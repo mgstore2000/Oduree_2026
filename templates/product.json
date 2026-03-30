@@ -6,408 +6,1007 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
-    "main": {
-      "type": "product-information",
-      "blocks": {
-        "media-gallery": {
-          "type": "_product-media-gallery",
-          "static": true,
-          "settings": {
-            "media_presentation": "grid",
-            "media_columns": "two",
-            "image_gap": 4,
-            "large_first_image": false,
-            "icons_style": "none",
-            "slideshow_controls_style": "counter",
-            "slideshow_mobile_controls_style": "dots",
-            "thumbnail_position": "right",
-            "thumbnail_width": 44,
-            "aspect_ratio": "adapt",
-            "constrain_to_viewport": true,
-            "media_fit": "contain",
-            "media_radius": 0,
-            "extend_media": false,
-            "zoom": true,
-            "video_loop": false,
-            "hide_variants": true,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        },
-        "product-details": {
-          "type": "_product-details",
-          "static": true,
-          "settings": {
-            "width": "fill",
-            "custom_width": 100,
-            "width_mobile": "fill",
-            "custom_width_mobile": 100,
-            "height": "fit",
-            "details_position": "flex-start",
-            "gap": 28,
-            "sticky_details_desktop": true,
-            "inherit_color_scheme": true,
-            "color_scheme": "scheme-1",
-            "background_media": "none",
-            "video_position": "cover",
-            "background_image_position": "cover",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 24,
-            "padding-block-end": 24,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "group_icgrde": {
-              "type": "group",
-              "name": "Header",
-              "settings": {
-                "open_in_new_tab": false,
-                "content_direction": "column",
-                "vertical_on_mobile": true,
-                "horizontal_alignment": "flex-start",
-                "vertical_alignment": "center",
-                "align_baseline": false,
-                "horizontal_alignment_flex_direction_column": "flex-start",
-                "vertical_alignment_flex_direction_column": "center",
-                "gap": 12,
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "custom_height": 100,
-                "inherit_color_scheme": true,
-                "color_scheme": "",
-                "background_media": "none",
-                "video_position": "cover",
-                "background_image_position": "cover",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "toggle_overlay": false,
-                "overlay_color": "#00000026",
-                "overlay_style": "solid",
-                "gradient_direction": "to top",
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {
-                "text_xrnftG": {
-                  "type": "text",
-                  "name": "Product title",
-                  "settings": {
-                    "text": "<h1>{{ closest.product.title }}</h1>",
-                    "width": "100%",
-                    "max_width": "normal",
-                    "alignment": "left",
-                    "type_preset": "h3",
-                    "font": "var(--font-primary--family)",
-                    "font_size": "",
-                    "line_height": "normal",
-                    "letter_spacing": "normal",
-                    "case": "none",
-                    "wrap": "pretty",
-                    "color": "",
-                    "background": false,
-                    "background_color": "#00000026",
-                    "corner_radius": 0,
-                    "padding-block-start": 0,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
-                  },
-                  "blocks": {}
-                },
-                "price_tVjtKg": {
-                  "type": "price",
-                  "settings": {
-                    "show_sale_price_first": true,
-                    "show_installments": false,
-                    "show_tax_info": false,
-                    "type_preset": "paragraph",
-                    "width": "100%",
-                    "alignment": "left",
-                    "font": "var(--font-body--family)",
-                    "font_size": "1rem",
-                    "line_height": "normal",
-                    "letter_spacing": "normal",
-                    "case": "none",
-                    "color": "var(--color-foreground)",
-                    "padding-block-start": 4,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
-                  },
-                  "blocks": {}
-                }
-              },
-              "block_order": [
-                "text_xrnftG",
-                "price_tVjtKg"
-              ]
-            },
-            "divider_VJhene": {
-              "type": "_divider",
-              "name": "t:names.divider",
-              "settings": {
-                "thickness": 1,
-                "corner_radius": "square",
-                "width_percent": 100,
-                "padding-block-start": 0,
-                "padding-block-end": 0
-              },
-              "blocks": {}
-            },
-            "variant_picker_R3rGDr": {
-              "type": "variant-picker",
-              "settings": {
-                "variant_style": "buttons",
-                "show_swatches": false,
-                "alignment": "left",
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "buy_buttons_eYQEYi": {
-              "type": "buy-buttons",
-              "settings": {
-                "stacking": true,
-                "show_pickup_availability": false,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {
-                "quantity": {
-                  "type": "quantity",
-                  "static": true,
-                  "settings": {},
-                  "blocks": {}
-                },
-                "add-to-cart": {
-                  "type": "add-to-cart",
-                  "static": true,
-                  "settings": {
-                    "style_class": "button"
-                  },
-                  "blocks": {}
-                },
-                "accelerated-checkout": {
-                  "type": "accelerated-checkout",
-                  "static": true,
-                  "settings": {},
-                  "blocks": {}
-                }
-              },
-              "block_order": []
-            },
-            "text_aEtTtq": {
-              "type": "text",
-              "name": "Product description",
-              "settings": {
-                "text": "{{ closest.product.description }}",
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-primary--family)",
-                "font_size": "",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "group_icgrde",
-            "divider_VJhene",
-            "variant_picker_R3rGDr",
-            "buy_buttons_eYQEYi",
-            "text_aEtTtq"
-          ]
-        }
-      },
+    "breadcrumbs": {
+      "type": "main-breadcrumbs",
       "settings": {
-        "content_width": "content-center-aligned",
-        "desktop_media_position": "left",
-        "equal_columns": false,
-        "limit_details_width": false,
-        "gap": 48,
-        "color_scheme": "",
-        "padding-block-start": 0,
-        "padding-block-end": 0
+        "full-width-enabled": true,
+        "text_color": "#ffffff",
+        "background_color": "#f29f00",
+        "margin-top": 12,
+        "margin-bottom": 12
       }
     },
-    "product_recommendations_qggXJq": {
-      "type": "product-recommendations",
+    "main": {
+      "type": "main-product",
       "blocks": {
-        "text_cbcgyb": {
-          "type": "text",
-          "name": "t:names.header",
+        "title": {
+          "type": "title",
           "settings": {
-            "text": "<h3>You may also like </h3>",
-            "width": "fit-content",
-            "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "h4",
-            "font": "var(--font-primary--family)",
-            "font_size": "",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "color": "",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
+            "brand": "plant-based",
+            "enable_vendor_link": false,
+            "size_text": 300,
+            "size_text_mobile": 160
+          }
         },
-        "static-product-card": {
-          "type": "_product-card",
-          "name": "t:names.product_card",
-          "static": true,
+        "feature_tags_ktxUht": {
+          "type": "feature_tags",
           "settings": {
-            "product_card_gap": 8,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
+            "metafield": "shopify.detailed-ingredients",
+            "limit": 4,
+            "text_color": "rgba(0,0,0,0)",
+            "border_color": "rgba(0,0,0,0)"
+          }
+        },
+        "separator_reBrRK": {
+          "type": "separator",
+          "settings": {
+            "show-separator-line": false,
+            "color-background": "#000000",
+            "margin-top": 8,
+            "margin-bottom": 8
+          }
+        },
+        "text_LQ6bM9": {
+          "type": "text",
+          "settings": {
+            "heading": "",
+            "content": "<p>Topical skincare is key, but lasting results start within. WELLNESS Collagen provides 2000 mg of Collagen Peptides plus Vitamins C and E to promote clear skin and boost natural collagen. Elevate your skincare from the inside out.</p>",
+            "page": ""
+          }
+        },
+        "c1ba8695-94d2-40ad-ac06-93ec3b8cf38e": {
+          "type": "separator",
+          "settings": {
+            "show-separator-line": false,
+            "color-background": "#ffffff",
+            "margin-top": 8,
+            "margin-bottom": 0
+          }
+        },
+        "product_variations_7LBAAU": {
+          "type": "product_variations",
+          "settings": {
+            "option_name": "Choose Supplement",
+            "picker_type": "swatch",
+            "swatch_size": 36,
+            "radius": "default",
             "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 8,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "product_card_gallery_DNizbJ": {
-              "type": "_product-card-gallery",
-              "name": "t:names.product_card_media",
-              "settings": {
-                "image_ratio": "adapt",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "product_title_M7MJkb": {
-              "type": "product-title",
-              "name": "t:names.product_title",
-              "settings": {
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 4,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "price_gLWgA6": {
-              "type": "price",
-              "settings": {
-                "show_sale_price_first": true,
-                "show_installments": false,
-                "show_tax_info": false,
-                "type_preset": "h6",
-                "width": "100%",
-                "alignment": "left",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "color": "var(--color-foreground)",
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "product_card_gallery_DNizbJ",
-            "product_title_M7MJkb",
-            "price_gLWgA6"
-          ]
+            "option_value_metafield": "custom.color",
+            "products": []
+          }
+        },
+        "variant_picker_WQEbez": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_type": "button",
+            "color_swatch_names": "",
+            "variant_picture_swatch_names": "",
+            "thumb_size": 60,
+            "radius": "default",
+            "border_radius": 0,
+            "dropdown_swatch_names": "",
+            "margin-top": 8,
+            "margin-bottom": 8,
+            "size_icon": "check_mark",
+            "size_link": "",
+            "variant_name": "",
+            "size_content": "",
+            "metafield": "",
+            "enable-striped-rows": true
+          }
+        },
+        "separator_xgqTJM": {
+          "type": "separator",
+          "settings": {
+            "show-separator-line": false,
+            "color-background": "#000000",
+            "margin-top": 8,
+            "margin-bottom": 4
+          }
+        },
+        "price": {
+          "type": "price",
+          "settings": {
+            "show_tax_included": true,
+            "show_shipping_policy": true,
+            "size_text": 140,
+            "size_text_mobile": 140
+          }
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": false,
+            "show_gift_card_recipient": true,
+            "show_qty_selector": true,
+            "text_color": "#ffffff",
+            "background_color": "#151515"
+          }
+        },
+        "promo_wBVFy3": {
+          "type": "promo",
+          "settings": {
+            "content": "<p>+10000 Happy Customers  - Free shipping on US</p>",
+            "text_alignment": "center",
+            "color-body-text": "#ffffff",
+            "background_color": "#eb9a00"
+          }
+        },
+        "description": {
+          "type": "description",
+          "disabled": true,
+          "settings": {
+            "is_open": false,
+            "icon": "none"
+          }
+        },
+        "collapsible_tab_Q7UFgL": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "BENEFITS",
+            "content": "<ul><li><strong>Supports Healthy Skin</strong>: Boosts skin elasticity, hydration, and firmness, helping to reduce the appearance of wrinkles and promote a youthful glow.</li><li><strong>Strengthens Hair and Nails</strong>: Encourages healthier, stronger hair growth and helps to reduce brittle nails, giving you a polished look from within.</li><li><strong>Promotes Joint Health</strong>: Enhances joint flexibility and reduces discomfort, supporting an active lifestyle and overall mobility.</li><li><strong>Improves Bone Density</strong>: Aids in maintaining strong and healthy bones by supporting bone structure and density.</li><li><strong>Enhances Muscle Recovery</strong>: Assists in muscle repair and recovery, making it an excellent supplement for active individuals and athletes.</li></ul>",
+            "metafield_variables": "",
+            "page": "",
+            "icon": "none"
+          }
+        },
+        "separator_gDwzxi": {
+          "type": "separator",
+          "settings": {
+            "show-separator-line": true,
+            "color-background": "#ffffff",
+            "margin-top": 0,
+            "margin-bottom": 0
+          }
+        },
+        "collapsible_tab_3rErRt": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "How to take supplement?",
+            "content": "<ol><li>Recommended Dosage: Take 1 capsules daily, preferably with water or your favorite beverage.</li><li>Best Time to Take: For optimal results, consume the supplement in the morning on an empty stomach or as advised by your healthcare professional.</li><li>Consistency is Key: Incorporate the supplement into your daily routine to maximize its benefits.</li><li>Optional Pairing: Pair with a balanced diet and a healthy lifestyle to enhance the effects.</li><li>Always read the product label for specific instructions and consult your healthcare provider if you are pregnant, nursing, or taking medications.<br/>This is demo store, this information are only for demo purpose</li></ol>",
+            "metafield_variables": "",
+            "page": "",
+            "icon": "none"
+          }
+        },
+        "separator_pEEMHg": {
+          "type": "separator",
+          "settings": {
+            "show-separator-line": true,
+            "color-background": "#ffffff",
+            "margin-top": 0,
+            "margin-bottom": 0
+          }
+        },
+        "collapsible_tab_cAT6Ne": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "INGREDIENTS",
+            "content": "<ul><li><strong>Protein</strong></li><li><strong>Vitamin C</strong> (as L-Ascorbic Acid)</li><li><strong>Vitamin E</strong> (as D-Alpha Tocopherol Succinate)</li><li><strong>Hydrolysed Collagen</strong> (from Bovine)</li></ul>",
+            "metafield_variables": "",
+            "page": "",
+            "icon": "none"
+          }
+        },
+        "separator_teAXQX": {
+          "type": "separator",
+          "settings": {
+            "show-separator-line": true,
+            "color-background": "#ffffff",
+            "margin-top": 0,
+            "margin-bottom": 0
+          }
+        },
+        "video_reels_cJKbXC": {
+          "type": "video_reels",
+          "settings": {
+            "heading": "Enhance Your Daily Routine",
+            "show_play_pause": true,
+            "show_unmute": false,
+            "auto_advanced": true,
+            "enable_quick_add": false,
+            "hide_brand": true,
+            "video_reels_1_product": "womens-multi-capsules",
+            "video_reels_2_product": "mens-multi-capsules",
+            "video_reels_3_product": "stress-relief-capsules",
+            "video_reels_4_product": "hair-skin-nails-capsules",
+            "video_reels_5_product": "boost-energy-capsules",
+            "video_reels_6_product": ""
+          }
+        },
+        "separator_VUiFa6": {
+          "type": "separator",
+          "settings": {
+            "show-separator-line": false,
+            "color-background": "#ffffff",
+            "margin-top": 12,
+            "margin-bottom": 16
+          }
         }
       },
       "block_order": [
-        "text_cbcgyb"
+        "title",
+        "feature_tags_ktxUht",
+        "separator_reBrRK",
+        "text_LQ6bM9",
+        "c1ba8695-94d2-40ad-ac06-93ec3b8cf38e",
+        "product_variations_7LBAAU",
+        "variant_picker_WQEbez",
+        "separator_xgqTJM",
+        "price",
+        "buy_buttons",
+        "promo_wBVFy3",
+        "description",
+        "collapsible_tab_Q7UFgL",
+        "separator_gDwzxi",
+        "collapsible_tab_3rErRt",
+        "separator_pEEMHg",
+        "collapsible_tab_cAT6Ne",
+        "separator_teAXQX",
+        "video_reels_cJKbXC",
+        "separator_VUiFa6"
       ],
-      "name": "t:names.product_recommendations",
+      "custom_css": [
+        ".rte p:first-child,.rte ul:first-child,.rte li:first-child,.rte ol:first-child {margin-block-start: 0;}"
+      ],
       "settings": {
-        "product": "{{ closest.product }}",
-        "recommendation_type": "related",
-        "layout_type": "grid",
-        "carousel_on_mobile": false,
-        "max_products": 4,
-        "columns": 4,
-        "mobile_columns": "2",
-        "columns_gap": 12,
-        "rows_gap": 24,
-        "icons_style": "arrow",
-        "icons_shape": "none",
-        "section_width": "page-width",
-        "gap": 28,
-        "color_scheme": "scheme-1",
-        "padding-block-start": 48,
-        "padding-block-end": 48
+        "enable_sticky_buy_button": true,
+        "full-width-enabled": false,
+        "desktop-media-size": "normal",
+        "desktop-layout": "carousel-vertical",
+        "desktop-image-ratio": "original",
+        "enable_video_looping": true,
+        "video_controls": false,
+        "video_custom_play_controls": false,
+        "video_custom_mute_controls": false,
+        "enable-preselected-variant": true,
+        "enable-image-zoom": true,
+        "mobile-image": "small",
+        "show-thumbnails-mobile": false,
+        "text_color": "#ffffff",
+        "background_color": "#f29f00",
+        "margin-top": 0,
+        "margin-bottom": 8
+      }
+    },
+    "separator_a938wj": {
+      "type": "separator",
+      "settings": {
+        "advanced_heading": false,
+        "heading": "",
+        "heading_richtext": "<h2>Separator</h2>",
+        "size_heading": 100,
+        "size_heading_mobile": 100,
+        "show-separator-line": true,
+        "full-width-line": true,
+        "color-background": "#000000",
+        "color-body-text": "rgba(0,0,0,0)",
+        "color-section-background": "#ffffff",
+        "margin-top": 0,
+        "margin-bottom": 0
+      }
+    },
+    "benefits_product_RArPDt": {
+      "type": "benefits-product",
+      "blocks": {
+        "benefit_a8BHCH": {
+          "type": "benefit",
+          "settings": {
+            "item_heading": "Vitamin C",
+            "text": "<p>A powerful antioxidant that boosts the immune system, enhances iron absorption, and promotes collagen production for healthy skin.</p>"
+          }
+        },
+        "benefit_VC9nyU": {
+          "type": "benefit",
+          "settings": {
+            "item_heading": "Vitamin E",
+            "text": "<p>Is a powerful antioxidant that helps protect cells from damage caused by free radicals. It supports healthy skin by promoting hydration and reducing signs of aging.</p>"
+          }
+        },
+        "benefit_dAVxLA": {
+          "type": "benefit",
+          "settings": {
+            "item_heading": "Hydrolysed Collagen",
+            "text": "<p>Supports skin elasticity and hydration, reducing the appearance of fine lines and wrinkles for a youthful glow.</p>"
+          }
+        },
+        "benefit_MgFn7x": {
+          "type": "benefit",
+          "settings": {
+            "item_heading": "Iron",
+            "text": "<p>Vital for energy production and oxygen transport in the body, it prevents fatigue and supports overall vitality.</p>"
+          }
+        },
+        "benefit_xByee6": {
+          "type": "benefit",
+          "settings": {
+            "item_heading": "Zinc",
+            "text": "<p>Supports a strong immune system, promotes wound healing, and helps maintain healthy skin.</p>"
+          }
+        },
+        "benefit_Vd94d7": {
+          "type": "benefit",
+          "settings": {
+            "item_heading": "Vitamin A",
+            "text": "<p>Essential for good vision, healthy skin, and a robust immune system, it also supports cell growth and reproduction.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "benefit_a8BHCH",
+        "benefit_VC9nyU",
+        "benefit_dAVxLA",
+        "benefit_MgFn7x",
+        "benefit_xByee6",
+        "benefit_Vd94d7"
+      ],
+      "settings": {
+        "heading": "Key Ingredients",
+        "full-width-enabled": false,
+        "section_height_mode": "fixed_height",
+        "desktop_section_height": 67,
+        "desktop_section_max_height": 1080,
+        "desktop_width": 100,
+        "desktop_max_width": 760,
+        "button_label": "",
+        "button_link": "",
+        "quick_buy_product": "",
+        "button_select": "primary",
+        "size_heading": 140,
+        "size_heading_mobile": 120,
+        "color-body-heading": "rgba(0,0,0,0)",
+        "color-overlay": "#fcf8f2",
+        "color-overlay-opacity": 100,
+        "color-body-text": "rgba(0,0,0,0)",
+        "margin-top": 48,
+        "margin-bottom": 48
+      }
+    },
+    "separator_eQP688": {
+      "type": "separator",
+      "settings": {
+        "advanced_heading": false,
+        "heading": "",
+        "heading_richtext": "<h2>Separator</h2>",
+        "size_heading": 100,
+        "size_heading_mobile": 100,
+        "show-separator-line": true,
+        "full-width-line": true,
+        "color-background": "#000000",
+        "color-body-text": "rgba(0,0,0,0)",
+        "color-section-background": "#ffffff",
+        "margin-top": 0,
+        "margin-bottom": 0
+      }
+    },
+    "scrolling_text_banner_wcVbRd": {
+      "type": "scrolling-text-banner",
+      "blocks": {
+        "heading_FPpXkp": {
+          "type": "heading",
+          "settings": {
+            "heading": "Glow from Within – Strengthen with Collagen!",
+            "size_heading": 700,
+            "size_heading_mobile": 240
+          }
+        },
+        "button_E9kgHx": {
+          "type": "button",
+          "settings": {
+            "button_select": "secondary",
+            "button_label": "our mission",
+            "disable_on_mobile": false,
+            "button_link": "",
+            "second_button_select": "primary",
+            "second_button_label": "Button label",
+            "second_disable_on_mobile": false,
+            "second_button_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "heading_FPpXkp",
+        "button_E9kgHx"
+      ],
+      "settings": {
+        "heading": "",
+        "full-width-enabled": true,
+        "animation_speed": 4,
+        "slide_height": "adapt_to_first_image",
+        "desktop_fixed_height": 320,
+        "mobile_fixed_height": 460,
+        "desktop_image": "",
+        "desktop_text_vertical_position": "center",
+        "desktop_text_horizontal_position": "center",
+        "mobile_image": "",
+        "mobile_text_vertical_position": "center",
+        "mobile_text_horizontal_position": "center",
+        "color-heading": "rgba(0,0,0,0)",
+        "section-color-overlay": "rgba(0,0,0,0)",
+        "section-color-overlay-opacity": 100,
+        "color-body-text": "#ffffff",
+        "text-container-color": "#000000",
+        "color-overlay-opacity": 20,
+        "margin-top": 0,
+        "margin-bottom": 0
+      }
+    },
+    "separator_X8dBea": {
+      "type": "separator",
+      "settings": {
+        "advanced_heading": false,
+        "heading": "",
+        "heading_richtext": "<h2>Separator</h2>",
+        "size_heading": 100,
+        "size_heading_mobile": 100,
+        "show-separator-line": true,
+        "full-width-line": true,
+        "color-background": "#000000",
+        "color-body-text": "rgba(0,0,0,0)",
+        "color-section-background": "#ffffff",
+        "margin-top": 0,
+        "margin-bottom": 0
+      }
+    },
+    "rich_text_zWj4cT": {
+      "type": "rich-text",
+      "blocks": {
+        "text_BDXGNa": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Your Health in Trusted Hands!</p>",
+            "disable_on_mobile": false
+          }
+        },
+        "heading_G4i3AE": {
+          "type": "heading",
+          "settings": {
+            "heading": "Real Stories, Real Results",
+            "disable_on_mobile": false,
+            "size_heading": 100,
+            "size_heading_mobile": 100
+          }
+        }
+      },
+      "block_order": [
+        "text_BDXGNa",
+        "heading_G4i3AE"
+      ],
+      "settings": {
+        "section_width": "regular",
+        "desktop_text_horizontal_position": "center",
+        "color-body-text": "rgba(0,0,0,0)",
+        "background_color": "rgba(0,0,0,0)",
+        "margin-top": 40,
+        "margin-bottom": 0
+      }
+    },
+    "testimonial_video_reels_qnieGX": {
+      "type": "testimonial-video-reels",
+      "blocks": {
+        "video_xweXNL": {
+          "type": "video",
+          "settings": {
+            "rating": "5",
+            "testimonial": "<p>\"I was skeptical at first, but after just a few weeks, I noticed a huge difference in my energy and mood!\"</p>",
+            "author": "Sarah J."
+          }
+        },
+        "video_CgLccj": {
+          "type": "video",
+          "settings": {
+            "rating": "5",
+            "testimonial": "<p>\"Finally, a product that delivers on its promises. My skin glows, and I feel amazing inside and out!\"</p>",
+            "author": "Anna P."
+          }
+        },
+        "video_XqGWqn": {
+          "type": "video",
+          "settings": {
+            "rating": "4.5",
+            "testimonial": "<p>\"I’ve tried so many supplements, but nothing compares to these. I feel like the best version of myself!\"</p>",
+            "author": "Maria Z."
+          }
+        },
+        "video_dtJqXE": {
+          "type": "video",
+          "settings": {
+            "rating": "4.5",
+            "testimonial": "<p>\"A game-changer for my daily routine. I wake up refreshed and ready to take on the day like never before!\"</p>",
+            "author": "Hanna S."
+          }
+        },
+        "video_gAfQHf": {
+          "type": "video",
+          "settings": {
+            "rating": "5",
+            "testimonial": "<p>\"These supplements have truly changed my life! I feel healthier, more energetic, and confident every day.\"</p>",
+            "author": "Emma T."
+          }
+        }
+      },
+      "block_order": [
+        "video_xweXNL",
+        "video_CgLccj",
+        "video_XqGWqn",
+        "video_dtJqXE",
+        "video_gAfQHf"
+      ],
+      "settings": {
+        "heading": "",
+        "video_button": true,
+        "text_alignment": "center",
+        "text_style": "body",
+        "color-body-text": "rgba(0,0,0,0)",
+        "background_color": "rgba(0,0,0,0)",
+        "margin-top": 20,
+        "margin-bottom": 40
+      }
+    },
+    "separator_y6xcTk": {
+      "type": "separator",
+      "settings": {
+        "advanced_heading": false,
+        "heading": "",
+        "heading_richtext": "<h2>Separator</h2>",
+        "size_heading": 100,
+        "size_heading_mobile": 100,
+        "show-separator-line": true,
+        "full-width-line": true,
+        "color-background": "#000000",
+        "color-body-text": "rgba(0,0,0,0)",
+        "color-section-background": "#ffffff",
+        "margin-top": 0,
+        "margin-bottom": 0
+      }
+    },
+    "rich_text_YecVJk": {
+      "type": "rich-text",
+      "blocks": {
+        "text_DAR9af": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Everything You Need to Know!</p>",
+            "disable_on_mobile": false
+          }
+        },
+        "heading_LFctxD": {
+          "type": "heading",
+          "settings": {
+            "heading": "Frequently Asked Questions",
+            "disable_on_mobile": false,
+            "size_heading": 100,
+            "size_heading_mobile": 100
+          }
+        }
+      },
+      "block_order": [
+        "text_DAR9af",
+        "heading_LFctxD"
+      ],
+      "settings": {
+        "section_width": "regular",
+        "desktop_text_horizontal_position": "center",
+        "color-body-text": "rgba(0,0,0,0)",
+        "background_color": "#ffffff",
+        "margin-top": 40,
+        "margin-bottom": 0
+      }
+    },
+    "collapsible_menu_WraA7j": {
+      "type": "collapsible_menu",
+      "blocks": {
+        "collapsible_tab_ndLBg3": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Are Wellness supplements safe to use?",
+            "content": "<p>Absolutely! All our products are manufactured in certified facilities and meet strict safety and quality standards. We recommend consulting your healthcare provider if you have specific health conditions or are taking medications.This is the demo store.</p>",
+            "page": "",
+            "icon": "none"
+          }
+        },
+        "collapsible_tab_74pBFd": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "How should I store my supplements?",
+            "content": "<p>To ensure the freshness and effectiveness of our products, store them in a cool, dry place away from direct sunlight. Always keep them out of reach of children.</p>",
+            "page": "",
+            "icon": "none"
+          }
+        },
+        "collapsible_tab_ijR4af": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Do you offer international shipping?",
+            "content": "<p>Yes, we ship worldwide! Shipping costs and delivery times may vary depending on your location. You can find more details on our Shipping Policy page.</p>",
+            "page": "",
+            "icon": "none"
+          }
+        },
+        "collapsible_tab_nExPEQ": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "What is your return policy?",
+            "content": "<p>We offer a 30-day satisfaction guarantee. If you're not completely happy with your purchase, you can return it for a refund or exchange. Please visit our Return Policy page for more details.</p>",
+            "page": "",
+            "icon": "none"
+          }
+        }
+      },
+      "block_order": [
+        "collapsible_tab_ndLBg3",
+        "collapsible_tab_74pBFd",
+        "collapsible_tab_ijR4af",
+        "collapsible_tab_nExPEQ"
+      ],
+      "settings": {
+        "color-body-text": "rgba(0,0,0,0)",
+        "background_color": "#ffffff",
+        "compact-size-enabled": true,
+        "margin-top": 0,
+        "margin-bottom": 48
+      }
+    },
+    "separator_UNtqVW": {
+      "type": "separator",
+      "settings": {
+        "advanced_heading": false,
+        "heading": "",
+        "heading_richtext": "<h2>Separator</h2>",
+        "size_heading": 100,
+        "size_heading_mobile": 100,
+        "show-separator-line": true,
+        "full-width-line": true,
+        "color-background": "#000000",
+        "color-body-text": "rgba(0,0,0,0)",
+        "color-section-background": "#ffffff",
+        "margin-top": 0,
+        "margin-bottom": 0
+      }
+    },
+    "grid_view_7wXtrp": {
+      "type": "grid-view",
+      "blocks": {
+        "image_UxTPGi": {
+          "type": "image",
+          "settings": {
+            "heading": "Immunity \nBoost",
+            "heading_disable_on_mobile": false,
+            "size_heading": 300,
+            "size_heading_mobile": 200,
+            "text": "",
+            "text_disable_on_mobile": false,
+            "button_select": "link",
+            "button_label": "check now",
+            "button_disable_on_mobile": false,
+            "button_link": "",
+            "button_link_in_new_window": false,
+            "color-body-text": "#ffffff",
+            "color-overlay": "#ffffff",
+            "color-overlay-opacity": 0,
+            "desktop_image": "",
+            "desktop_text_vertical_position": "top",
+            "desktop_text_horizontal_position": "left",
+            "mobile_text_vertical_position": "top",
+            "mobile_text_horizontal_position": "left"
+          }
+        },
+        "image_TmrRrn": {
+          "type": "image",
+          "settings": {
+            "heading": "Energy \nBoost",
+            "heading_disable_on_mobile": false,
+            "size_heading": 300,
+            "size_heading_mobile": 200,
+            "text": "",
+            "text_disable_on_mobile": false,
+            "button_select": "link",
+            "button_label": "check now",
+            "button_disable_on_mobile": false,
+            "button_link": "",
+            "button_link_in_new_window": false,
+            "color-body-text": "#ffffff",
+            "color-overlay": "rgba(0,0,0,0)",
+            "color-overlay-opacity": 0,
+            "desktop_image": "",
+            "desktop_text_vertical_position": "top",
+            "desktop_text_horizontal_position": "left",
+            "mobile_text_vertical_position": "top",
+            "mobile_text_horizontal_position": "left"
+          }
+        }
+      },
+      "block_order": [
+        "image_UxTPGi",
+        "image_TmrRrn"
+      ],
+      "settings": {
+        "title": "",
+        "swipe_on_mobile": false,
+        "full-width-enabled": true,
+        "image_ratio": "square",
+        "color-body-text": "rgba(0,0,0,0)",
+        "background_color": "rgba(0,0,0,0)",
+        "margin-top": 0,
+        "margin-bottom": 0
+      }
+    },
+    "separator_4a7fFL": {
+      "type": "separator",
+      "settings": {
+        "advanced_heading": false,
+        "heading": "",
+        "heading_richtext": "<h2>Separator</h2>",
+        "size_heading": 100,
+        "size_heading_mobile": 100,
+        "show-separator-line": true,
+        "full-width-line": true,
+        "color-background": "#000000",
+        "color-body-text": "rgba(0,0,0,0)",
+        "color-section-background": "#ffffff",
+        "margin-top": 0,
+        "margin-bottom": 0
+      }
+    },
+    "rich_text_AtYc9A": {
+      "type": "rich-text",
+      "blocks": {
+        "text_QE3XGe": {
+          "type": "text",
+          "settings": {
+            "text": "<p>What Our Customers Say</p>",
+            "disable_on_mobile": false
+          }
+        },
+        "heading_8wQKBm": {
+          "type": "heading",
+          "settings": {
+            "heading": "+10000 Happy Customers",
+            "disable_on_mobile": false,
+            "size_heading": 300,
+            "size_heading_mobile": 100
+          }
+        }
+      },
+      "block_order": [
+        "text_QE3XGe",
+        "heading_8wQKBm"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "section_width": "regular",
+        "desktop_text_horizontal_position": "center",
+        "color-body-text": "#ffffff",
+        "background_color": "#f29f00",
+        "margin-top": 36,
+        "margin-bottom": 8
+      }
+    },
+    "testimonial_images_3YJzHj": {
+      "type": "testimonial-images",
+      "blocks": {
+        "testimonial_gwwdEf": {
+          "type": "testimonial",
+          "settings": {
+            "icon_select": "100",
+            "text": "<p>\"Collagen Caps have helped with my joint comfort and even improved my skin. Simple, effective, and worth it. I'll definitely keep using them.\"</p>",
+            "author": "- Michael M.",
+            "featured_product": "mens-multi-capsules",
+            "desktop_image": "",
+            "mobile_image": "",
+            "image_link": ""
+          }
+        },
+        "testimonial_6rTqHb": {
+          "type": "testimonial",
+          "settings": {
+            "icon_select": "100",
+            "text": "<p>\"I've been taking Collagen Caps for a month now and I really see a difference — my skin feels smoother and looks brighter. Super easy to add to my routine.\"</p>",
+            "author": "- Anna M.",
+            "featured_product": "womens-multi-capsules",
+            "desktop_image": "",
+            "mobile_image": "",
+            "image_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "testimonial_gwwdEf",
+        "testimonial_6rTqHb"
+      ],
+      "name": "t:sections.testimonial_images.name",
+      "settings": {
+        "title": "",
+        "text_style": "body",
+        "testimonial_text_size_desktop": 170,
+        "testimonial_text_size": 120,
+        "layout": "image_first",
+        "desktop-percentage-image-width": 50,
+        "full-width-enabled": false,
+        "auto-rotate": false,
+        "change_slider_time": 5,
+        "slide_height": "adapt_to_first_image",
+        "desktop_fixed_height": 480,
+        "mobile_fixed_height": 300,
+        "desktop_text_vertical_position": "center",
+        "desktop_text_horizontal_position": "left",
+        "mobile_text_horizontal_position": "center",
+        "quick-add-enabled": false,
+        "hide-brand-name": true,
+        "section-color-body-text": "#ffffff",
+        "section-color-overlay": "#f29f00",
+        "section-color-overlay-opacity": 100,
+        "color-body-text": "rgba(0,0,0,0)",
+        "color-overlay": "#ffffff",
+        "color-overlay-opacity": 100,
+        "margin-top": 0,
+        "margin-bottom": 56
+      }
+    },
+    "separator_daizRp": {
+      "type": "separator",
+      "settings": {
+        "advanced_heading": false,
+        "heading": "",
+        "heading_richtext": "<h2>Separator</h2>",
+        "size_heading": 100,
+        "size_heading_mobile": 100,
+        "show-separator-line": true,
+        "full-width-line": true,
+        "color-background": "#000000",
+        "color-body-text": "rgba(0,0,0,0)",
+        "color-section-background": "#ffffff",
+        "margin-top": 0,
+        "margin-bottom": 0
+      }
+    },
+    "features_banner_wiKkaQ": {
+      "type": "features-banner",
+      "blocks": {
+        "image_P4yL64": {
+          "type": "image",
+          "settings": {
+            "desktop_image": "",
+            "select_icon": "bag",
+            "heading": "Third-party tested",
+            "text": "<p>We hold ourselves and our ingredients to the highest standards.</p>",
+            "link": ""
+          }
+        },
+        "image_m7jjzm": {
+          "type": "image",
+          "settings": {
+            "desktop_image": "",
+            "select_icon": "user",
+            "heading": "Quality ingredients",
+            "text": "<p>We're dedicated to using scientifically backed, high-quality natural ingredients.</p>",
+            "link": ""
+          }
+        },
+        "image_AkKWrq": {
+          "type": "image",
+          "settings": {
+            "desktop_image": "",
+            "select_icon": "search",
+            "heading": "Non-GMO",
+            "text": "<p>We carefully evaluate every ingredient, ensuring they are non-GMO.</p>",
+            "link": ""
+          }
+        },
+        "image_XPgaAR": {
+          "type": "image",
+          "settings": {
+            "desktop_image": "",
+            "select_icon": "star",
+            "heading": "Vegan",
+            "text": "<p>We ensure the highest standards with 100% vegan, cruelty-free formulations.</p>",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "image_P4yL64",
+        "image_m7jjzm",
+        "image_AkKWrq",
+        "image_XPgaAR"
+      ],
+      "settings": {
+        "heading": "",
+        "size_heading_mobile": 80,
+        "size_heading": 80,
+        "icon_width_mobile": 52,
+        "icon_width_desktop": 64,
+        "icon_layout": "center",
+        "columns_desktop": "4",
+        "icon_layout_mobile": "grid",
+        "color_body_icon": "rgba(0,0,0,0)",
+        "color_background_icon": "rgba(0,0,0,0)",
+        "color_body_text": "rgba(0,0,0,0)",
+        "background_color": "rgba(0,0,0,0)",
+        "margin-top": 44,
+        "margin-bottom": 52
+      }
+    },
+    "separator_FD4z9W": {
+      "type": "separator",
+      "settings": {
+        "advanced_heading": false,
+        "heading": "",
+        "heading_richtext": "<h2>Separator</h2>",
+        "size_heading": 100,
+        "size_heading_mobile": 100,
+        "show-separator-line": true,
+        "full-width-line": true,
+        "color-background": "#000000",
+        "color-body-text": "rgba(0,0,0,0)",
+        "color-section-background": "#ffffff",
+        "margin-top": 0,
+        "margin-bottom": 0
+      }
+    },
+    "newsletter_pEcrBa": {
+      "type": "newsletter",
+      "blocks": {
+        "heading_mLFMeW": {
+          "type": "heading",
+          "settings": {
+            "heading": "Join Our Circle & Save!",
+            "heading_disable_on_mobile": false,
+            "size_heading": 100,
+            "size_heading_mobile": 100
+          }
+        },
+        "paragraph_d8VNPK": {
+          "type": "paragraph",
+          "settings": {
+            "paragraph": "<p>Sign up now for 10% off your first order – because you deserve it!</p>",
+            "text_disable_on_mobile": false
+          }
+        },
+        "email_form_gTPAyG": {
+          "type": "email_form",
+          "settings": {
+            "button_select": "primary"
+          }
+        }
+      },
+      "block_order": [
+        "heading_mLFMeW",
+        "paragraph_d8VNPK",
+        "email_form_gTPAyG"
+      ],
+      "settings": {
+        "color-body-text": "#ffffff",
+        "background_color": "#f29f00",
+        "margin-top": 60,
+        "margin-bottom": 60
       }
     }
   },
   "order": [
+    "breadcrumbs",
     "main",
-    "product_recommendations_qggXJq"
+    "separator_a938wj",
+    "benefits_product_RArPDt",
+    "separator_eQP688",
+    "scrolling_text_banner_wcVbRd",
+    "separator_X8dBea",
+    "rich_text_zWj4cT",
+    "testimonial_video_reels_qnieGX",
+    "separator_y6xcTk",
+    "rich_text_YecVJk",
+    "collapsible_menu_WraA7j",
+    "separator_UNtqVW",
+    "grid_view_7wXtrp",
+    "separator_4a7fFL",
+    "rich_text_AtYc9A",
+    "testimonial_images_3YJzHj",
+    "separator_daizRp",
+    "features_banner_wiKkaQ",
+    "separator_FD4z9W",
+    "newsletter_pEcrBa"
   ]
 }

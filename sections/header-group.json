@@ -9,108 +9,238 @@
  */
 {
   "type": "header",
-  "name": "Header",
+  "name": "Header Group",
   "sections": {
-    "header_announcements_9jGBFp": {
-      "type": "header-announcements",
+    "announcement-bar": {
+      "type": "announcement-bar",
       "blocks": {
-        "announcement_BxgCk9": {
-          "type": "_announcement",
+        "announcement_DKVb4L": {
+          "type": "announcement",
           "settings": {
-            "text": "Welcome to our store",
-            "link": "",
-            "font": "var(--font-subheading--family)",
-            "font_size": "0.75rem",
-            "weight": "",
-            "letter_spacing": "normal",
-            "case": "none"
-          },
-          "blocks": {}
+            "text": "Free shipping on US orders over $100",
+            "link": ""
+          }
         }
       },
       "block_order": [
-        "announcement_BxgCk9"
+        "announcement_DKVb4L"
       ],
-      "name": "t:names.announcement_bar",
       "settings": {
-        "speed": 5,
-        "section_width": "page-width",
-        "color_scheme": "scheme-1",
-        "divider_width": 1,
-        "padding-block-start": 15,
-        "padding-block-end": 15
+        "marquee": true,
+        "animation_speed": "100",
+        "checkbox_close_announcement": true,
+        "color-body-text": "#ffffff",
+        "background_color": "#2d2d2d"
       }
     },
-    "header_section": {
-      "type": "header",
+    "header": {
+      "type": "page-header",
       "blocks": {
-        "header-logo": {
-          "type": "_header-logo",
-          "static": true,
+        "column_yVYQQ3": {
+          "type": "column",
           "settings": {
-            "hide_logo_on_home_page": false,
-            "padding-block-start": 0,
-            "padding-block-end": 0
-          },
-          "blocks": {}
-        },
-        "header-menu": {
-          "type": "_header-menu",
-          "static": true,
-          "settings": {
-            "menu": "main-menu",
-            "color_scheme": "",
-            "type_font_primary_size": "0.875rem",
-            "menu_font_style": "inverse",
-            "type_font_primary_link": "body",
-            "type_case_primary_link": "none",
-            "menu_style": "featured_products",
-            "featured_products_aspect_ratio": "4 / 5",
-            "featured_collections_aspect_ratio": "16 / 9",
-            "image_border_radius": 0,
-            "navigation_bar": false,
-            "color_scheme_navigation_bar": "",
-            "drawer_accordion": false,
-            "drawer_accordion_expand_first": false,
-            "drawer_dividers": false
-          },
-          "blocks": {}
+            "title": "shop",
+            "promo_section_width": 6,
+            "stack_view": true,
+            "image_ratio": "adapt",
+
+            "heading_1": "",
+            "text_1": "View All Products",
+
+
+            "heading_2": "",
+            "text_2": "Women's Multi Capsules",
+
+
+            "heading_3": "",
+            "text_3": "Immunity Boost Capsules",
+
+
+            "heading_4": "",
+            "text_4": "Natural Collagen Capsules",
+
+
+            "heading_5": "",
+            "text_5": "Boost Energy Capsules",
+
+
+            "heading_6": "",
+            "text_6": "Men's Multi Capsules",
+
+          }
         }
       },
+      "block_order": [
+        "column_yVYQQ3"
+      ],
       "settings": {
-        "logo_position": "left",
-        "menu_position": "left",
-        "menu_row": "top",
-        "show_search": true,
-        "search_position": "right",
-        "search_row": "top",
-        "show_country": true,
-        "country_selector_style": false,
-        "show_language": true,
-        "localization_font": "heading",
-        "localization_font_size": "0.875rem",
-        "localization_position": "right",
-        "localization_row": "top",
-        "section_width": "page-width",
-        "section_height": "standard",
-        "enable_sticky_header": "always",
-        "divider_width": 0,
-        "divider_size": "page-width",
-        "border_width": 0,
-        "color_scheme_top": "scheme-1",
-        "color_scheme_bottom": "",
-        "color_scheme_transparent": "scheme-6",
-        "enable_transparent_header_home": false,
-        "home_color_scheme": "inverse",
-        "enable_transparent_header_product": false,
-        "product_color_scheme": "default",
-        "enable_transparent_header_collection": false,
-        "collection_color_scheme": "default"
+        "layout": "option_5",
+        "sticky_header": true,
+        "sticky_header_always": true,
+        "header_bg_opacity": 44,
+        "header_bg_blur": 30,
+        "header_always_blurred": true,
+        "show_line_separator": true,
+        "show_shadow": false,
+
+        "large_screen_logo_width": 160,
+        "mobile_screen_logo_width": 120,
+        "menu": "main-menu",
+        "teaser_menu": "main-menu",
+        "mobile_footer_menu": "",
+
+        "transparent_header_color": "rgba(0,0,0,0)",
+        "show_country_selector": true,
+        "show_country_selector_label": false,
+        "show_country_selector_flag": true,
+        "show_language_selector": true,
+        "drawer_title": "Hello!",
+        "enable_submenu_link_in_drawer": false,
+        "typing_search": "Search...",
+        "suggestions_title": "most popular",
+        "suggestions_menu": "search"
+      }
+    },
+    "page_header_logo_banner_8J4Vgm": {
+      "type": "page-header-logo-banner",
+      "disabled": true,
+      "settings": {
+
+
+
+        "additional_text": "",
+        "button_style": "link",
+        "button_label": "The future of Wellness",
+        "button_disable_on_mobile": false,
+
+        "button_link_in_new_window": false,
+        "color-body-text": "#ffffff",
+        "color-overlay": "#000000",
+        "color-overlay-opacity": 12
+      }
+    },
+    "page_header_image_video_fECwHG": {
+      "type": "page-header-image-video",
+      "blocks": {
+        "text_RCbiGj": {
+          "type": "text",
+          "settings": {
+            "text": "<p>The Future of Wellness</p>",
+            "disable_on_mobile": false
+          }
+        },
+        "heading_XQM4jQ": {
+          "type": "heading",
+          "settings": {
+            "heading": "Gear up for great health",
+            "disable_on_mobile": false,
+            "size_heading": 300,
+            "size_heading_mobile": 220
+          }
+        },
+        "button_B63KwX": {
+          "type": "button",
+          "settings": {
+            "button_select": "secondary",
+            "button_label": "check now",
+    
+            "button_link_in_new_window": false,
+            "disable_on_mobile": false
+          }
+        }
+      },
+      "block_order": [
+        "text_RCbiGj",
+        "heading_XQM4jQ",
+        "button_B63KwX"
+      ],
+      "settings": {
+        "content_position": "over_video",
+        "slide_height": "adapt_to_first_image",
+        "desktop_fixed_height": 560,
+        "mobile_fixed_height": 460,
+
+
+        "layout_mobile": "video",
+        "layout": "video_first",
+        "color-body-text": "#000000",
+        "color-overlay": "rgba(0,0,0,0)",
+        "color-overlay-opacity": 100,
+
+        "desktop_text_vertical_position": "bottom",
+        "desktop_text_horizontal_position": "left",
+        "mobile_text_vertical_position": "center",
+        "mobile_text_horizontal_position": "center"
+      }
+    },
+    "page_header_image_banner_NXJtwJ": {
+      "type": "page-header-image-banner",
+      "blocks": {
+        "subheading_ehn7xi": {
+          "type": "subheading",
+          "settings": {
+            "subheading": "Tell you story",
+            "subheading_disable_on_mobile": false
+          }
+        },
+        "heading_nN4QLn": {
+          "type": "heading",
+          "settings": {
+            "heading": "Image banner",
+            "disable_on_mobile": false,
+            "size_heading": 100,
+            "size_heading_mobile": 100
+          }
+        },
+        "text_kwNxPQ": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Give customers details about the banner image(s) or content on the template.</p>",
+            "disable_on_mobile": false
+          }
+        },
+        "button_3d7gBT": {
+          "type": "button",
+          "settings": {
+            "button_select": "primary",
+            "button_label": "Button label",
+            "disable_on_mobile": false,
+            "button_link": "/",
+            "second_button_select": "primary",
+            "second_button_label": "Button label",
+            "second_disable_on_mobile": false,
+            "second_button_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "subheading_ehn7xi",
+        "heading_nN4QLn",
+        "text_kwNxPQ",
+        "button_3d7gBT"
+      ],
+      "disabled": true,
+      "name": "Image banner for transparent header",
+      "settings": {
+        "slide_height": "fixed_height",
+        "desktop_fixed_height": 320,
+        "mobile_fixed_height": 460,
+
+        "desktop_text_vertical_position": "center",
+        "desktop_text_horizontal_position": "center",
+        "mobile_text_vertical_position": "center",
+        "mobile_text_horizontal_position": "center",
+        "color-body-text": "transparent",
+        "text-container-color": "transparent",
+        "color-overlay-opacity": 100
       }
     }
   },
   "order": [
-    "header_announcements_9jGBFp",
-    "header_section"
+    "announcement-bar",
+    "header",
+    "page_header_logo_banner_8J4Vgm",
+    "page_header_image_video_fECwHG",
+    "page_header_image_banner_NXJtwJ"
   ]
 }

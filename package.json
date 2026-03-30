@@ -3,9 +3,12 @@
   "version": "1.0.0",
   "description": "Oduree Shopify Theme",
   "scripts": {
-    "dev": "shopify theme dev --store 0kk8ai-gy.myshopify.com",
-    "pull": "shopify theme pull --store 0kk8ai-gy.myshopify.com",
-    "push": "shopify theme push --store 0kk8ai-gy.myshopify.com"
+    "dev": "shopify theme dev -e development",
+    "pull": "shopify theme pull -e development",
+    "push": "shopify theme push -e development",
+    "dev:live": "shopify theme dev -e live",
+    "pull:live": "shopify theme pull -e live",
+    "push:live": "shopify theme push -e live"
   },
   "private": true
 }

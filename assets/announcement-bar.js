@@ -1,130 +1,168 @@
-import { Component } from '@theme/component';
+class AnnouncementBar extends HTMLElement {
+  constructor() {
+    super();
 
-/**
- * Announcement banner custom element that allows fading between content.
- * Based on the Slideshow component.
- *
- * @typedef {object} Refs
- * @property {HTMLElement} slideshowContainer
- * @property {HTMLElement[]} [slides]
- * @property {HTMLButtonElement} [previous]
- * @property {HTMLButtonElement} [next]
- *
- * @extends {Component<Refs>}
- */
-export class AnnouncementBar extends Component {
-  #current = 0;
+    this.currentIndex = 0;
+    this.touchStartX = 0;
+    this.touchEndX = 0;
+    this.announcementBar = this.querySelector("#wt-announcement__container");
+    this.announcementInterval = null;
 
-  /**
-   * The interval ID for automatic playback.
-   * @type {number|undefined}
-   */
-  #interval = undefined;
+    this.changeAnnouncement = this.changeAnnouncement.bind(this);
+    this.previousAnnouncement = this.previousAnnouncement.bind(this);
+    this.handleTouchStart = this.handleTouchStart.bind(this);
+    this.handleTouchMove = this.handleTouchMove.bind(this);
+    this.handleTouchEnd = this.handleTouchEnd.bind(this);
+    this.hideForOneDay = this.hideForOneDay.bind(this);
+    this.restartInterval = this.restartInterval.bind(this);
+    this.isMobileView = this.isMobileView.bind(this);
+  }
 
   connectedCallback() {
-    super.connectedCallback();
+    if (
+      !this.announcementBar?.classList.contains(
+        "wt-announcement__container--marquee",
+      )
+    ) {
+      this.announcementInterval = setInterval(this.changeAnnouncement, 5000);
 
-    this.addEventListener('mouseenter', this.suspend);
-    this.addEventListener('mouseleave', this.resume);
-    document.addEventListener('visibilitychange', this.#handleVisibilityChange);
-
-    this.play();
-  }
-
-  next() {
-    this.current += 1;
-  }
-
-  previous() {
-    this.current -= 1;
-  }
-
-  /**
-   * Starts automatic slide playback.
-   * @param {number} [interval] - The time interval in seconds between slides.
-   */
-  play(interval = this.autoplayInterval) {
-    if (!this.autoplay) return;
-
-    this.paused = false;
-
-    this.#interval = setInterval(() => {
-      if (this.matches(':hover') || document.hidden) return;
-
-      this.next();
-    }, interval);
-  }
-
-  /**
-   * Pauses automatic slide playback.
-   */
-  pause() {
-    this.paused = true;
-    this.suspend();
-  }
-
-  get paused() {
-    return this.hasAttribute('paused');
-  }
-
-  set paused(paused) {
-    this.toggleAttribute('paused', paused);
-  }
-
-  /**
-   * Suspends automatic slide playback.
-   */
-  suspend() {
-    clearInterval(this.#interval);
-    this.#interval = undefined;
-  }
-
-  /**
-   * Resumes automatic slide playback if autoplay is enabled.
-   */
-  resume() {
-    if (!this.autoplay || this.paused) return;
-
-    this.pause();
-    this.play();
-  }
-
-  get autoplay() {
-    return Boolean(this.autoplayInterval);
-  }
-
-  get autoplayInterval() {
-    const interval = this.getAttribute('autoplay');
-    const value = parseInt(`${interval}`, 10);
-
-    if (Number.isNaN(value)) return undefined;
-
-    return value * 1000;
-  }
-
-  get current() {
-    return this.#current;
-  }
-
-  set current(current) {
-    this.#current = current;
-
-    let relativeIndex = current % (this.refs.slides ?? []).length;
-    if (relativeIndex < 0) {
-      relativeIndex += (this.refs.slides ?? []).length;
+      if (this.announcementBar) {
+        this.announcementBar.addEventListener(
+          "touchstart",
+          this.handleTouchStart,
+          { passive: true },
+        );
+        this.announcementBar.addEventListener(
+          "touchmove",
+          this.handleTouchMove,
+          {
+            passive: true,
+          },
+        );
+        this.announcementBar.addEventListener("touchend", this.handleTouchEnd, {
+          passive: true,
+        });
+        this.announcementBar.addEventListener(
+          "touchstart",
+          () => clearInterval(this.announcementInterval),
+          { passive: true },
+        );
+        this.announcementBar.addEventListener(
+          "touchend",
+          this.restartInterval,
+          {
+            passive: true,
+          },
+        );
+      }
     }
 
-    this.refs.slides?.forEach((slide, index) => {
-      slide.setAttribute('aria-hidden', `${index !== relativeIndex}`);
-    });
+    if (this.announcementBar)
+      this.announcementBar.style.transition = "transform 0.5s ease-in-out";
+
+    this.closeButton = this.querySelector(".wt-announcement__close");
+    if (this.closeButton)
+      this.closeButton.addEventListener("click", this.hideForOneDay);
+
+    window.addEventListener("resize", this.handleResize.bind(this));
   }
 
-  /**
-   * Pause the slideshow when the page is hidden.
-   */
-  #handleVisibilityChange = () => (document.hidden ? this.pause() : this.resume());
+  handleResize() {
+    if (window.innerWidth >= 900) {
+      // Reset the translateX to its initial state
+      if (this.announcementBar) {
+        this.announcementBar.style.transform = "translateX(0)";
+        this.currentIndex = 0;
+      }
+    }
+  }
+
+  isMobileView() {
+    return window.innerWidth < 900;
+  }
+
+  restartInterval() {
+    clearInterval(this.announcementInterval);
+    this.announcementInterval = setInterval(this.changeAnnouncement, 5000);
+  }
+
+  hideForOneDay() {
+    const oneDayLater = new Date().getTime() + 24 * 60 * 60 * 1000;
+    localStorage.setItem("wt-announcement-hidden", oneDayLater);
+    this.style.display = "none";
+  }
+
+  changeAnnouncement() {
+    if (!this.isMobileView()) {
+      return;
+    }
+
+    const totalSlides = this.announcementBar?.children.length;
+
+    // Move to the next slide
+    this.currentIndex = (this.currentIndex + 1) % totalSlides;
+    const newPosition = -(this.currentIndex * 100);
+
+    if (this.announcementBar)
+      this.announcementBar.style.transform = `translateX(${newPosition}vw)`;
+
+    if (this.currentIndex === 0 && this.announcementBar) {
+      // When we're back at the start, reset position with transition.
+      setTimeout(() => {
+        this.announcementBar.style.transition = "none";
+        this.announcementBar.style.transform = "translateX(0)";
+        this.currentIndex = 0;
+        // Restore transition after resetting position
+        setTimeout(() => {
+          this.announcementBar.style.transition = "transform 0.5s ease-in-out";
+        }, 0);
+      }, 490); // Just slightly before 0.5s to ensure it happens before next slide movement.
+    }
+  }
+
+  previousAnnouncement() {
+    const totalSlides = this.announcementBar?.children.length;
+
+    this.currentIndex = (this.currentIndex - 1 + totalSlides) % totalSlides;
+    const newPosition = -(this.currentIndex * 100);
+    if (this.announcementBar)
+      this.announcementBar.style.transform = `translateX(${newPosition}vw)`;
+  }
+
+  handleTouchStart(e) {
+    if (this.isMobileView()) {
+      this.touchStartX = e.touches[0].clientX;
+    }
+  }
+
+  handleTouchMove(e) {
+    if (this.isMobileView()) {
+      this.touchEndX = e.touches[0].clientX;
+    }
+  }
+
+  handleTouchEnd() {
+    const swipeThreshold = 30;
+
+    if (Math.abs(this.touchEndX - this.touchStartX) > swipeThreshold) {
+      if (this.touchEndX < this.touchStartX) {
+        this.changeAnnouncement();
+      } else {
+        this.previousAnnouncement();
+      }
+    }
+  }
+
+  disconnectedCallback() {
+    clearInterval(this.announcementInterval);
+    this.announcementBar.removeEventListener(
+      "touchstart",
+      this.handleTouchStart,
+    );
+    this.announcementBar.removeEventListener("touchmove", this.handleTouchMove);
+    this.announcementBar.removeEventListener("touchend", this.handleTouchEnd);
+    window.removeEventListener("resize", this.handleResize.bind(this));
+  }
 }
 
-if (!customElements.get('announcement-bar-component')) {
-  customElements.define('announcement-bar-component', AnnouncementBar);
-}
+customElements.define("announcement-bar", AnnouncementBar);

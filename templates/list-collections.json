@@ -6,169 +6,82 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
-    "collection_list_Wfgh3m": {
-      "type": "main-collection-list",
+    "main": {
+      "type": "main-list-collections",
+      "disabled": true,
+      "settings": {
+        "heading": "Heading",
+        "size_heading": 140,
+        "size_heading_mobile": 100,
+        "sort": "alphabetical",
+        "margin-top": 40,
+        "margin-bottom": 40
+      }
+    },
+    "background_video_XKwctW": {
+      "type": "background-video",
       "blocks": {
-        "group_4FtiAg": {
-          "type": "group",
-          "name": "t:names.header",
+        "text_PdP4Ji": {
+          "type": "text",
           "settings": {
-            "open_in_new_tab": false,
-            "content_direction": "column",
-            "vertical_on_mobile": true,
-            "horizontal_alignment": "flex-start",
-            "vertical_alignment": "center",
-            "align_baseline": false,
-            "horizontal_alignment_flex_direction_column": "flex-start",
-            "vertical_alignment_flex_direction_column": "center",
-            "gap": 12,
-            "width": "fit-content",
-            "custom_width": 100,
-            "width_mobile": "fit-content",
-            "custom_width_mobile": 100,
-            "height": "fit",
-            "custom_height": 100,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "background_media": "none",
-            "video_position": "cover",
-            "background_image_position": "cover",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "toggle_overlay": false,
-            "overlay_color": "#00000026",
-            "overlay_style": "solid",
-            "gradient_direction": "to top",
-            "padding-block-start": 0,
-            "padding-block-end": 48,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "text_fRMQMR": {
-              "type": "text",
-              "name": "t:names.text",
-              "settings": {
-                "text": "<h1>Collections</h1>",
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "h2",
-                "font": "var(--font-primary--family)",
-                "font_size": "",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 16,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "text_fRMQMR"
-          ]
+            "text": "<p>The Future of Wellness is here</p>",
+            "disable_on_mobile": false
+          }
         },
-        "static-collection-card": {
-          "type": "_collection-card",
-          "name": "t:names.collection_card",
-          "static": true,
+        "heading_TeM7EF": {
+          "type": "heading",
           "settings": {
-            "placement": "below_image",
-            "horizontal_alignment": "flex-start",
-            "vertical_alignment": "flex-start",
-            "collection_card_gap": 8,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0
-          },
-          "blocks": {
-            "collection_title_7YgBPU": {
-              "type": "collection-title",
-              "name": "t:names.collection_title",
-              "settings": {
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "collection-card-image": {
-              "type": "_collection-card-image",
-              "name": "t:names.collection_card_image",
-              "static": true,
-              "settings": {
-                "image_ratio": "adapt",
-                "toggle_overlay": false,
-                "overlay_color": "#00000026",
-                "overlay_style": "solid",
-                "gradient_direction": "to top",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "collection_title_7YgBPU"
-          ]
+            "heading": "Gear Up for Great Health!",
+            "disable_on_mobile": false,
+            "size_heading": 370,
+            "size_heading_mobile": 220
+          }
+        },
+        "button_p9mpzx": {
+          "type": "button",
+          "settings": {
+            "button_select": "primary",
+            "button_label": "check now",
+            "disable_on_mobile": false,
+
+            "second_button_select": "primary",
+            "second_button_label": "Button label",
+            "second_disable_on_mobile": false,
+            "second_button_link": ""
+          }
         }
       },
       "block_order": [
-        "group_4FtiAg"
+        "text_PdP4Ji",
+        "heading_TeM7EF",
+        "button_p9mpzx"
       ],
-      "name": "Collection list",
       "settings": {
-        "layout_type": "grid",
-        "carousel_on_mobile": false,
-        "columns": 3,
-        "mobile_columns": "2",
-        "columns_gap": 12,
-        "bento_gap": 8,
-        "rows_gap": 24,
-        "max_collections": 4,
-        "icons_style": "arrow",
-        "icons_shape": "none",
-        "section_width": "page-width",
-        "gap": 12,
-        "color_scheme": "",
-        "padding-block-start": 48,
-        "padding-block-end": 48
+        "heading": "",
+        "full-width-enabled": true,
+
+        "autoplay": true,
+        "video_controls": false,
+        "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+        "original_ratio": "fixed_height",
+        "desktop_fixed_height": 540,
+        "mobile_fixed_height": 460,
+        "color-body-heading": "transparent",
+        "color-overlay": "transparent",
+        "color-overlay-opacity": 100,
+        "color-body-text": "#ffffff",
+        "desktop_text_horizontal_position": "center",
+        "mobile_text_horizontal_position": "center",
+        "margin-top": 0,
+        "margin-bottom": 0
       }
     }
   },
   "order": [
-    "collection_list_Wfgh3m"
+    "main",
+    "background_video_XKwctW"
   ]
 }

@@ -1,188 +1,203 @@
+{% assign background_rgb = section.settings.background_color | color_to_rgb %}
+{% assign text_rgb = section.settings['color-body-text'] | color_to_rgb %}
 
+<style type="text/css">
+  #shopify-section-{{ section.id }} {
+    {% if background_rgb != 'rgba(0, 0, 0, 0.0)' %}
+      --color-overlay-rgb: {{ background_rgb | color_to_rgb | remove: 'rgb(' | remove: ')' }};
+      --color-overlay-opacity: {{ section.settings.color-overlay-opacity | divided_by: 100.0 }};
 
-<div class="section-background color-{{ section.settings.color_scheme }}"></div>
-<div
-  class="
-    section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}
-    {% if section.settings.section_height != "" %} {{ section.settings.section_height | prepend: "section--height-" }}{% endif %}
-  "
->
-  <div>
-    <div
-      class="
-        spacing-style
-        layout-panel-flex
-        layout-panel-flex--column
-        section-content-wrapper
-        mobile-column
-      "
-      style="
-        {% render 'layout-panel-style', settings: section.settings %}
-        {% render 'spacing-style', settings: section.settings %}
-      "
-    >
-      {% content_for 'blocks' %}
-    </div>
+    {% endif %}
+
+    {% if text_rgb != 'rgba(0, 0, 0, 0.0)' %}
+      --color-custom-text: {{ section.settings.color-body-text }};
+      --color-body-text: {{ section.settings.color-body-text }};
+    {% endif %}
+  }
+
+  [data-section-id="{{ section.id }}"] .headline{
+
+    font-size: calc({{ section.settings.font_size_mobile }} / 100 * var(--font-headline-size));
+
+    {% if text_rgb != 'rgba(0, 0, 0, 0.0)' %}
+      --color-body-text: {{ section.settings.color-body-text }};
+    {% endif %}
+
+    @media (min-width: 1200px) {
+      font-size: calc({{ section.settings.font_size_desktop }} / 100 * var(--font-headline-size));
+    }
+  }
+
+  [data-section-id="{{ section.id }}"] {
+      {% if background_rgb != 'rgba(0, 0, 0, 0.0)' %}
+        --color-overlay-rgb: {{ section.settings.background_color }};
+        --color-overlay-opacity: 1;
+      {% endif %}
+
+      {% if text_rgb != 'rgba(0, 0, 0, 0.0)' %}
+        --color-custom-text: {{ section.settings.color-body-text }};
+      {% endif %}
+
+      {% if section.settings.margin-top %}
+          --section-gap-top: {{ section.settings.margin-top }}px;
+      {% endif %}
+
+      {% if section.settings.margin-bottom %}
+          --section-gap-bottom: {{ section.settings.margin-bottom }}px;
+      {% endif %}
+  }
+</style>
+
+<div class="wt-main-404__container" data-section-id="{{ section.id }}">
+  <h1 class="headline">
+    {{ section.settings.heading }}
+  </h1>
+  <p class="wt-featured-collection__subheading">
+    {{ section.settings.subtext }}
+  </p>
+  <div class="wt-button__container">
+    <a href="{{ section.settings.button_link }}" class="{% if section.settings.button_disable_on_mobile %}hero__button--mobile{% endif %}">
+      <button
+        aria-label="{{ section.settings['link-text'] }}"
+        class="hero__button--primary {% if section.settings.button_select != 'primary' %} hero__button--secondary {% endif %}{% if section.settings.button_select == 'link' %} hero__button--link {% endif %}"
+        type="submit"
+        onclick="location.href={{ section.settings.button_link }}"
+      >
+        <span class="wt-newsletter__send__text">{{ section.settings['link-text'] }}</span>
+      </button>
+    </a>
   </div>
 </div>
 
 {% schema %}
 {
-  "name": "t:names.404",
-  "class": "section-wrapper",
-  "blocks": [
-    {
-      "type": "@theme"
-    },
-    {
-      "type": "@app"
-    },
-    {
-      "type": "_divider"
-    }
-  ],
+  "name": "main-404",
+  "tag": "section",
   "settings": [
     {
+      "type": "textarea",
+      "id": "heading",
+      "label": "t:sections.settings.settings.heading.label",
+      "default": "Ooops!"
+    },
+    {
+      "type": "range",
+      "id": "font_size_mobile",
+      "min": 0,
+      "max": 400,
+      "step": 20,
+      "unit": "%",
+      "label": "t:sections.global.heading_scale_mobile",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "font_size_desktop",
+      "min": 0,
+      "max": 400,
+      "step": 20,
+      "unit": "%",
+      "label": "t:sections.global.heading_scale_large_screen",
+      "default": 100
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "t:sections.global.subtext",
+      "default": "We can't find what you're looking for here. Click below to go back to the homepage"
+    },
+    {
+      "type": "text",
+      "id": "link-text",
+      "label": "t:sections.global.button_text",
+      "default": "Back to Home"
+    },
+    {
       "type": "select",
-      "id": "content_direction",
-      "label": "t:settings.direction",
+      "id": "button_select",
       "options": [
         {
-          "value": "column",
-          "label": "t:options.vertical"
+          "value": "primary",
+          "label": "t:sections.settings.settings.button_select.primary.label"
+        },
+        {
+          "value": "secondary",
+          "label": "t:sections.settings.settings.button_select.secondary.label"
+        },
+        {
+          "value": "link",
+          "label": "t:sections.settings.settings.button_select.link.label"
         }
       ],
-      "default": "column",
-      "visible_if": "{{ section.settings.horizontal_alignment_flex_direction_column == 'fake-value' }}"
+      "default": "primary",
+      "label": "t:sections.settings.settings.button_select.default.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "button_disable_on_mobile",
+      "label": "t:sections.global.disable_on_mobile",
+      "default": false
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "t:sections.global.link_url"
     },
     {
       "type": "header",
-      "content": "t:content.layout"
+      "content": "t:sections.global.colors",
+      "info": "t:sections.global.colors-info"
     },
     {
-      "type": "select",
-      "id": "section_width",
-      "label": "t:settings.width",
-      "options": [
-        {
-          "value": "page-width",
-          "label": "t:options.page"
-        },
-        {
-          "value": "full-width",
-          "label": "t:options.full"
-        }
-      ],
-      "default": "page-width"
+      "type": "color",
+      "id": "color-body-text",
+      "default": "transparent",
+      "label": "t:sections.settings.settings.text-color.label"
     },
     {
-      "type": "select",
-      "id": "section_height",
-      "label": "t:settings.height",
-      "options": [
-        {
-          "value": "",
-          "label": "t:options.auto"
-        },
-        {
-          "value": "small",
-          "label": "t:options.small"
-        },
-        {
-          "value": "medium",
-          "label": "t:options.medium"
-        },
-        {
-          "value": "large",
-          "label": "t:options.large"
-        },
-        {
-          "value": "full-screen",
-          "label": "t:options.full_screen"
-        }
-      ],
-      "default": ""
-    },
-    {
-      "type": "select",
-      "id": "horizontal_alignment_flex_direction_column",
-      "label": "t:settings.alignment",
-      "options": [
-        {
-          "value": "flex-start",
-          "label": "t:options.left"
-        },
-        {
-          "value": "center",
-          "label": "t:options.center"
-        },
-        {
-          "value": "flex-end",
-          "label": "t:options.right"
-        }
-      ],
-      "default": "center"
-    },
-    {
-      "type": "select",
-      "id": "vertical_alignment_flex_direction_column",
-      "label": "t:settings.position",
-      "options": [
-        {
-          "value": "flex-start",
-          "label": "t:options.top"
-        },
-        {
-          "value": "center",
-          "label": "t:options.center"
-        },
-        {
-          "value": "flex-end",
-          "label": "t:options.bottom"
-        }
-      ],
-      "default": "center"
+      "type": "color",
+      "id": "background_color",
+      "default": "transparent",
+      "label": "t:sections.settings.settings.background-color.label"
     },
     {
       "type": "range",
-      "id": "gap",
-      "label": "t:settings.gap",
+      "id": "color-overlay-opacity",
       "min": 0,
       "max": 100,
       "step": 1,
-      "unit": "px",
-      "default": 12
-    },
-    {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "t:settings.color_scheme",
-      "default": "scheme-1"
+      "unit": "%",
+      "default": 0,
+      "label": "t:sections.settings.settings.background-opacity.label"
     },
     {
       "type": "header",
-      "content": "t:content.padding"
+      "content": "t:sections.global.section_spacing"
     },
     {
       "type": "range",
-      "id": "padding-block-start",
-      "label": "t:settings.top",
+      "id": "margin-top",
       "min": 0,
       "max": 100,
-      "step": 1,
+      "step": 4,
+      "default": 40,
       "unit": "px",
-      "default": 0
+      "label": "t:sections.settings.settings.distance-top.label"
     },
     {
       "type": "range",
-      "id": "padding-block-end",
-      "label": "t:settings.bottom",
+      "id": "margin-bottom",
       "min": 0,
       "max": 100,
-      "step": 1,
+      "step": 4,
+      "default": 40,
       "unit": "px",
-      "default": 0
+      "label": "t:sections.settings.settings.distance-bottom.label",
+      "info": "t:sections.settings.settings.distance-bottom.info"
     }
-  ]
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
 }
 {% endschema %}

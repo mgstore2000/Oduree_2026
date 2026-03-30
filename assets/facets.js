@@ -1,843 +1,440 @@
-import { sectionRenderer } from '@theme/section-renderer';
-import { Component } from '@theme/component';
-import { FilterUpdateEvent, ThemeEvents } from '@theme/events';
-import { debounce, startViewTransition } from '@theme/utilities';
-import { convertMoneyToMinorUnits, formatMoney } from '@theme/money-formatting';
-/**
- * Search query parameter.
- * @type {string}
- */
-const SEARCH_QUERY = 'q';
+class FacetFiltersForm extends HTMLElement {
+  constructor() {
+    super();
+    this.onActiveFilterClick = this.onActiveFilterClick.bind(this);
+    this.debouncedOnSubmit = debounce((event) => {
+      this.onSubmitHandler(event);
+    }, 500);
 
-/**
- * Handles the main facets form functionality
- *
- * @typedef {Object} FacetsFormRefs
- * @property {HTMLFormElement} facetsForm - The main facets form element
- * @property {HTMLElement | undefined} facetStatus - The facet status element
- *
- * @extends {Component<FacetsFormRefs>}
- */
-class FacetsFormComponent extends Component {
-  requiredRefs = ['facetsForm'];
-
-  /**
-   * Creates URL parameters from form data
-   * @param {FormData} [formData] - Optional form data to use instead of the main form
-   * @returns {URLSearchParams} The processed URL parameters
-   */
-  createURLParameters(formData = new FormData(this.refs.facetsForm)) {
-    let newParameters = new URLSearchParams(/** @type any */ (formData));
-
-    if (newParameters.get('filter.v.price.gte') === '') newParameters.delete('filter.v.price.gte');
-    if (newParameters.get('filter.v.price.lte') === '') newParameters.delete('filter.v.price.lte');
-
-    newParameters.delete('page');
-
-    const searchQuery = this.#getSearchQuery();
-    if (searchQuery) newParameters.set(SEARCH_QUERY, searchQuery);
-
-    return newParameters;
+    const facetForm = this.querySelector("form");
+    facetForm.addEventListener("input", this.debouncedOnSubmit.bind(this));
+    const facetWrapper = this.querySelector("#FacetsWrapperDesktop");
+    if (facetWrapper) facetWrapper.addEventListener("keyup", onKeyUpEscape);
   }
-
-  /**
-   * Gets the search query parameter from the current URL
-   * @returns {string} The search query
-   */
-  #getSearchQuery() {
-    const url = new URL(window.location.href);
-    return url.searchParams.get(SEARCH_QUERY) ?? '';
-  }
-
-  get sectionId() {
-    const id = this.getAttribute('section-id');
-    if (!id) throw new Error('Section ID is required');
-    return id;
-  }
-
-  /**
-   * Updates the URL hash with current filter parameters
-   */
-  #updateURLHash() {
-    const url = new URL(window.location.href);
-    const urlParameters = this.createURLParameters();
-
-    url.search = '';
-    for (const [param, value] of urlParameters.entries()) {
-      url.searchParams.append(param, value);
-    }
-
-    history.pushState({ urlParameters: urlParameters.toString() }, '', url.toString());
-  }
-
-  /**
-   * Updates filters and renders the section
-   */
-  updateFilters = () => {
-    this.#updateURLHash();
-    this.dispatchEvent(new FilterUpdateEvent(this.createURLParameters()));
-    this.#updateSection();
-  };
-
-  /**
-   * Updates the section
-   */
-  #updateSection() {
-    const viewTransition = !this.closest('dialog');
-
-    if (viewTransition) {
-      startViewTransition(() => sectionRenderer.renderSection(this.sectionId), ['product-grid']);
-    } else {
-      sectionRenderer.renderSection(this.sectionId);
-    }
-  }
-
-  /**
-   * Updates filters based on a provided URL
-   * @param {string} url - The URL to update filters with
-   */
-  updateFiltersByURL(url) {
-    history.pushState('', '', url);
-    this.dispatchEvent(new FilterUpdateEvent(this.createURLParameters()));
-    this.#updateSection();
-  }
-}
-
-if (!customElements.get('facets-form-component')) {
-  customElements.define('facets-form-component', FacetsFormComponent);
-}
-
-/**
- * @typedef {Object} FacetInputsRefs
- * @property {HTMLInputElement[]} facetInputs - The facet input elements
- */
-
-/**
- * Handles individual facet input functionality
- * @extends {Component<FacetInputsRefs>}
- */
-class FacetInputsComponent extends Component {
-  get sectionId() {
-    const id = this.closest('.shopify-section')?.id;
-    if (!id) throw new Error('FacetInputs component must be a child of a section');
-    return id;
-  }
-
-  /**
-   * Updates filters and the selected facet summary
-   */
-  updateFilters() {
-    const facetsForm = this.closest('facets-form-component');
-
-    if (!(facetsForm instanceof FacetsFormComponent)) return;
-
-    facetsForm.updateFilters();
-    this.#updateSelectedFacetSummary();
-  }
-
-  /**
-   * Handles keydown events for the facets form
-   * @param {KeyboardEvent} event - The keydown event
-   */
-  handleKeyDown(event) {
-    if (!(event.target instanceof HTMLElement)) return;
-    const closestInput = event.target.querySelector('input');
-
-    if (!(closestInput instanceof HTMLInputElement)) return;
-
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      closestInput.checked = !closestInput.checked;
-      this.updateFilters();
-    }
-  }
-
-  /**
-   * Handles mouseover events on facet labels
-   * @param {MouseEvent} event - The mouseover event
-   */
-  prefetchPage = debounce((event) => {
-    if (!(event.target instanceof HTMLElement)) return;
-
-    const form = this.closest('form');
-    if (!form) return;
-
-    const formData = new FormData(form);
-    const inputElement = event.target.querySelector('input');
-
-    if (!(inputElement instanceof HTMLInputElement)) return;
-
-    if (!inputElement.checked) formData.append(inputElement.name, inputElement.value);
-
-    const facetsForm = this.closest('facets-form-component');
-    if (!(facetsForm instanceof FacetsFormComponent)) return;
-
-    const urlParameters = facetsForm.createURLParameters(formData);
-
-    const url = new URL(window.location.pathname, window.location.origin);
-
-    for (const [key, value] of urlParameters) url.searchParams.append(key, value);
-
-    if (inputElement.checked) url.searchParams.delete(inputElement.name, inputElement.value);
-
-    sectionRenderer.getSectionHTML(this.sectionId, true, url);
-  }, 200);
-
-  cancelPrefetchPage = () => this.prefetchPage.cancel();
-
-  /**
-   * Updates the selected facet summary
-   */
-  #updateSelectedFacetSummary() {
-    if (!this.refs.facetInputs) return;
-
-    const checkedInputElements = this.refs.facetInputs.filter((input) => input.checked);
-    const details = this.closest('details');
-    const statusComponent = details?.querySelector('facet-status-component');
-
-    if (!(statusComponent instanceof FacetStatusComponent)) return;
-
-    statusComponent.updateListSummary(checkedInputElements);
-  }
-}
-
-if (!customElements.get('facet-inputs-component')) {
-  customElements.define('facet-inputs-component', FacetInputsComponent);
-}
-
-/**
- * @typedef {Object} PriceFacetRefs
- * @property {HTMLInputElement} minInput - The minimum price input
- * @property {HTMLInputElement} maxInput - The maximum price input
- */
-
-/**
- * Handles price facet functionality
- * @extends {Component<PriceFacetRefs>}
- */
-class PriceFacetComponent extends Component {
-  /** @type {string} */
-  currency;
-  /** @type {string} */
-  moneyFormat;
 
   connectedCallback() {
-    super.connectedCallback();
-    this.addEventListener('keydown', this.#onKeyDown);
-    this.currency = this.dataset.currency ?? 'USD';
-    this.moneyFormat = this.#extractMoneyPlaceholder(this.dataset.moneyFormat ?? '{{amount}}');
+    const facetForm = this.querySelector("form");
+    facetForm.addEventListener("input", this.debouncedOnSubmit.bind(this));
+    // const filterButton = document.querySelector(
+    //   ".collection__filter-trigger.wt-filter__trigger.wt-filter__trigger--drawer",
+    // );
+    // filterButton?.addEventListener("keydown", (e) => {
+    //   if (e.key === "Enter" || e.keyCode === 13) {
+    //     document.querySelector("collection-section").toggleDrawer();
+    //     document
+    //       .querySelector(".svg-icon.svg-icon--close.wt-filter__close")
+    //       ?.focus();
+    //   }
+    // });
+    // const checkboxInputs = this.querySelectorAll(".form-checkbox__input");
+    // checkboxInputs.forEach((input) => {
+    //   input.addEventListener("keydown", (e) => {
+    //     if (e.key === "Enter" || e.keyCode === 13) {
+    //       input.checked = !input.checked;
+    //     }
+    //   });
+    // });
   }
 
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    this.removeEventListener('keydown', this.#onKeyDown);
+  static setListeners() {
+    const onHistoryChange = (event) => {
+      const searchParams = event.state
+        ? event.state.searchParams
+        : FacetFiltersForm.searchParamsInitial;
+      if (searchParams === FacetFiltersForm.searchParamsPrev) return;
+      FacetFiltersForm.renderPage(searchParams, null, false);
+    };
+    window.addEventListener("popstate", onHistoryChange);
   }
 
-  /**
-   * Extracts the placeholder from a money format string, removing currency symbols.
-   * @param {string} format - The money format (e.g., "${{amount}}", "{{amount}} USD")
-   * @returns {string} Just the placeholder (e.g., "{{amount}}")
-   */
-  #extractMoneyPlaceholder(format) {
-    const match = format.match(/{{\s*\w+\s*}}/);
-    return match ? match[0] : '{{amount}}';
+  static toggleActiveFacets(disable = true) {
+    document.querySelectorAll(".js-facet-remove").forEach((element) => {
+      element.classList.toggle("disabled", disable);
+    });
   }
 
-  /**
-   * Handles keydown events to restrict input to valid characters
-   * @param {KeyboardEvent} event - The keydown event
-   */
-  #onKeyDown = (event) => {
-    if (event.metaKey) return;
-
-    const pattern = /[0-9]|\.|,|'| |Tab|Backspace|Enter|ArrowUp|ArrowDown|ArrowLeft|ArrowRight|Delete|Escape/;
-    if (!event.key.match(pattern)) event.preventDefault();
-  };
-
-  /**
-   * Updates price filter and results
-   */
-  updatePriceFilterAndResults() {
-    const { minInput, maxInput } = this.refs;
-
-    this.#adjustToValidValues(minInput);
-    this.#adjustToValidValues(maxInput);
-
-    const facetsForm = this.closest('facets-form-component');
-    if (!(facetsForm instanceof FacetsFormComponent)) return;
-
-    facetsForm.updateFilters();
-    this.#setMinAndMaxValues();
-    this.#updateSummary();
+  static fireCustomEvent(options) {
+    const facetsChange = new CustomEvent("facets:change", {
+      bubbles: true,
+      cancelable: true,
+      detail: {
+        desc: "facets changed",
+        ...options,
+      },
+    });
+    document.dispatchEvent(facetsChange);
   }
 
-  /**
-   * Parses a formatted money value into minor units
-   * displayValue can come from user input or API response
-   * @param {string} displayValue - The display value (e.g., "10.50" for USD, "9,50" for EUR, "1000" for JPY)
-   * @param {string} currency - The currency code
-   * @returns {number} The value in minor units
-   */
-  #parseDisplayValue(displayValue, currency) {
-    return convertMoneyToMinorUnits(displayValue, currency) ?? 0;
-  }
+  static renderPage(searchParams, event, updateURLHash = true) {
+    FacetFiltersForm.searchParamsPrev = searchParams;
 
-  /**
-   * Adjusts input values to be within valid range
-   * @param {HTMLInputElement} input - The input element to adjust
-   */
-  #adjustToValidValues(input) {
-    if (input.value.trim() === '') return;
+    const sections = FacetFiltersForm.getSections();
+    const countContainer = document.getElementById("ProductCount");
+    const countContainerDesktop = document.getElementById(
+      "ProductCountDesktop",
+    );
+    // document.getElementById('ProductGridContainer').querySelector('.collection').classList.add('loading');
+    // if (countContainer) {
+    //   countContainer.classList.add('loading');
+    // }
+    // if (countContainerDesktop) {
+    //   countContainerDesktop.classList.add('loading');
+    // }
 
-    const { currency, moneyFormat } = this;
-    // Parse the user's input value using currency-aware parsing
-    const value = this.#parseDisplayValue(input.value, currency);
+    sections.forEach((section) => {
+      const url = `${window.location.pathname}?section_id=${section.section}&${searchParams}`;
+      const filterDataUrl = (element) => element.url === url;
 
-    // data-min and data-max now contain raw minor unit values (not formatted)
-    const min = this.#parseDisplayValue(input.getAttribute('data-min') ?? '0', currency);
-    const max = this.#parseDisplayValue(input.getAttribute('data-max') ?? '0', currency);
-
-    if (value < min) {
-      input.value = formatMoney(min, moneyFormat, currency);
-    } else if (value > max) {
-      input.value = formatMoney(max, moneyFormat, currency);
-    }
-  }
-
-  /**
-   * Sets min and max values for the inputs
-   */
-  #setMinAndMaxValues() {
-    const { minInput, maxInput } = this.refs;
-
-    if (maxInput.value) minInput.setAttribute('data-max', maxInput.value);
-    if (minInput.value) maxInput.setAttribute('data-min', minInput.value);
-    if (minInput.value === '') maxInput.setAttribute('data-min', '0');
-    if (maxInput.value === '') minInput.setAttribute('data-max', maxInput.getAttribute('data-max') ?? '');
-  }
-
-  /**
-   * Updates the price summary
-   */
-  #updateSummary() {
-    const { minInput, maxInput } = this.refs;
-    const details = this.closest('details');
-    const statusComponent = details?.querySelector('facet-status-component');
-
-    if (!(statusComponent instanceof FacetStatusComponent)) return;
-
-    statusComponent?.updatePriceSummary(minInput, maxInput);
-  }
-}
-
-if (!customElements.get('price-facet-component')) {
-  customElements.define('price-facet-component', PriceFacetComponent);
-}
-
-/**
- * Handles clearing of facet filters
- * @extends {Component}
- */
-class FacetClearComponent extends Component {
-  requiredRefs = ['clearButton'];
-
-  connectedCallback() {
-    super.connectedCallback();
-    this.addEventListener('keyup', this.#handleKeyUp);
-    document.addEventListener(ThemeEvents.FilterUpdate, this.#handleFilterUpdate);
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    document.removeEventListener(ThemeEvents.FilterUpdate, this.#handleFilterUpdate);
-  }
-
-  /**
-   * Clears the filter
-   * @param {Event} event - The click event
-   */
-  clearFilter(event) {
-    if (!(event.target instanceof HTMLElement)) return;
-
-    if (event instanceof KeyboardEvent) {
-      if (event.key !== 'Enter' && event.key !== ' ') {
-        return;
-      }
-      event.preventDefault();
-    }
-
-    const container = event.target.closest('facet-inputs-component, price-facet-component');
-    container?.querySelectorAll('[type="checkbox"]:checked, input').forEach((input) => {
-      if (input instanceof HTMLInputElement) {
-        input.checked = false;
-        input.value = '';
-      }
+      FacetFiltersForm.filterData.some(filterDataUrl)
+        ? FacetFiltersForm.renderSectionFromCache(filterDataUrl, event)
+        : FacetFiltersForm.renderSectionFromFetch(url, event);
     });
 
-    const details = event.target.closest('details');
-    const statusComponent = details?.querySelector('facet-status-component');
-
-    if (!(statusComponent instanceof FacetStatusComponent)) return;
-
-    statusComponent.clearSummary();
-
-    const facetsForm = this.closest('facets-form-component');
-    if (!(facetsForm instanceof FacetsFormComponent)) return;
-
-    facetsForm.updateFilters();
+    if (updateURLHash) FacetFiltersForm.updateURLHash(searchParams);
   }
 
-  /**
-   * Handles keyup events
-   * @param {KeyboardEvent} event - The keyup event
-   */
-  #handleKeyUp = (event) => {
-    if (event.metaKey) return;
-    if (event.key === 'Enter') this.clearFilter(event);
-  };
+  static renderSectionFromFetch(url, event) {
+    fetch(url)
+      .then((response) => response.text())
+      .then((responseText) => {
+        const html = responseText;
+        FacetFiltersForm.filterData = [
+          ...FacetFiltersForm.filterData,
+          { html, url },
+        ];
 
-  /**
-   * Toggle clear button visibility when filters are applied. Happens before the
-   * Section Rendering Request resolves.
-   *
-   * @param {FilterUpdateEvent} event
-   */
-  #handleFilterUpdate = (event) => {
-    const { clearButton } = this.refs;
-    if (clearButton instanceof Element) {
-      clearButton.classList.toggle('facets__clear--active', event.shouldShowClearAll());
-    }
-  };
-}
 
-if (!customElements.get('facet-clear-component')) {
-  customElements.define('facet-clear-component', FacetClearComponent);
-}
-
-/**
- * @typedef {Object} FacetRemoveComponentRefs
- * @property {HTMLInputElement | undefined} clearButton - The button to clear filters
- */
-
-/**
- * Handles removal of individual facet filters
- * @extends {Component<FacetRemoveComponentRefs>}
- */
-class FacetRemoveComponent extends Component {
-  connectedCallback() {
-    super.connectedCallback();
-    document.addEventListener(ThemeEvents.FilterUpdate, this.#handleFilterUpdate);
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    document.removeEventListener(ThemeEvents.FilterUpdate, this.#handleFilterUpdate);
-  }
-
-  /**
-   * Removes the filter
-   * @param {Object} data - The data object
-   * @param {string} data.form - The form to remove the filter from
-   * @param {Event} event - The click event
-   */
-  removeFilter({ form }, event) {
-    if (event instanceof KeyboardEvent) {
-      if (event.key !== 'Enter' && event.key !== ' ') {
-        return;
-      }
-      event.preventDefault();
-    }
-
-    const url = this.dataset.url;
-    if (!url) return;
-
-    const facetsForm = form ? document.getElementById(form) : this.closest('facets-form-component');
-
-    if (!(facetsForm instanceof FacetsFormComponent)) return;
-
-    facetsForm.updateFiltersByURL(url);
-  }
-
-  /**
-   * Toggle clear button visibility when filters are applied. Happens before the
-   * Section Rendering Request resolves.
-   *
-   * @param {FilterUpdateEvent} event
-   */
-  #handleFilterUpdate = (event) => {
-    const { clearButton } = this.refs;
-    if (clearButton instanceof Element) {
-      const activeClass = this.getAttribute('active-class') || 'active';
-      clearButton.classList.toggle(activeClass, event.shouldShowClearAll());
-    }
-  };
-}
-
-if (!customElements.get('facet-remove-component')) {
-  customElements.define('facet-remove-component', FacetRemoveComponent);
-}
-
-/**
- * Handles sorting filter functionality
- *
- * @typedef {Object} SortingFilterRefs
- * @property {HTMLDetailsElement} details - The details element
- * @property {HTMLElement} summary - The summary element
- * @property {HTMLElement} listbox - The listbox element
- *
- * @extends {Component}
- */
-class SortingFilterComponent extends Component {
-  requiredRefs = ['details', 'summary', 'listbox'];
-
-  /**
-   * Handles keyboard navigation in the sorting dropdown
-   * @param {KeyboardEvent} event - The keyboard event
-   */
-  handleKeyDown = (event) => {
-    const { listbox } = this.refs;
-    if (!(listbox instanceof Element)) return;
-
-    const options = Array.from(listbox.querySelectorAll('[role="option"]'));
-    const currentFocused = options.find((option) => option instanceof HTMLElement && option.tabIndex === 0);
-    let newFocusIndex = currentFocused ? options.indexOf(currentFocused) : 0;
-
-    switch (event.key) {
-      case 'ArrowDown':
-        event.preventDefault();
-        newFocusIndex = Math.min(newFocusIndex + 1, options.length - 1);
-        this.#moveFocus(options, newFocusIndex);
-        break;
-
-      case 'ArrowUp':
-        event.preventDefault();
-        newFocusIndex = Math.max(newFocusIndex - 1, 0);
-        this.#moveFocus(options, newFocusIndex);
-        break;
-
-      case 'Enter':
-      case ' ':
-        if (event.target instanceof Element) {
-          const targetOption = event.target.closest('[role="option"]');
-          if (targetOption) {
-            event.preventDefault();
-            this.#selectOption(targetOption);
-          }
-        }
-        break;
-
-      case 'Escape':
-        event.preventDefault();
-        this.#closeDropdown();
-        break;
-    }
-  };
-
-  /**
-   * Handles details toggle event
-   */
-  handleToggle = () => {
-    const { details, summary, listbox } = this.refs;
-    if (!(details instanceof HTMLDetailsElement) || !(summary instanceof HTMLElement)) return;
-
-    const isOpen = details.open;
-    summary.setAttribute('aria-expanded', isOpen.toString());
-
-    if (isOpen && listbox instanceof Element) {
-      // Move focus to selected option when dropdown opens
-      const selectedOption = listbox.querySelector('[aria-selected="true"]');
-      if (selectedOption instanceof HTMLElement) {
-        selectedOption.focus();
-      }
-    }
-  };
-
-  /**
-   * Moves focus between options
-   * @param {Element[]} options - The option elements
-   * @param {number} newIndex - The index of the option to focus
-   */
-  #moveFocus(options, newIndex) {
-    // Remove tabindex from all options
-    options.forEach((option) => {
-      if (option instanceof HTMLElement) {
-        option.tabIndex = -1;
-      }
-    });
-
-    // Set tabindex and focus on new option
-    const targetOption = options[newIndex];
-    if (targetOption instanceof HTMLElement) {
-      targetOption.tabIndex = 0;
-      targetOption.focus();
-    }
-  }
-
-  /**
-   * Selects an option and triggers form submission
-   * @param {Element} option - The option element to select
-   */
-  #selectOption(option) {
-    const input = option.querySelector('input[type="radio"]');
-    if (input instanceof HTMLInputElement && option instanceof HTMLElement) {
-      // Update aria-selected states
-      this.querySelectorAll('[role="option"]').forEach((opt) => {
-        opt.setAttribute('aria-selected', 'false');
-      });
-      option.setAttribute('aria-selected', 'true');
-
-      // Trigger click on the input to ensure normal form behavior
-      input.click();
-
-      // Close dropdown and return focus (handles tabIndex reset)
-      this.#closeDropdown();
-    }
-  }
-
-  /**
-   * Closes the dropdown and returns focus to summary
-   */
-  #closeDropdown() {
-    const { details, summary } = this.refs;
-    if (details instanceof HTMLDetailsElement) {
-      // Reset focus to match the actual selected option
-      const options = this.querySelectorAll('[role="option"]');
-      const selectedOption = this.querySelector('[aria-selected="true"]');
-
-      options.forEach((opt) => {
-        if (opt instanceof HTMLElement) {
-          opt.tabIndex = -1;
-        }
-      });
-
-      if (selectedOption instanceof HTMLElement) {
-        selectedOption.tabIndex = 0;
-      }
-
-      details.open = false;
-      if (summary instanceof HTMLElement) {
-        summary.focus();
-      }
-    }
-  }
-
-  /**
-   * Updates filter and sorting
-   * @param {Event} event - The change event
-   */
-  updateFilterAndSorting(event) {
-    const facetsForm =
-      this.closest('facets-form-component') || this.closest('.shopify-section')?.querySelector('facets-form-component');
-
-    if (!(facetsForm instanceof FacetsFormComponent)) return;
-    const isMobile = window.innerWidth < 750;
-
-    const shouldDisable = this.dataset.shouldUseSelectOnMobile === 'true';
-
-    // Because we have a select element on mobile and a bunch of radio buttons on desktop,
-    // we need to disable the input during "form-submission" to prevent duplicate entries.
-    if (shouldDisable) {
-      if (isMobile) {
-        const inputs = this.querySelectorAll('input[name="sort_by"]');
-        inputs.forEach((input) => {
-          if (!(input instanceof HTMLInputElement)) return;
-          input.disabled = true;
-        });
-      } else {
-        const selectElement = this.querySelector('select[name="sort_by"]');
-        if (!(selectElement instanceof HTMLSelectElement)) return;
-        selectElement.disabled = true;
-      }
-    }
-
-    facetsForm.updateFilters();
-    this.updateFacetStatus(event);
-
-    // Re-enable the input after the form-submission
-    if (shouldDisable) {
-      if (isMobile) {
-        const inputs = this.querySelectorAll('input[name="sort_by"]');
-        inputs.forEach((input) => {
-          if (!(input instanceof HTMLInputElement)) return;
-          input.disabled = false;
-        });
-      } else {
-        const selectElement = this.querySelector('select[name="sort_by"]');
-        if (!(selectElement instanceof HTMLSelectElement)) return;
-        selectElement.disabled = false;
-      }
-    }
-
-    // Close the details element when a value is selected
-    const { details } = this.refs;
-    if (!(details instanceof HTMLDetailsElement)) return;
-    details.open = false;
-  }
-
-  /**
-   * Updates the facet status
-   * @param {Event} event - The change event
-   */
-  updateFacetStatus(event) {
-    if (!(event.target instanceof HTMLSelectElement)) return;
-
-    const details = this.querySelector('details');
-    if (!details) return;
-
-    const facetStatus = details.querySelector('facet-status-component');
-    if (!(facetStatus instanceof FacetStatusComponent)) return;
-
-    facetStatus.textContent =
-      event.target.value !== details.dataset.defaultSortBy ? event.target.dataset.optionName ?? '' : '';
-  }
-}
-
-if (!customElements.get('sorting-filter-component')) {
-  customElements.define('sorting-filter-component', SortingFilterComponent);
-}
-
-/**
- * @typedef {Object} FacetStatusRefs
- * @property {HTMLElement} facetStatus - The facet status element
- */
-
-/**
- * Handles facet status display
- * @extends {Component<FacetStatusRefs>}
- */
-class FacetStatusComponent extends Component {
-  /**
-   * Updates the list summary
-   * @param {HTMLInputElement[]} checkedInputElements - The checked input elements
-   */
-  updateListSummary(checkedInputElements) {
-    const checkedInputElementsCount = checkedInputElements.length;
-
-    this.getAttribute('facet-type') === 'swatches'
-      ? this.#updateSwatchSummary(checkedInputElements, checkedInputElementsCount)
-      : this.#updateBubbleSummary(checkedInputElements, checkedInputElementsCount);
-  }
-
-  /**
-   * Updates the swatch summary
-   * @param {HTMLInputElement[]} checkedInputElements - The checked input elements
-   * @param {number} checkedInputElementsCount - The number of checked inputs
-   */
-  #updateSwatchSummary(checkedInputElements, checkedInputElementsCount) {
-    const { facetStatus } = this.refs;
-    facetStatus.classList.remove('bubble', 'facets__bubble');
-
-    if (checkedInputElementsCount === 0) {
-      facetStatus.innerHTML = '';
-      return;
-    }
-
-    if (checkedInputElementsCount > 3) {
-      facetStatus.innerHTML = checkedInputElementsCount.toString();
-      facetStatus.classList.add('bubble', 'facets__bubble');
-      return;
-    }
-
-    facetStatus.innerHTML = Array.from(checkedInputElements)
-      .map((inputElement) => {
-        const swatch = inputElement.parentElement?.querySelector('span.swatch');
-        const span = document.createElement('span');
-        span.className = 'visually-hidden';
-        span.textContent = inputElement.getAttribute('aria-label') ?? '';
-        return (swatch?.outerHTML ?? '') + span.outerHTML;
+        FacetFiltersForm.renderFilters(html, event);
+        FacetFiltersForm.renderProductGridContainer(html);
+        // FacetFiltersForm.renderProductCount(html);
+        if (typeof initializeScrollAnimationTrigger === "function")
+          initializeScrollAnimationTrigger(html.innerHTML);
       })
-      .join('');
+      .finally(() => FacetFiltersForm.fireCustomEvent());
   }
 
-  /**
-   * Updates the bubble summary
-   * @param {HTMLInputElement[]} checkedInputElements - The checked input elements
-   * @param {number} checkedInputElementsCount - The number of checked inputs
-   */
-  #updateBubbleSummary(checkedInputElements, checkedInputElementsCount) {
-    const { facetStatus } = this.refs;
-    const filterStyle = this.dataset.filterStyle;
+  static renderSectionFromCache(filterDataUrl, event) {
+    const html = FacetFiltersForm.filterData.find(filterDataUrl).html;
+    
 
-    facetStatus.classList.remove('bubble', 'facets__bubble');
+    FacetFiltersForm.renderFilters(html, event);
+    FacetFiltersForm.renderProductGridContainer(html);
+    // FacetFiltersForm.renderProductCount(html);
+    if (typeof initializeScrollAnimationTrigger === "function")
+      initializeScrollAnimationTrigger(html.innerHTML);
+  }
 
-    if (checkedInputElementsCount === 0) {
-      facetStatus.innerHTML = '';
-      return;
+  static renderProductGridContainer(html) {
+    document.getElementById("ProductGridContainer").innerHTML = new DOMParser()
+      .parseFromString(html, "text/html")
+      .getElementById("ProductGridContainer").innerHTML;
+  }
+
+  static renderProductCount(html) {
+    const count = new DOMParser()
+      .parseFromString(html, "text/html")
+      .getElementById("ProductCount").innerHTML;
+    const container = document.getElementById("ProductCount");
+    const containerDesktop = document.getElementById("ProductCountDesktop");
+    container.innerHTML = count;
+    container.classList.remove("loading");
+    if (containerDesktop) {
+      containerDesktop.innerHTML = count;
+      containerDesktop.classList.remove("loading");
+    }
+  }
+
+  static renderFilters(html, event) {
+    const parsedHTML = new DOMParser().parseFromString(html, "text/html");
+
+    const facetDetailsElements = parsedHTML.querySelectorAll(
+      "#FacetFiltersForm .js-filter, #FacetFiltersFormMobile .js-filter, #FacetFiltersPillsForm .js-filter",
+    );
+    const matchesIndex = (element) => {
+      const jsFilter = event ? event.target.closest(".js-filter") : undefined;
+      return jsFilter
+        ? element.dataset.index === jsFilter.dataset.index
+        : false;
+    };
+    const facetsToRender = Array.from(facetDetailsElements).filter(
+      (element) => !matchesIndex(element),
+    );
+    const countsToRender = Array.from(facetDetailsElements).find(matchesIndex);
+
+    facetsToRender.forEach((element) => {
+      // const newElement = document.createElement(element.tagName);
+      // newElement.innerHTML = element.innerHTML;
+      const newElement = element;
+
+      const tabIndexElements = newElement.querySelectorAll(
+        ".wt-collapse__trigger",
+      );
+      tabIndexElements.forEach((el) => el.setAttribute("tabindex", "0"));
+
+      const container = document.querySelector(
+        `.js-filter[data-index="${element.dataset.index}"]`,
+      );
+
+      container.innerHTML = ""; // clear existing content
+      container.appendChild(newElement); // append new element
+    });
+
+    FacetFiltersForm.renderActiveFacets(parsedHTML);
+    FacetFiltersForm.renderAdditionalElements(parsedHTML);
+
+    if (countsToRender)
+      FacetFiltersForm.renderCounts(
+        countsToRender,
+        event.target.closest(".js-filter"),
+      );
+  }
+
+  static renderActiveFacets(html) {
+    const activeFacetElementSelectors = [".active-facets"];
+
+    activeFacetElementSelectors.forEach((selector) => {
+      const activeFacetsElement = html.querySelector(selector);
+      if (!activeFacetsElement) return;
+      document.querySelector(selector).innerHTML =
+        activeFacetsElement.innerHTML;
+    });
+
+    FacetFiltersForm.toggleActiveFacets(false);
+  }
+
+  static renderAdditionalElements(html) {
+    const mobileElementSelectors = [
+      ".mobile-facets__open",
+      ".mobile-facets__count",
+      ".sorting",
+    ];
+
+    mobileElementSelectors.forEach((selector) => {
+      if (!html.querySelector(selector)) return;
+      document.querySelector(selector).innerHTML =
+        html.querySelector(selector).innerHTML;
+    });
+
+    // document.getElementById('FacetFiltersFormMobile').closest('menu-drawer').bindEvents();
+  }
+
+  static renderCounts(source, target) {
+    const targetElement = target.querySelector(".facets__selected");
+    const sourceElement = source.querySelector(".facets__selected");
+
+    const targetElementAccessibility = target.querySelector(".facets__summary");
+    const sourceElementAccessibility = source.querySelector(".facets__summary");
+
+    if (sourceElement && targetElement) {
+      target.querySelector(".facets__selected").outerHTML =
+        source.querySelector(".facets__selected").outerHTML;
     }
 
-    if (filterStyle === 'horizontal' && checkedInputElementsCount === 1) {
-      facetStatus.textContent = checkedInputElements[0]?.dataset.label ?? '';
-      return;
+    if (targetElementAccessibility && sourceElementAccessibility) {
+      target.querySelector(".facets__summary").outerHTML =
+        source.querySelector(".facets__summary").outerHTML;
     }
-
-    facetStatus.innerHTML = checkedInputElementsCount.toString();
-    facetStatus.classList.add('bubble', 'facets__bubble');
   }
 
-  /**
-   * Updates the price summary
-   * @param {HTMLInputElement} minInput - The minimum price input
-   * @param {HTMLInputElement} maxInput - The maximum price input
-   */
-  updatePriceSummary(minInput, maxInput) {
-    const minInputValue = minInput.value;
-    const maxInputValue = maxInput.value;
-    const { facetStatus } = this.refs;
+  static updateURLHash(searchParams) {
+    history.pushState(
+      { searchParams },
+      "",
+      `${window.location.pathname}${searchParams && "?".concat(searchParams)}`,
+    );
+  }
 
-    if (!minInputValue && !maxInputValue) {
-      facetStatus.innerHTML = '';
-      return;
+  static getSections() {
+    return [
+      {
+        section: document.getElementById("product-grid").dataset.id,
+      },
+    ];
+  }
+
+  createSearchParams(form) {
+    const q = new URL(location.href).searchParams.get('q'); 
+    const formData = new FormData(form);
+    if(q && !formData.has('q'))formData.append('q', q);
+
+    return new URLSearchParams(formData).toString();
+  }
+
+  onSubmitForm(searchParams, event) {
+    FacetFiltersForm.renderPage(searchParams, event);
+  }
+
+  onSubmitHandler(event) {
+    event.preventDefault();
+    const sortFilterForms = document.querySelectorAll(
+      "facet-filters-form form",
+    );
+    if (event.srcElement.className == "mobile-facets__checkbox") {
+      const searchParams = this.createSearchParams(
+        event.target.closest("form"),
+      );
+      
+      this.onSubmitForm(searchParams, event);
+    } else {
+      const forms = [];
+      const isMobile =
+        event.target.closest("form")?.id === "FacetFiltersFormMobile";
+
+      sortFilterForms.forEach((form) => {
+        if (!isMobile) {
+          if (
+            form.id === "FacetSortForm" ||
+            form.id === "FacetFiltersForm" ||
+            form.id === "FacetSortDrawerForm"
+          ) {
+            const noJsElements = document.querySelectorAll(".no-js-list");
+            noJsElements.forEach((el) => el.remove());
+            forms.push(this.createSearchParams(form));
+          }
+        } else if (form.id === "FacetFiltersFormMobile") {
+          forms.push(this.createSearchParams(form));
+        }
+      });
+      this.onSubmitForm(forms.join("&"), event);
     }
-
-    const currency = facetStatus.dataset.currency || '';
-    const minInputNum = this.#parseCents(minInputValue, '0', currency);
-    const maxInputNum = this.#parseCents(maxInputValue, facetStatus.dataset.rangeMax, currency);
-    facetStatus.innerHTML = `${this.#formatMoney(minInputNum)}–${this.#formatMoney(maxInputNum)}`;
   }
 
-  /**
-   * Parses a decimal number as minor units (cents for most currencies, but adjusted for zero-decimal currencies)
-   * @param {string} value - The stringified decimal number to parse
-   * @param {string} fallback - The fallback value in case `value` is invalid (formatted string like "11,400")
-   * @param {string} currency - The currency code (e.g., 'USD', 'JPY', 'KRW')
-   * @returns {number} The money value in minor units
-   */
-  #parseCents(value, fallback = '0', currency = '') {
-    // Try to parse the value
-    const result = convertMoneyToMinorUnits(value, currency);
-    if (result !== null) return result;
-
-    // Fall back to parsing the fallback string (which may have formatting like "11,400")
-    const fallbackResult = convertMoneyToMinorUnits(fallback, currency);
-    if (fallbackResult !== null) return fallbackResult;
-
-    // Last resort: clean and parse as integer
-    const cleanFallback = fallback.replace(/[^\d]/g, '');
-    return parseInt(cleanFallback, 10) || 0;
-  }
-
-  /**
-   * Formats money, replicated the implementation of the `money` liquid filters
-   * @param {number} moneyValue - The money value
-   * @returns {string} The formatted money value
-   */
-  #formatMoney(moneyValue) {
-    if (!(this.refs.moneyFormat instanceof HTMLTemplateElement)) return '';
-
-    const format = this.refs.moneyFormat.content.textContent || '{{amount}}';
-    const currency = this.refs.facetStatus.dataset.currency || '';
-
-    return formatMoney(moneyValue, format, currency);
-  }
-
-  /**
-   * Clears the summary
-   */
-  clearSummary() {
-    this.refs.facetStatus.innerHTML = '';
+  onActiveFilterClick(event) {
+    event.preventDefault();
+    FacetFiltersForm.toggleActiveFacets();
+    const url =
+      event.currentTarget.href.indexOf("?") == -1
+        ? ""
+        : event.currentTarget.href.slice(
+            event.currentTarget.href.indexOf("?") + 1,
+          );
+    FacetFiltersForm.renderPage(url);
   }
 }
 
-if (!customElements.get('facet-status-component')) {
-  customElements.define('facet-status-component', FacetStatusComponent);
+FacetFiltersForm.filterData = [];
+FacetFiltersForm.searchParamsInitial = window.location.search.slice(1);
+FacetFiltersForm.searchParamsPrev = window.location.search.slice(1);
+customElements.define("facet-filters-form", FacetFiltersForm);
+FacetFiltersForm.setListeners();
+
+class PriceRange extends HTMLElement {
+  constructor() {
+    super();
+    this.querySelectorAll("input").forEach((element) =>
+      element.addEventListener("input", this.onRangeChange.bind(this)),
+    );
+    this.setMinAndMaxValues();
+  }
+
+  onRangeChange(event) {
+    this.adjustToValidValues(event.currentTarget);
+    this.setMinAndMaxValues();
+  }
+
+  setMinAndMaxValues() {
+    const inputs = this.querySelectorAll("input");
+    const minInput = inputs[0];
+    const maxInput = inputs[1];
+    if (maxInput.value) minInput.setAttribute("max", maxInput.value.trim());
+    if (minInput.value) maxInput.setAttribute("min", minInput.value.trim());
+    if (minInput.value === "") maxInput.setAttribute("min", 0);
+    if (maxInput.value === "")
+      minInput.setAttribute("max", maxInput.getAttribute("max"));
+  }
+
+  adjustToValidValues(input) {
+    const fromInput = this.querySelector('[name="filter.v.price.gte"]');
+    const toInput = this.querySelector('[name="filter.v.price.lte"]');
+    const sliderEl = this.querySelector(".f-price__slider");
+
+    const globalMax = sliderEl
+      ? Number(sliderEl.dataset.max) || 999999
+      : 999999;
+
+    let fromValue = parseFloat(fromInput.value) || 0;
+    let toValue = parseFloat(toInput.value) || 0;
+
+    if (input.name === "filter.v.price.gte") {
+      if (fromValue < 0) {
+        fromValue = 0;
+      }
+      if (fromValue > toValue) {
+        fromValue = toValue;
+      }
+      if (fromValue > globalMax) {
+        fromValue = globalMax;
+      }
+      fromInput.value = fromValue;
+    } else {
+      if (toValue < fromValue) {
+        toValue = fromValue;
+      }
+      if (toValue > globalMax) {
+        toValue = globalMax;
+      }
+      toInput.value = toValue;
+    }
+  }
 }
+
+customElements.define("price-range", PriceRange);
+
+class FacetRemove extends HTMLElement {
+  constructor() {
+    super();
+    const facetLink = this.querySelector("a");
+    facetLink.setAttribute("role", "button");
+    facetLink.addEventListener("click", this.closeFilter.bind(this));
+    facetLink.addEventListener("keyup", (event) => {
+      if (event.code.toUpperCase() === "SPACE") {
+        event.preventDefault();
+        this.closeFilter(event);
+      }
+    });
+    FacetFiltersForm.fireCustomEvent();
+  }
+
+  closeFilter(event) {
+    event.preventDefault();
+    const form =
+      this.closest("facet-filters-form") ||
+      document.querySelector("facet-filters-form");
+    const priceRanges = document.querySelectorAll(
+      ".f-price__inputs > .f-price__val",
+    );
+
+    if (
+      (event.target.className === "filter__remove" ||
+        event.target.parentNode.classList.contains("price_range")) &&
+      priceRanges
+    ) {
+      const priceSlider = document.querySelector(".f-price__slider");
+
+      if (priceSlider) {
+        const maxPrice = document
+          .querySelectorAll("price-range > div")[0]
+          .getAttribute("data-max");
+        const currency = document
+          .querySelectorAll("price-range > div")[0]
+          .getAttribute("data-currency");
+        const minPriceRange = priceRanges[0].querySelector("input");
+        const maxPriceRange = priceRanges[1].querySelector("input");
+
+        priceSlider.noUiSlider.set([
+          priceSlider.dataset.min,
+          priceSlider.dataset.max,
+        ]);
+
+        minPriceRange.value = 0;
+        minPriceRange.max = maxPrice;
+
+        maxPriceRange.value = maxPrice;
+        maxPriceRange.min = 0;
+      }
+    }
+    form.onActiveFilterClick(event);
+  }
+}
+
+customElements.define("facet-remove", FacetRemove);

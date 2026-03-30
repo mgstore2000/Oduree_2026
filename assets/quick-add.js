@@ -1,343 +1,490 @@
-import { morph } from '@theme/morph';
-import { Component } from '@theme/component';
-import { CartUpdateEvent, ThemeEvents, VariantSelectedEvent } from '@theme/events';
-import { DialogComponent, DialogCloseEvent } from '@theme/dialog';
-import { mediaQueryLarge, isMobileBreakpoint, getIOSVersion } from '@theme/utilities';
-import VariantPicker from '@theme/variant-picker';
+if (!customElements.get("quick-add")) {
+  customElements.define(
+    "quick-add",
+    class QuickAdd extends HTMLElement {
+      getFocusableElements(parent) {
+        const focusableElementsSelector =
+          "button:not(.wt-product__sticky-buy__button), [href], input:not(.disabled):not([type='hidden']), select, .close-btn";
+        const focusableElements = () =>
+          Array.from(parent.querySelectorAll(focusableElementsSelector)).filter(
+            (el) => !el.hasAttribute("disabled") && el.tabIndex >= 0,
+          );
 
-export class QuickAddComponent extends Component {
-  /** @type {AbortController | null} */
-  #abortController = null;
-  /** @type {Map<string, Element>} */
-  #cachedContent = new Map();
-  /** @type {AbortController} */
-  #cartUpdateAbortController = new AbortController();
+        return {
+          focusableElements,
+          first: focusableElements()[0],
+          last: focusableElements()[focusableElements().length - 1],
+        };
+      }
 
-  get productPageUrl() {
-    const productCard = /** @type {import('./product-card').ProductCard | null} */ (this.closest('product-card'));
-    const hotspotProduct = /** @type {import('./product-hotspot').ProductHotspotComponent | null} */ (
-      this.closest('product-hotspot-component')
-    );
-    const productLink = productCard?.getProductCardLink() || hotspotProduct?.getHotspotProductLink();
+      connectedCallback() {
+        this.add_button = this.querySelector("button");
+        this.isDrawerOpen = false;
+        this.isMobile = window.innerWidth < 768;
+          if (this.add_button)
+            this.add_button.addEventListener("click", (e) => {
+          const button = e.currentTarget;
+          const cardLink = button
+          .closest(".card__picture-container")
+          ?.querySelector("a.card");
+          this.product_url = this.add_button.getAttribute("data-product-url");
+            this.currentTrigger = cardLink;
+            this.fetchProduct(this.product_url);
+          });
 
-    if (!productLink?.href) return '';
+        this.handleInteractionOutside =
+          this.handleInteractionOutside.bind(this);
 
-    const url = new URL(productLink.href);
+        this.getFocusableElements = this.getFocusableElements.bind(this);
 
-    if (url.searchParams.has('variant')) {
-      return url.toString();
-    }
+        this.lastFeaturedImage;
+        this.firstMedia;
+        this.hasFirstMediaImg;
 
-    const selectedVariantId = this.#getSelectedVariantId();
-    if (selectedVariantId) {
-      url.searchParams.set('variant', selectedVariantId);
-    }
+        this.fetchProduct = this.fetchProduct.bind(this);
+        this.galleryObserver = this.galleryObserver.bind(this);
+        this.observerCallback = this.observerCallback.bind(this);
+        this.disconnectObserver = this.disconnectObserver.bind(this);
+        this.removeButtonEventListener =
+          this.removeButtonEventListener.bind(this);
+      }
 
-    return url.toString();
-  }
+      fetchProduct(product_url) {
+        this.lastFeaturedImage = null;
+        this.firstMedia = null;
+        this.hasFirstMediaImg = null;
+        this.quick_add = document.querySelector(".wt__quick-buy");
+        this.quick_add_container = document.querySelector(
+          ".wt__quick-buy__container",
+        );
+        this.quick_add_wrapper = document.querySelector(
+          ".wt__quick-buy--wrapper",
+        );
+        this.quick_add_product = this.quick_add.querySelector(
+          ".wt__quick-buy--product",
+        );
+        this.close_button = this.quick_add.querySelector(".close-btn");
+        this.loader = this.quick_add.querySelector(".wt__quick-buy-loader");
+        this.page_overlay = document.querySelector(
+          ".wt__quick-buy--page-overlay",
+        );
+        this.body = document.body;
 
-  /**
-   * Gets the currently selected variant ID from the product card
-   * @returns {string | null} The variant ID or null
-   */
-  #getSelectedVariantId() {
-    const productCard = /** @type {import('./product-card').ProductCard | null} */ (this.closest('product-card'));
-    return productCard?.getSelectedVariantId() || null;
-  }
+        const controller = new AbortController();
+        const signal = controller.signal;
 
-  connectedCallback() {
-    super.connectedCallback();
+        const allWtProducts =
+          this.quick_add_wrapper.querySelectorAll(".wt-product");
+        allWtProducts?.forEach((product) => product.remove());
+        this.quick_add.classList.remove("hidden");
+        this.body.classList.add("quick-buy-page-overlay");
+        this.page_overlay.classList.add("wt__quick-buy--page-overlay--open");
 
-    mediaQueryLarge.addEventListener('change', this.#closeQuickAddModal);
-    document.addEventListener(ThemeEvents.cartUpdate, this.#handleCartUpdate, {
-      signal: this.#cartUpdateAbortController.signal,
-    });
-    document.addEventListener(ThemeEvents.variantSelected, this.#updateQuickAddButtonState.bind(this));
-  }
+        this.interactiveEelements = () =>
+          this.quick_add_container.querySelectorAll();
 
-  disconnectedCallback() {
-    super.disconnectedCallback();
+        this.quick_add_container.classList.add(
+          "wt__quick-buy__container--open",
+        );
 
-    mediaQueryLarge.removeEventListener('change', this.#closeQuickAddModal);
-    this.#abortController?.abort();
-    this.#cartUpdateAbortController.abort();
-    document.removeEventListener(ThemeEvents.variantSelected, this.#updateQuickAddButtonState.bind(this));
-  }
+        this.close_button.addEventListener("click", () => {
+          controller.abort();
+          this.closeCart();
+          this.close_button.setAttribute("tabindex", "-1");
+          this.currentTrigger?.focus();
+        });
 
-  /**
-   * Clears the cached content when cart is updated
-   */
-  #handleCartUpdate = () => {
-    this.#cachedContent.clear();
-  };
+        this.quick_add_container.addEventListener("keydown", (e) => {
+          const isTabPressed =
+            e.key === "Tab" || e.keyCode === 9 || e.code === "Tab";
+          const { first, last } = this.getFocusableElements(
+            this.quick_add_container,
+          );
 
-  /**
-   * Re-renders the variant picker in the quick-add modal.
-   * @param {Element} newHtml - The element to re-render.
-   */
-  #updateVariantPicker(newHtml) {
-    const modalContent = document.getElementById('quick-add-modal-content');
-    if (!modalContent) return;
-    const variantPicker = /** @type {VariantPicker | null} */ (modalContent.querySelector('variant-picker'));
-    if (!variantPicker) return;
-    variantPicker.updateVariantPicker(newHtml);
-  }
+          if (e.key === "Escape" || e.keyCode === 27 || e.code === "Escape") {
+            this.close_button.click();
+          }
 
-  /**
-   * Handles quick add button click
-   * @param {Event} event - The click event
-   */
-  handleClick = async (event) => {
-    event.preventDefault();
+          if (isTabPressed) {
+            if (e.shiftKey && document.activeElement === first) {
+              last.focus();
+              e.preventDefault();
+            } else if (!e.shiftKey && document.activeElement === last) {
+              first.focus();
+              e.preventDefault();
+            }
+          }
+        });
 
-    const currentUrl = this.productPageUrl;
+        fetch(product_url, { signal })
+          .then((res) => res.text())
+          .then((res) => {
+            this.loader.classList.add("hidden");
+            const htmlDocument = new DOMParser().parseFromString(
+              res,
+              "text/html",
+            );
+            this.productMain = htmlDocument.querySelector(".wt-product__main");
+            this.productCard = htmlDocument.querySelector(".wt-product");
+            this.productInfo = htmlDocument.querySelector(".wt-product__info");
 
-    // Check if we have cached content for this URL
-    let productGrid = this.#cachedContent.get(currentUrl);
+            const animatedElements = this.productMain.querySelectorAll(
+              ".scroll-trigger.animate--slide-in",
+            );
+            animatedElements?.forEach((element) =>
+              element.classList.remove("scroll-trigger", "animate--slide-in"),
+            );
 
-    if (!productGrid) {
-      // Fetch and cache the content
-      const html = await this.fetchProductPage(currentUrl);
-      if (html) {
-        const gridElement = html.querySelector('[data-product-grid-content]');
-        if (gridElement) {
-          // Cache the cloned element to avoid modifying the original
-          productGrid = /** @type {Element} */ (gridElement.cloneNode(true));
-          this.#cachedContent.set(currentUrl, productGrid);
+            const productGallery =
+            this.productCard.querySelector("gallery-section");
+
+
+            this.removeElements(
+              this.productCard,
+              "collapsible-section",
+              "[not-quick-add]",
+              ".product__inventory",
+              ".share-icons__container",
+              "#gallery-loader",
+              "pickup-availability",
+              ".wt-product__sku",
+              ".wt-product__feature-icons",
+              "gallery-section",
+            );
+
+            const newVariantId =
+              this.productCard.querySelector("variant-options");
+            if (newVariantId) {
+              newVariantId.dataset.updateUrl = "false";
+              this.updateAttribute(
+                newVariantId,
+                "data-original-section",
+                newVariantId.getAttribute("data-section"),
+              );
+              this.updateAttribute(
+                newVariantId,
+                "data-section",
+                `quick-${newVariantId.getAttribute("data-section")}`,
+              );
+            }
+
+          
+
+            productGallery.style.display = "none";
+
+            this.images = productGallery.querySelectorAll("img");
+            this.updateAttribute(
+              productGallery,
+              "id",
+              `MediaGallery-${newVariantId?.getAttribute("data-section")}`,
+            );
+            const firstImageFromGallery = productGallery.querySelector("li");
+            if (firstImageFromGallery) {
+              this.firstMedia = firstImageFromGallery;
+
+              this.playBtn = this.firstMedia.querySelector(".model-btn");
+              if (this.playBtn) this.playBtn.setAttribute("tabindex", "0");
+
+              this.video = this.firstMedia.querySelector("video");
+              if (this.video) this.video.setAttribute("tabindex", "0");
+
+              this.hasFirstMediaImg = Boolean(
+                firstImageFromGallery.querySelector("img"),
+              );
+            }
+
+            firstImageFromGallery
+              ?.querySelector("img")
+              ?.removeAttribute("srcset");
+            const imageContainer = document.createElement("div");
+            imageContainer.setAttribute("class", "product-image");
+
+            const productDetails = document.createElement("div");
+            productDetails.setAttribute("class", "wt-product__details");
+
+            const productAbout = document.createElement("div");
+            productAbout.setAttribute("class", "product-info");
+            const title = this.productInfo.querySelector(".wt-product__name");
+
+            if (title) {
+              const aElement = document.createElement("a");
+              aElement.textContent = title.textContent;
+              aElement.href = this.product_url;
+              title.innerHTML = "";
+              title.appendChild(aElement);
+              title.setAttribute("tabindex", "0");
+            }
+
+            const productElementsToCopy = this.productInfo.querySelectorAll(
+              ".wt-product__brand, .wt-product__name, .wt-rating, .wt-product__price, .product__tax",
+            );
+
+            productElementsToCopy.forEach((product) =>
+              productAbout.appendChild(product),
+            );
+
+            imageContainer.innerHTML = firstImageFromGallery?.innerHTML || "";
+            productDetails.appendChild(imageContainer);
+            productDetails.appendChild(productAbout);
+            this.productInfo.prepend(productDetails);
+
+            this.galleryObserver();
+
+            const mainProductPrice =
+              this.productCard.querySelector(".wt-product__price");
+            this.updateAttribute(
+              mainProductPrice,
+              "id",
+              `price-${newVariantId?.getAttribute("data-section")}`,
+            );
+
+            const allFieldSets = this.productCard.querySelectorAll("fieldset");
+            this.updateFieldSets(allFieldSets);
+
+            const addBtn = this.productCard.querySelector('button[name="add"]');
+            this.updateAttribute(
+              addBtn,
+              "id",
+              `ProductSubmitButton-${newVariantId?.getAttribute("data-section")}`,
+            );
+
+            const form = this.productCard.querySelector(
+              'form[method="post"][data-type="add-to-cart-form"]',
+            );
+            this.updateAttribute(
+              form,
+              "id",
+              `product-form-${newVariantId?.getAttribute("data-section")}`,
+            );
+
+            const viewAllDetailsContainer =
+              this.quick_add_wrapper.querySelector(
+                ".wt__quick-buy__view-all-container",
+              );
+            this.quick_add_wrapper.removeChild(viewAllDetailsContainer);
+            this.quick_add_wrapper.innerHTML += this.productCard.outerHTML;
+            this.quick_add_wrapper.append(viewAllDetailsContainer);
+
+            const giftCardInput = this.quick_add_wrapper.querySelector(
+              '[name="properties[__shopify_send_gift_card_to_recipient]"]',
+            );
+            if (giftCardInput) giftCardInput.removeAttribute("disabled");
+
+            this.addViewAllDetailsButton();
+            this.isDrawerOpen = true;
+
+            // Fire the quick-buy drawer–open event
+            publish(PUB_SUB_EVENTS.quickBuyDrawerOpen, { source: "quick-add" });
+
+            this.close_button.setAttribute("tabindex", "0");
+            this.close_button.focus();
+
+            document.addEventListener("click", this.handleInteractionOutside);
+          })
+          .catch((error) => {
+            if (error.name === "AbortError") {
+              console.error("Fetch aborted");
+            } else {
+              console.error("Fetch error:", error);
+            }
+          });
+      }
+
+      addViewAllDetailsButton() {
+        const viewAllDetailsContainer = this.quick_add_wrapper.querySelector(
+          ".wt__quick-buy__view-all-container",
+        );
+        const link = viewAllDetailsContainer.querySelector("a");
+        link.href = this.product_url;
+        link.setAttribute("tabindex", "0");
+        viewAllDetailsContainer.classList.remove("hidden");
+      }
+
+      hideViewAllDetailsButton() {
+        const viewAllDetailsContainer = this.quick_add_wrapper.querySelector(
+          ".wt__quick-buy__view-all-container",
+        );
+        viewAllDetailsContainer.classList.add("hidden");
+      }
+
+      galleryObserver() {
+        const config = {
+          attributes: true,
+          childList: true,
+          subtree: true,
+          characterData: true,
+        };
+        this.observer = new MutationObserver(this.observerCallback);
+        this.observer.observe(this.quick_add_wrapper, config);
+      }
+
+      observerCallback(mutations) {
+        for (const mutation of mutations) {
+          if (mutation.target.localName === "variant-options") {
+            this.quick_add = document.querySelector(".wt__quick-buy");
+            const variantOptions =
+              this.quick_add.querySelector("variant-options");
+            const imageContainer =
+              this.quick_add.querySelector(".product-image");
+            const image = imageContainer.querySelector("img");
+            const formInput = this.quick_add.querySelector(
+              'form input[name="id"]',
+            );
+            if (variantOptions.getAttribute("data-variant-id")) {
+              formInput.value = variantOptions.getAttribute("data-variant-id");
+              formInput.setAttribute(
+                "value",
+                variantOptions.getAttribute("data-variant-id"),
+              );
+            }
+            if (
+              variantOptions.getAttribute("data-featured-image") &&
+              this.lastFeaturedImage !==
+                variantOptions.getAttribute("data-featured-image")
+            ) {
+              image?.setAttribute(
+                "src",
+                variantOptions.getAttribute("data-featured-image"),
+              );
+              image?.removeAttribute("srcset");
+
+              this.lastFeaturedImage = variantOptions.getAttribute(
+                "data-featured-image",
+              );
+              if (
+                imageContainer.children[0]?.nodeName !== "IMG" &&
+                imageContainer.children[0]?.nodeName !== "A"
+              ) {
+                const newImage = document.createElement("img");
+                newImage.setAttribute(
+                  "class",
+                  "wt-product__img  wt-product__img--zoom-cursor",
+                );
+                newImage.setAttribute(
+                  "src",
+                  variantOptions.getAttribute("data-featured-image"),
+                );
+                newImage.removeAttribute("srcset");
+                imageContainer.innerHTML = "";
+                imageContainer.appendChild(newImage);
+              } else {
+                image.setAttribute(
+                  "src",
+                  variantOptions.getAttribute("data-featured-image"),
+                );
+                image.removeAttribute("srcset");
+              }
+              this.lastFeaturedImage = variantOptions.getAttribute(
+                "data-featured-image",
+              );
+            } else {
+              const hasFirstMediaModel =
+                this.firstMedia?.querySelector("model-element");
+              if (!this.hasFirstMediaImg || hasFirstMediaModel)
+                imageContainer.innerHTML = this.firstMedia?.innerHTML;
+            }
+            break;
+          }
         }
       }
-    }
 
-    if (productGrid) {
-      // Use a fresh clone from the cache
-      const freshContent = /** @type {Element} */ (productGrid.cloneNode(true));
-      await this.updateQuickAddModal(freshContent);
-      this.#updateVariantPicker(productGrid);
-    }
+      handleInteractionOutside(event) {
+        // if (this.isDrawerOpen) {
+        //   const clickInsideDrawer = this.quick_add_wrapper.contains(
+        //     event.target,
+        //   );
+        //   const clickCloseBtn = document
+        //     .querySelector(".icon.icon-close")
+        //     .contains(event.target);
+        //     console.log(event.target, this.page_overlay)
+        //   if (!clickInsideDrawer || clickCloseBtn) {
+        //     this.closeCart();
+        //   }
 
-    this.#openQuickAddModal();
-  };
-
-  #resetScroll() {
-    const dialogComponent = document.getElementById('quick-add-dialog');
-    if (!(dialogComponent instanceof QuickAddDialog)) return;
-
-    const productDetails = dialogComponent.querySelector('.product-details');
-    const productMedia = dialogComponent.querySelector('.product-information__media');
-    productDetails?.scrollTo({ top: 0, behavior: 'instant' });
-    productMedia?.scrollTo({ top: 0, behavior: 'instant' });
-  }
-
-  /** @param {QuickAddDialog} dialogComponent */
-  #stayVisibleUntilDialogCloses(dialogComponent) {
-    this.toggleAttribute('stay-visible', true);
-
-    dialogComponent.addEventListener(DialogCloseEvent.eventName, () => this.toggleAttribute('stay-visible', false), {
-      once: true,
-    });
-  }
-
-  #openQuickAddModal = () => {
-    const dialogComponent = document.getElementById('quick-add-dialog');
-    if (!(dialogComponent instanceof QuickAddDialog)) return;
-
-    this.#stayVisibleUntilDialogCloses(dialogComponent);
-
-    dialogComponent.showDialog();
-
-    // is nondeterministic when the open attribute is set on the dialog element after .showDialog() is called.
-    // Waiting until the open animation starts seemed to be the most reliable metric here.
-    const dialog = dialogComponent.refs?.dialog;
-    if (!dialog) return;
-    dialog.addEventListener('animationstart', this.#resetScroll.bind(this), { once: true });
-  };
-
-  #closeQuickAddModal = () => {
-    const dialogComponent = document.getElementById('quick-add-dialog');
-    if (!(dialogComponent instanceof QuickAddDialog)) return;
-
-    dialogComponent.closeDialog();
-  };
-
-  /**
-   * Fetches the product page content
-   * @param {string} productPageUrl - The URL of the product page to fetch
-   * @returns {Promise<Document | null>}
-   */
-  async fetchProductPage(productPageUrl) {
-    if (!productPageUrl) return null;
-
-    // We use this to abort the previous fetch request if it's still pending.
-    this.#abortController?.abort();
-    this.#abortController = new AbortController();
-
-    try {
-      const response = await fetch(productPageUrl, {
-        signal: this.#abortController.signal,
-      });
-
-      if (!response.ok) {
-        throw new Error(`Failed to fetch product page: HTTP error ${response.status}`);
+        // }
+        if (this.isDrawerOpen && event.target === this.page_overlay) {
+          this.closeCart();
+        }
       }
 
-      const responseText = await response.text();
-      const html = new DOMParser().parseFromString(responseText, 'text/html');
+      closeCart() {
+        // Fire the quick-buy drawer–close event
+        publish(PUB_SUB_EVENTS.quickBuyDrawerClose, { source: "quick-add" });
 
-      return html;
-    } catch (error) {
-      if (error.name === 'AbortError') {
-        return null;
-      } else {
-        throw error;
-      }
-    } finally {
-      this.#abortController = null;
-    }
-  }
+        const loader = this.quick_add.querySelector(".wt__quick-buy-loader");
+        loader.classList.remove("hidden");
+        const product = this.quick_add.querySelector(".wt-product");
 
-  /**
-   * Re-renders the variant picker.
-   * @param {Element} productGrid - The product grid element
-   */
-  async updateQuickAddModal(productGrid) {
-    const modalContent = document.getElementById('quick-add-modal-content');
+        if (product) product.remove();
 
-    if (!productGrid || !modalContent) return;
-
-    if (isMobileBreakpoint()) {
-      const productDetails = productGrid.querySelector('.product-details');
-      const productFormComponent = productGrid.querySelector('product-form-component');
-      const variantPicker = productGrid.querySelector('variant-picker');
-      const productPrice = productGrid.querySelector('product-price');
-      const productTitle = document.createElement('a');
-      productTitle.textContent = this.dataset.productTitle || '';
-
-      // Make product title as a link to the product page
-      productTitle.href = this.productPageUrl;
-
-      const productHeader = document.createElement('div');
-      productHeader.classList.add('product-header');
-
-      productHeader.appendChild(productTitle);
-      if (productPrice) {
-        productHeader.appendChild(productPrice);
-      }
-      productGrid.appendChild(productHeader);
-
-      if (variantPicker) {
-        productGrid.appendChild(variantPicker);
-      }
-      if (productFormComponent) {
-        productGrid.appendChild(productFormComponent);
+        this.body.classList.remove("quick-buy-page-overlay");
+        this.page_overlay.classList.remove("wt__quick-buy--page-overlay--open");
+        this.quick_add_container.classList.remove(
+          "wt__quick-buy__container--open",
+        );
+        this.isDrawerOpen = false;
+        this.hideViewAllDetailsButton();
+        document.removeEventListener("click", this.handleInteractionOutside);
+        this.disconnectObserver();
+        this.removeButtonEventListener();
       }
 
-      productDetails?.remove();
-    }
-
-    morph(modalContent, productGrid);
-
-    this.#syncVariantSelection(modalContent);
-  }
-
-  /**
-   * Updates the quick-add button state based on whether a swatch is selected
-   * @param {VariantSelectedEvent} event - The variant selected event
-   */
-  #updateQuickAddButtonState(event) {
-    if (!(event.target instanceof HTMLElement)) return;
-    if (event.target.closest('product-card') !== this.closest('product-card')) return;
-    const productOptionsCount = this.dataset.productOptionsCount;
-    const quickAddButton = productOptionsCount === '1' ? 'add' : 'choose';
-    this.setAttribute('data-quick-add-button', quickAddButton);
-  }
-
-  /**
-   * Syncs the variant selection from the product card to the modal
-   * @param {Element} modalContent - The modal content element
-   */
-  #syncVariantSelection(modalContent) {
-    const selectedVariantId = this.#getSelectedVariantId();
-    if (!selectedVariantId) return;
-
-    // Find and check the corresponding input in the modal
-    const modalInputs = modalContent.querySelectorAll('input[type="radio"][data-variant-id]');
-    for (const input of modalInputs) {
-      if (input instanceof HTMLInputElement && input.dataset.variantId === selectedVariantId && !input.checked) {
-        input.checked = true;
-        input.dispatchEvent(new Event('change', { bubbles: true }));
-        break;
-      }
-    }
-  }
-}
-
-if (!customElements.get('quick-add-component')) {
-  customElements.define('quick-add-component', QuickAddComponent);
-}
-
-class QuickAddDialog extends DialogComponent {
-  #abortController = new AbortController();
-
-  connectedCallback() {
-    super.connectedCallback();
-
-    this.addEventListener(ThemeEvents.cartUpdate, this.handleCartUpdate, { signal: this.#abortController.signal });
-    this.addEventListener(ThemeEvents.variantUpdate, this.#updateProductTitleLink);
-
-    this.addEventListener(DialogCloseEvent.eventName, this.#handleDialogClose);
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-
-    this.#abortController.abort();
-    this.removeEventListener(DialogCloseEvent.eventName, this.#handleDialogClose);
-  }
-
-  /**
-   * Closes the dialog
-   * @param {CartUpdateEvent} event - The cart update event
-   */
-  handleCartUpdate = (event) => {
-    if (event.detail.data.didError) return;
-    this.closeDialog();
-  };
-
-  #updateProductTitleLink = (/** @type {CustomEvent} */ event) => {
-    const anchorElement = /** @type {HTMLAnchorElement} */ (
-      event.detail.data.html?.querySelector('.view-product-title a')
-    );
-    const viewMoreDetailsLink = /** @type {HTMLAnchorElement} */ (this.querySelector('.view-product-title a'));
-    const mobileProductTitle = /** @type {HTMLAnchorElement} */ (this.querySelector('.product-header a'));
-
-    if (!anchorElement) return;
-
-    if (viewMoreDetailsLink) viewMoreDetailsLink.href = anchorElement.href;
-    if (mobileProductTitle) mobileProductTitle.href = anchorElement.href;
-  };
-
-  #handleDialogClose = () => {
-    const iosVersion = getIOSVersion();
-    /**
-     * This is a patch to solve an issue with the UI freezing when the dialog is closed.
-     * To reproduce it, use iOS 16.0.
-     */
-    if (!iosVersion || iosVersion.major >= 17 || (iosVersion.major === 16 && iosVersion.minor >= 4)) return;
-
-    requestAnimationFrame(() => {
-      /** @type {HTMLElement | null} */
-      const grid = document.querySelector('#ResultsList [product-grid-view]');
-      if (grid) {
-        const currentWidth = grid.getBoundingClientRect().width;
-        grid.style.width = `${currentWidth - 1}px`;
-        requestAnimationFrame(() => {
-          grid.style.width = '';
+      removeElements(element, ...selectors) {
+        selectors.forEach((selector) => {
+          const elements = element.querySelectorAll(selector);
+          elements.forEach((el) => el.remove());
         });
       }
-    });
-  };
-}
 
-if (!customElements.get('quick-add-dialog')) {
-  customElements.define('quick-add-dialog', QuickAddDialog);
+      updateAttribute(element, attribute, value) {
+        if (element) {
+          element.setAttribute(attribute, value);
+        }
+      }
+
+      updateFieldSets(fieldSets) {
+        fieldSets.forEach((fieldset) => {
+          const inputRadios = fieldset.querySelectorAll('input[type="radio"]');
+          const labels = fieldset.querySelectorAll("label");
+
+          inputRadios.forEach((radio) => {
+            this.updateAttribute(
+              radio,
+              "id",
+              `quick-${radio.getAttribute("id")}`,
+            );
+            this.updateAttribute(
+              radio,
+              "form",
+              `product-form-${radio.getAttribute("id")}`,
+            );
+          });
+
+          labels.forEach((label) => {
+            this.updateAttribute(
+              label,
+              "for",
+              `quick-${label.getAttribute("for")}`,
+            );
+          });
+        });
+      }
+
+      disconnectObserver() {
+        this.observer?.disconnect();
+      }
+
+      removeButtonEventListener() {
+        if (this.add_button)
+          this.add_button.removeEventListener("click", () =>
+            this.fetchProduct(this.product_url),
+          );
+      }
+
+      disconnectedCallback() {
+        this.disconnectObserver();
+        this.removeButtonEventListener();
+      }
+    },
+  );
 }
