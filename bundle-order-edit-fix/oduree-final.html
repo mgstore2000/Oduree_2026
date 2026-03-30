@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Duo Set - Oduree | Luxe Autoparfum</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    :root{
+      --bk:#09090b;--dk:#18181b;--g9:#27272a;--g7:#52525b;--g5:#71717a;--g4:#a1a1aa;
+      --g3:#d4d4d8;--g2:#e4e4e7;--g1:#f4f4f5;--g0:#fafafa;--wh:#fff;
+      --gold:#c6a455;--gold-l:#e2cc8b;--gold-d:#a68a3a;
+      --grn:#16a34a;--grn-l:#dcfce7;--grn-d:#166534;
+      --red:#dc2626;--org:#ea580c;--org-l:#fff7ed;--org-b:#fed7aa;
+      --blu:#2563eb;--blu-l:#eff6ff;
+      --rs:8px;--rm:12px;--rl:16px;--rx:20px;--rf:9999px;
+      --ss:0 1px 3px rgba(0,0,0,.07);--sm:0 4px 6px -1px rgba(0,0,0,.07);--sl:0 10px 15px -3px rgba(0,0,0,.07);
+      --f:'Plus Jakarta Sans',system-ui,sans-serif;--e:cubic-bezier(.4,0,.2,1);--d:.2s;--mw:1280px;
+    }
+    body{font-family:var(--f);color:var(--dk);background:var(--wh);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+    a{color:inherit;text-decoration:none}img{max-width:100%;display:block}ul,ol{list-style:none}
+    button,input,select,textarea{font-family:var(--f);border:none;outline:none;background:none}button{cursor:pointer}
+    .w{max-width:var(--mw);margin:0 auto;padding:0 20px}
+    @media(min-width:768px){.w{padding:0 32px}}
+
+    /* ANNOUNCEMENT */
+    .ann{background:var(--bk);color:var(--wh);height:38px;display:flex;align-items:center;overflow:hidden;position:relative}
+    .ann::before,.ann::after{content:'';position:absolute;top:0;bottom:0;width:40px;z-index:2;pointer-events:none}
+    .ann::before{left:0;background:linear-gradient(90deg,var(--bk),transparent)}
+    .ann::after{right:0;background:linear-gradient(-90deg,var(--bk),transparent)}
+    .ann__t{display:flex;white-space:nowrap;animation:mrq 35s linear infinite}
+    .ann__i{display:inline-flex;align-items:center;gap:5px;padding:0 32px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+    .ann__i em{font-style:normal;color:var(--gold)}
+    @keyframes mrq{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+    /* HEADER */
+    .hd{position:sticky;top:0;z-index:90;background:rgba(255,255,255,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--g2);transition:box-shadow var(--d) var(--e)}
+    .hd--s{box-shadow:var(--ss)}
+    .hd__in{display:flex;align-items:center;justify-content:space-between;height:60px}
+    .hd__logo{font-size:20px;font-weight:900;letter-spacing:.1em;text-transform:uppercase}
+    .hd__nav{display:flex;gap:24px}
+    .hd__nav a{font-size:13px;font-weight:600;color:var(--g7);transition:color var(--d);position:relative}
+    .hd__nav a:hover{color:var(--bk)}
+    .hd__nav a.on{color:var(--bk)}
+    .hd__nav a.on::after{content:'';position:absolute;left:0;right:0;bottom:-4px;height:2px;background:var(--gold);border-radius:2px}
+    .hd__r{display:flex;align-items:center;gap:14px}
+    .hd__ic{width:20px;height:20px;color:var(--g7);transition:color var(--d)}
+    .hd__ic:hover{color:var(--bk)}
+    .hd__ct{position:relative}
+    .hd__bg{position:absolute;top:-5px;right:-7px;width:16px;height:16px;background:var(--gold);color:var(--wh);font-size:9px;font-weight:800;border-radius:50%;display:flex;align-items:center;justify-content:center}
+    @media(max-width:767px){.hd__nav{display:none}.hd__in{height:52px}}
+
+    /* HERO LAYOUT */
+    .hero{padding:32px 0 64px}
+    .hero__g{display:grid;grid-template-columns:1.1fr 1fr;gap:48px;align-items:start}
+    @media(max-width:899px){.hero__g{grid-template-columns:1fr;gap:28px}}
+
+    /* Gallery */
+    .gl{position:sticky;top:80px}
+    @media(max-width:899px){.gl{position:static}}
+    .gl__m{width:100%;aspect-ratio:1;border-radius:var(--rx);overflow:hidden;position:relative;background:linear-gradient(150deg,#f7f3ec,#ece5d8)}
+    .gl__ph{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+    .gl__ph-i{font-size:100px;filter:drop-shadow(0 12px 32px rgba(0,0,0,.08))}
+    .gl__ph-t{font-size:13px;color:var(--g5);font-weight:500}
+    .gl__bd{position:absolute;top:14px;left:14px;display:flex;flex-direction:column;gap:5px}
+    .gl__b{padding:4px 12px;border-radius:var(--rf);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.06em}
+    .gl__b--s{background:var(--red);color:var(--wh)}
+    .gl__b--h{background:var(--gold);color:var(--wh)}
+    .gl__th{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px}
+    .gl__t{aspect-ratio:1;border-radius:var(--rs);border:2px solid transparent;cursor:pointer;transition:all var(--d) var(--e);overflow:hidden}
+    .gl__t:hover{border-color:var(--g3)}
+    .gl__t.on{border-color:var(--bk)}
+
+    /* Details */
+    .dt{display:flex;flex-direction:column;gap:18px}
+    .bc{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--g5)}
+    .bc a:hover{color:var(--dk)}
+    .bc__s{color:var(--g3)}
+    .rat{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--g0);border:1px solid var(--g2);border-radius:var(--rf);cursor:pointer;transition:all var(--d) var(--e)}
+    .rat:hover{background:var(--g1);border-color:var(--g3)}
+    .rat__st{color:#f59e0b;font-size:13px;display:flex;gap:1px}
+    .rat__sc{font-size:12px;font-weight:700;color:var(--dk)}
+    .rat__ct{font-size:12px;color:var(--g5)}
+    h1.ttl{font-size:32px;font-weight:900;line-height:1.1;letter-spacing:-.02em;color:var(--bk)}
+    .sub{font-size:14px;color:var(--g7);margin-top:2px}
+    .prc{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .prc__n{font-size:28px;font-weight:900;color:var(--bk)}
+    .prc__w{font-size:16px;color:var(--g4);text-decoration:line-through}
+    .prc__s{display:inline-flex;align-items:center;gap:3px;background:var(--grn-l);color:var(--grn-d);font-size:11px;font-weight:700;padding:3px 8px;border-radius:var(--rf)}
+    .prc__p{width:100%;font-size:12px;color:var(--g5);margin-top:-4px}
+    .prc__sh{width:100%;font-size:12px;color:var(--gold-d);font-weight:600;margin-top:-4px}
+    .urg{display:flex;align-items:center;gap:8px;background:var(--org-l);border:1px solid var(--org-b);border-radius:var(--rm);padding:10px 14px;font-size:12px;color:var(--org)}
+    .urg__d{width:7px;height:7px;background:var(--org);border-radius:50%;flex-shrink:0;animation:bk 1.4s ease-in-out infinite}
+    @keyframes bk{0%,100%{opacity:1}50%{opacity:.3}}
+    .urg b{font-weight:700}
+    .shp{background:var(--blu-l);border:1px solid #bfdbfe;border-radius:var(--rm);padding:10px 14px;font-size:12px;color:var(--blu);display:flex;flex-direction:column;gap:6px}
+    .shp__t{display:flex;justify-content:space-between;align-items:center}
+    .shp__bar{width:100%;height:6px;background:#dbeafe;border-radius:var(--rf);overflow:hidden}
+    .shp__f{height:100%;background:var(--blu);border-radius:var(--rf);transition:width .5s var(--e)}
+    .dv{border:none;border-top:1px solid var(--g1);margin:2px 0}
+
+    /* PURCHASE TYPE TOGGLE */
+    .pt{display:flex;flex-direction:column;gap:8px}
+    .pt__l{font-size:14px;font-weight:700;display:flex;align-items:center;gap:5px}
+    .pt__o{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .pt__c{position:relative;border:2px solid var(--g2);border-radius:var(--rm);padding:14px 16px;cursor:pointer;transition:all var(--d) var(--e);background:var(--wh)}
+    .pt__c:hover{border-color:var(--g3)}
+    .pt__c.on{border-color:var(--bk);background:var(--g0);box-shadow:0 0 0 1px var(--bk)}
+    .pt__r{width:16px;height:16px;border-radius:50%;border:2px solid var(--g3);position:absolute;top:14px;right:14px;transition:all var(--d);display:flex;align-items:center;justify-content:center}
+    .pt__c.on .pt__r{border-color:var(--bk)}
+    .pt__c.on .pt__r::after{content:'';width:8px;height:8px;background:var(--bk);border-radius:50%}
+    .pt__ct{font-size:14px;font-weight:700}
+    .pt__cd{font-size:11px;color:var(--g5);margin-top:2px}
+    .pt__tg{display:inline-block;margin-top:6px;font-size:10px;font-weight:800;padding:2px 8px;border-radius:var(--rf);text-transform:uppercase;letter-spacing:.04em;background:var(--grn-l);color:var(--grn-d)}
+
+    /* Subscription freq */
+    .fq{display:none;flex-direction:column;gap:6px;padding:12px 14px;background:var(--g0);border:1px solid var(--g2);border-radius:var(--rm)}
+    .fq.vis{display:flex}
+    .fq__l{font-size:12px;font-weight:600;color:var(--g7)}
+    .fq__s{padding:8px 12px;border:1px solid var(--g2);border-radius:var(--rs);font-size:13px;font-weight:600;background:var(--wh);color:var(--dk);cursor:pointer;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2371717a' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:32px}
+    .fq__pk{display:flex;flex-direction:column;gap:3px;margin-top:4px}
+    .fq__p{font-size:11px;color:var(--grn-d);font-weight:500;display:flex;align-items:center;gap:4px}
+
+    /* BUNDLE SELECTOR */
+    .bs{display:flex;flex-direction:column;gap:8px}
+    .bs__l{font-size:14px;font-weight:700;display:flex;align-items:center;gap:5px}
+    .bs__g{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+    @media(max-width:520px){.bs__g{grid-template-columns:repeat(2,1fr)}}
+    .bd{position:relative;border:2px solid var(--g2);border-radius:var(--rm);padding:14px 8px 12px;text-align:center;cursor:pointer;transition:all var(--d) var(--e);background:var(--wh)}
+    .bd:hover{border-color:var(--g3);transform:translateY(-1px)}
+    .bd.on{border-color:var(--bk);background:var(--g0);box-shadow:0 0 0 1px var(--bk)}
+    .bd__tg{position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-size:8px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;padding:2px 8px;border-radius:var(--rf);white-space:nowrap}
+    .bd__tg--g{background:var(--gold);color:var(--wh)}
+    .bd__tg--d{background:var(--bk);color:var(--wh)}
+    .bd__q{font-size:22px;font-weight:900;line-height:1;color:var(--bk)}
+    .bd__u{font-size:10px;color:var(--g5);font-weight:500;margin-top:1px}
+    .bd__pr{font-size:13px;font-weight:700;margin-top:6px}
+    .bd__pp{font-size:9px;color:var(--g5);margin-top:1px}
+    .bd__gi{font-size:9px;color:var(--grn-d);font-weight:700;margin-top:5px;line-height:1.3}
+
+    /* Gift callout */
+    .gf{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--grn-l);border:1px solid #bbf7d0;border-radius:var(--rm);font-size:12px}
+    .gf__i{font-size:22px;flex-shrink:0}
+    .gf b{font-weight:700}
+    .gf__v{color:var(--grn-d);font-weight:700}
+
+    /* SCENT SELECTOR */
+    .ss{display:flex;flex-direction:column;gap:8px}
+    .ss__h{display:flex;justify-content:space-between;align-items:center}
+    .ss__l{font-size:14px;font-weight:700;display:flex;align-items:center;gap:5px}
+    .ss__c{font-size:12px;color:var(--g5)}
+    .ss__c b{color:var(--dk);font-weight:700}
+    .ss__g{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+    @media(max-width:600px){.ss__g{grid-template-columns:repeat(3,1fr)}}
+    .sc{position:relative;border:2px solid var(--g1);border-radius:var(--rm);padding:10px 4px 8px;text-align:center;cursor:pointer;transition:all var(--d) var(--e);background:var(--wh)}
+    .sc:hover{border-color:var(--g3)}
+    .sc.on{border-color:var(--bk);background:var(--g0)}
+    .sc__bg{position:absolute;top:-6px;right:-2px;font-size:7px;font-weight:800;background:var(--gold);color:var(--wh);padding:2px 5px;border-radius:var(--rf);text-transform:uppercase;letter-spacing:.04em}
+    .sc__sw{width:26px;height:26px;border-radius:50%;margin:0 auto 4px;box-shadow:inset 0 -2px 4px rgba(0,0,0,.08)}
+    .sc__nm{font-size:9px;font-weight:700;min-height:24px;display:flex;align-items:center;justify-content:center;line-height:1.2}
+    .sc__cr{display:flex;align-items:center;justify-content:center;gap:5px;margin-top:4px}
+    .sc__bt{width:20px;height:20px;border-radius:50%;background:var(--g1);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:background var(--d);color:var(--dk)}
+    .sc__bt:hover{background:var(--g3)}
+    .sc__n{font-size:12px;font-weight:800;min-width:12px}
+
+    /* CTA */
+    .ca{display:flex;flex-direction:column;gap:10px}
+    .ca__btn{width:100%;padding:16px 20px;background:var(--bk);color:var(--wh);font-size:15px;font-weight:700;border-radius:var(--rm);display:flex;align-items:center;justify-content:center;gap:8px;transition:all var(--d) var(--e);position:relative}
+    .ca__btn:hover{background:var(--g9);transform:translateY(-1px);box-shadow:var(--sl)}
+    .ca__btn:active{transform:translateY(0)}
+    .ca__bi{font-size:17px}
+    .ca__bs{display:block;font-size:10px;font-weight:500;opacity:.65;margin-top:1px}
+    .ca__bp{position:absolute;right:18px;font-size:13px;font-weight:500;opacity:.65}
+    .ex{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+    .ex__b{padding:11px;border-radius:var(--rs);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:5px;transition:all var(--d) var(--e)}
+    .ex__b--a{background:var(--bk);color:var(--wh)}.ex__b--a:hover{background:var(--g9)}
+    .ex__b--k{background:#FFB3C7;color:#0a0a0a}.ex__b--k:hover{background:#ffa0b8}
+    .or{text-align:center;font-size:11px;color:var(--g4);text-transform:uppercase;letter-spacing:.1em;font-weight:600}
+    .sm{display:flex;align-items:center;justify-content:center;gap:6px;font-size:11px;color:var(--g5)}
+    .sm__a{display:flex}
+    .sm__av{width:20px;height:20px;border-radius:50%;border:2px solid var(--wh);margin-left:-5px;font-size:7px;font-weight:800;display:flex;align-items:center;justify-content:center;color:var(--wh)}
+    .sm__s{color:#f59e0b;font-size:11px}
+
+    /* Trust strip */
+    .ts{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+    .ts__i{display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--g0);border-radius:var(--rs);font-size:10px;line-height:1.4}
+    .ts__ic{font-size:18px;flex-shrink:0}
+    .ts__i b{font-weight:700;display:block}
+
+    /* SOCIAL PROOF BAR */
+    .sp{background:var(--g0);border-top:1px solid var(--g1);border-bottom:1px solid var(--g1);padding:20px 0}
+    .sp__in{display:flex;align-items:center;justify-content:center;gap:48px;flex-wrap:wrap}
+    .sp__n{font-size:28px;font-weight:900;color:var(--bk)}
+    .sp__t{font-size:11px;color:var(--g5);font-weight:500;text-align:center}
+
+    /* VOLUME SECTION */
+    .vl{padding:64px 0}
+    .vl__ti{font-size:26px;font-weight:900;text-align:center;margin-bottom:6px}
+    .vl__su{text-align:center;font-size:14px;color:var(--g5);margin-bottom:36px}
+    .vl__g{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+    @media(max-width:768px){.vl__g{grid-template-columns:repeat(2,1fr)}}
+    .vc{border:2px solid var(--g1);border-radius:var(--rl);padding:24px 16px;text-align:center;position:relative;transition:all var(--d) var(--e);background:var(--wh)}
+    .vc:hover{transform:translateY(-3px);box-shadow:var(--sm);border-color:var(--g3)}
+    .vc--h{border-color:var(--gold);background:linear-gradient(180deg,#fffdf5,var(--wh))}
+    .vc__tg{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--wh);font-size:9px;font-weight:800;padding:3px 12px;border-radius:var(--rf);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
+    .vc__q{font-size:32px;font-weight:900}
+    .vc__l{font-size:11px;color:var(--g5)}
+    .vc__p{font-size:18px;font-weight:800;margin-top:10px}
+    .vc__pp{font-size:11px;color:var(--g5);margin-top:2px}
+    .vc__d{display:inline-block;background:var(--grn-l);color:var(--grn-d);font-size:10px;font-weight:700;padding:2px 8px;border-radius:var(--rf);margin-top:8px}
+    .vc__gi{font-size:10px;color:var(--gold-d);font-weight:600;margin-top:6px}
+    .vc__ct{display:inline-flex;align-items:center;gap:4px;margin-top:12px;padding:8px 16px;background:var(--bk);color:var(--wh);font-size:11px;font-weight:700;border-radius:var(--rf);transition:all var(--d)}
+    .vc__ct:hover{background:var(--g9);transform:translateY(-1px)}
+
+    /* SUBSCRIPTION EXPLAINER */
+    .se{padding:64px 0;background:linear-gradient(180deg,#fffdf5,var(--wh))}
+    .se__in{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+    @media(max-width:768px){.se__in{grid-template-columns:1fr}}
+    .se__v{background:linear-gradient(145deg,#f7f1e5,#eee5d5);border-radius:var(--rx);padding:48px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:340px}
+    .se__vi{font-size:72px;margin-bottom:16px}
+    .se__vt{font-size:20px;font-weight:800}
+    .se__vs{font-size:13px;color:var(--g5);margin-top:4px}
+    .se__tg{display:inline-block;background:var(--gold);color:var(--wh);font-size:10px;font-weight:800;padding:4px 12px;border-radius:var(--rf);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
+    .se__ti{font-size:26px;font-weight:900;margin-bottom:8px}
+    .se__tx{font-size:14px;color:var(--g7);margin-bottom:24px;line-height:1.7}
+    .se__pk{display:flex;flex-direction:column;gap:12px}
+    .se__p{display:flex;gap:12px;align-items:flex-start}
+    .se__pi{width:36px;height:36px;border-radius:var(--rs);background:var(--grn-l);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+    .se__pt{font-size:13px;font-weight:700}
+    .se__pd{font-size:12px;color:var(--g5);margin-top:1px}
+    .se__ct{display:inline-flex;align-items:center;gap:6px;margin-top:24px;padding:14px 28px;background:var(--bk);color:var(--wh);font-size:14px;font-weight:700;border-radius:var(--rf);transition:all var(--d)}
+    .se__ct:hover{background:var(--g9);transform:translateY(-1px);box-shadow:var(--sm)}
+
+    /* BENEFITS */
+    .bn{padding:64px 0}
+    .bn__ti{font-size:26px;font-weight:900;text-align:center;margin-bottom:40px}
+    .bn__g{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    @media(max-width:768px){.bn__g{grid-template-columns:1fr}}
+    .be{background:var(--g0);border-radius:var(--rl);padding:28px 24px;text-align:center;transition:all var(--d) var(--e)}
+    .be:hover{transform:translateY(-2px);box-shadow:var(--ss)}
+    .be__i{font-size:36px;margin-bottom:14px}
+    .be__t{font-size:14px;font-weight:700;margin-bottom:6px}
+    .be__x{font-size:12px;color:var(--g5);line-height:1.6}
+
+    /* HOW TO */
+    .hw{padding:64px 0;background:var(--g0)}
+    .hw__ti{font-size:26px;font-weight:900;text-align:center;margin-bottom:48px}
+    .hw__st{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
+    @media(max-width:768px){.hw__st{grid-template-columns:1fr}}
+    .hs{text-align:center}
+    .hs__c{width:64px;height:64px;border-radius:50%;background:linear-gradient(145deg,var(--gold-l),var(--gold));color:var(--wh);font-size:24px;font-weight:900;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 4px 16px rgba(198,164,85,.25)}
+    .hs__t{font-size:15px;font-weight:700;margin-bottom:6px}
+    .hs__x{font-size:12px;color:var(--g5);max-width:240px;margin:0 auto;line-height:1.6}
+
+    /* REVIEWS */
+    .rv{padding:64px 0}
+    .rv__hd{text-align:center;margin-bottom:40px}
+    .rv__ti{font-size:26px;font-weight:900}
+    .rv__su{font-size:14px;color:var(--g5);margin-top:6px}
+    .rv__sm{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:16px}
+    .rv__bg{font-size:48px;font-weight:900;line-height:1}
+    .rv__sr{text-align:left}
+    .rv__ss{color:#f59e0b;font-size:18px;letter-spacing:2px}
+    .rv__sc{font-size:12px;color:var(--g5)}
+    .rv__g{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    @media(max-width:768px){.rv__g{grid-template-columns:1fr}}
+    .re{background:var(--g0);border-radius:var(--rl);padding:22px}
+    .re__t{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+    .re__av{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--wh);flex-shrink:0}
+    .re__nm{font-size:13px;font-weight:700}
+    .re__vr{font-size:10px;color:var(--grn);font-weight:500}
+    .re__st{color:#f59e0b;font-size:12px;margin-bottom:6px}
+    .re__tx{font-size:12px;color:var(--g7);line-height:1.6}
+    .re__pr{font-size:10px;color:var(--g4);margin-top:8px;font-style:italic}
+
+    /* CROSS-SELL */
+    .xs{padding:64px 0;background:var(--g0)}
+    .xs__ti{font-size:26px;font-weight:900;text-align:center;margin-bottom:8px}
+    .xs__su{text-align:center;font-size:14px;color:var(--g5);margin-bottom:36px}
+    .xs__g{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    @media(max-width:768px){.xs__g{grid-template-columns:repeat(2,1fr)}}
+    .xc{background:var(--wh);border-radius:var(--rl);overflow:hidden;transition:all var(--d) var(--e)}
+    .xc:hover{transform:translateY(-3px);box-shadow:var(--sm)}
+    .xc__im{aspect-ratio:1;background:linear-gradient(150deg,#f7f3ec,#ece5d8);display:flex;align-items:center;justify-content:center;font-size:48px}
+    .xc__bd{padding:14px}
+    .xc__nm{font-size:13px;font-weight:700}
+    .xc__pr{font-size:12px;color:var(--g5);margin-top:2px}
+    .xc__bt{display:inline-flex;align-items:center;gap:4px;margin-top:8px;font-size:11px;font-weight:700;color:var(--bk);padding:6px 12px;background:var(--g1);border-radius:var(--rf);transition:background var(--d)}
+    .xc__bt:hover{background:var(--g2)}
+
+    /* FAQ */
+    .fq{padding:64px 20px;max-width:720px;margin:0 auto}
+    .fq__ti{font-size:26px;font-weight:900;text-align:center;margin-bottom:32px}
+    .fq__i{border-bottom:1px solid var(--g1)}
+    .fq__q{display:flex;justify-content:space-between;align-items:center;padding:16px 0;font-size:14px;font-weight:600;width:100%;text-align:left;color:var(--dk);transition:color var(--d)}
+    .fq__q:hover{color:var(--g7)}
+    .fq__ic{width:22px;height:22px;border-radius:50%;background:var(--g1);display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--g5);flex-shrink:0;transition:all var(--d)}
+    .fq__a{display:none;padding:0 0 16px;font-size:13px;color:var(--g7);line-height:1.7}
+    .fq__i.op .fq__a{display:block}
+    .fq__i.op .fq__ic{background:var(--bk);color:var(--wh);transform:rotate(45deg)}
+
+    /* GUARANTEE */
+    .gu{padding:64px 0}
+    .gu__bx{background:linear-gradient(135deg,var(--bk),#2a2a2e);border-radius:var(--rx);padding:52px;display:grid;grid-template-columns:auto 1fr;gap:36px;align-items:center;color:var(--wh)}
+    @media(max-width:768px){.gu__bx{grid-template-columns:1fr;text-align:center;padding:36px 24px}}
+    .gu__sh{font-size:72px;filter:drop-shadow(0 4px 20px rgba(198,164,85,.25))}
+    .gu__ti{font-size:22px;font-weight:900;margin-bottom:8px}
+    .gu__tx{font-size:13px;color:rgba(255,255,255,.65);line-height:1.7;max-width:480px}
+    .gu__bt{display:inline-flex;align-items:center;gap:6px;margin-top:18px;padding:12px 24px;background:var(--gold);color:var(--wh);font-size:13px;font-weight:700;border-radius:var(--rf);transition:all var(--d)}
+    .gu__bt:hover{background:var(--gold-d);transform:translateY(-1px)}
+
+    /* FOOTER */
+    .ft{background:var(--bk);color:var(--wh);padding:56px 0 0}
+    .ft__g{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;padding-bottom:40px}
+    @media(max-width:768px){.ft__g{grid-template-columns:1fr 1fr;gap:28px}}
+    .ft__h{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;margin-bottom:14px}
+    .ft__t{font-size:12px;color:rgba(255,255,255,.45);line-height:1.6}
+    .ft__lk{display:flex;flex-direction:column;gap:8px}
+    .ft__lk a{font-size:12px;color:rgba(255,255,255,.45);transition:color var(--d)}
+    .ft__lk a:hover{color:var(--wh)}
+    .ft__nl{display:flex;gap:6px;margin-top:14px}
+    .ft__nl input{flex:1;padding:10px 14px;border:1px solid rgba(255,255,255,.12);border-radius:var(--rs);background:rgba(255,255,255,.04);color:var(--wh);font-size:12px}
+    .ft__nl input::placeholder{color:rgba(255,255,255,.25)}
+    .ft__nl button{padding:10px 16px;background:var(--gold);color:var(--wh);font-size:12px;font-weight:700;border-radius:var(--rs);transition:background var(--d)}
+    .ft__nl button:hover{background:var(--gold-d)}
+    .ft__bt{border-top:1px solid rgba(255,255,255,.06);padding:16px 0;display:flex;justify-content:space-between;align-items:center;font-size:11px;color:rgba(255,255,255,.25)}
+    .ft__py{display:flex;gap:6px}
+    .ft__p{width:34px;height:22px;background:rgba(255,255,255,.08);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:700;color:rgba(255,255,255,.4)}
+  </style>
+</head>
+<body>
+<!-- ANNOUNCEMENT BAR -->
+<div class="ann"><div class="ann__t">
+  <div class="ann__i">&#128666; Vandaag besteld, <em>morgen in huis</em></div>
+  <div class="ann__i">&#11088; 100.000+ <em>tevreden klanten</em></div>
+  <div class="ann__i">&#128230; Gratis verzending <em>vanaf &euro;50</em></div>
+  <div class="ann__i">&#128274; Niet tevreden? <em>Geld terug</em></div>
+  <div class="ann__i">&#128257; Abonneer &amp; <em>bespaar 15%</em></div>
+  <div class="ann__i">&#128666; Vandaag besteld, <em>morgen in huis</em></div>
+  <div class="ann__i">&#11088; 100.000+ <em>tevreden klanten</em></div>
+  <div class="ann__i">&#128230; Gratis verzending <em>vanaf &euro;50</em></div>
+  <div class="ann__i">&#128274; Niet tevreden? <em>Geld terug</em></div>
+  <div class="ann__i">&#128257; Abonneer &amp; <em>bespaar 15%</em></div>
+</div></div>
+
+<!-- HEADER -->
+<header class="hd" id="hdr">
+  <div class="w hd__in">
+    <div class="hd__logo">Oduree</div>
+    <nav class="hd__nav">
+      <a href="#">Shop alles</a><a href="#">Best Sellers</a><a href="#" class="on">Bundels &amp; Sets</a><a href="#">Autoparfum</a><a href="#">Huisparfum</a><a href="#">Geurquiz</a>
+    </nav>
+    <div class="hd__r">
+      <svg class="hd__ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <svg class="hd__ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <div class="hd__ct">
+        <svg class="hd__ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span class="hd__bg">0</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- PRODUCT HERO -->
+<section class="hero"><div class="w hero__g">
+  <!-- Gallery -->
+  <div class="gl">
+    <div class="gl__m">
+      <div class="gl__bd"><span class="gl__b gl__b--s">-22%</span><span class="gl__b gl__b--h">Best seller</span></div>
+      <div class="gl__ph"><div class="gl__ph-i">&#129524;&#129524;</div><div class="gl__ph-t">Duo Set &mdash; 2x Autoparfum Hanger</div></div>
+    </div>
+    <div class="gl__th">
+      <div class="gl__t on" style="background:#f0ebe3"></div>
+      <div class="gl__t" style="background:#ede7db"></div>
+      <div class="gl__t" style="background:#e7dfd3"></div>
+      <div class="gl__t" style="background:#f3ede5"></div>
+      <div class="gl__t" style="background:#eae3d8"></div>
+    </div>
+  </div>
+
+  <!-- Details -->
+  <div class="dt">
+    <div class="bc"><a href="#">Home</a><span class="bc__s">/</span><a href="#">Bundels &amp; Sets</a><span class="bc__s">/</span><span>Duo Set</span></div>
+
+    <div class="rat" onclick="document.querySelector('.rv').scrollIntoView({behavior:'smooth'})">
+      <div class="rat__st">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <span class="rat__sc">4.8</span>
+      <span class="rat__ct">(2.347 reviews)</span>
+    </div>
+
+    <div><h1 class="ttl">Duo Set</h1><p class="sub">Kies 2 luxe autoparfum hangers &mdash; ge&iuml;nspireerd op designer geuren</p></div>
+
+    <div class="prc">
+      <span class="prc__n" id="pn">&euro;35,90</span>
+      <span class="prc__w" id="pw">&euro;45,80</span>
+      <span class="prc__s" id="ps">&#10003; Je bespaart &euro;9,90</span>
+      <span class="prc__p" id="pp">&euro;17,95 per autoparfum &bull; Incl. BTW</span>
+      <span class="prc__sh" id="ph" style="display:none">&#128257; Met abonnement: &euro;30,52 (&euro;15,26/st.)</span>
+    </div>
+
+    <div class="urg"><span class="urg__d"></span><span><b id="vw">127</b> mensen bekijken dit &mdash; vandaag al <b id="od">43</b>x besteld</span></div>
+
+    <div class="shp">
+      <div class="shp__t"><span>&#128230; Nog <b id="sr">&euro;14,10</b> voor <b>gratis verzending!</b></span><span id="spct">72%</span></div>
+      <div class="shp__bar"><div class="shp__f" id="sf" style="width:72%"></div></div>
+    </div>
+
+    <hr class="dv">
+
+    <!-- PURCHASE TYPE: Eenmalig vs Abonnement -->
+    <div class="pt">
+      <div class="pt__l">&#128176; Hoe wil je bestellen?</div>
+      <div class="pt__o">
+        <div class="pt__c on" onclick="setType('once')">
+          <div class="pt__r"></div>
+          <div class="pt__ct">Eenmalig</div>
+          <div class="pt__cd" id="pt1d">&euro;35,90</div>
+        </div>
+        <div class="pt__c" onclick="setType('sub')">
+          <div class="pt__r"></div>
+          <div class="pt__ct">Abonnement</div>
+          <div class="pt__cd" id="pt2d">&euro;30,52 <s style="color:var(--g4)">&euro;35,90</s></div>
+          <div class="pt__tg">Bespaar 15%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Subscription frequency -->
+    <div class="fq" id="fqp">
+      <div class="fq__l">Bezorgfrequentie</div>
+      <select class="fq__s"><option>Elke 4 weken (aanbevolen)</option><option>Elke 6 weken</option><option>Elke 8 weken</option></select>
+      <div class="fq__pk">
+        <div class="fq__p">&#10003; 15% korting op elke levering</div>
+        <div class="fq__p">&#10003; Altijd gratis verzending</div>
+        <div class="fq__p">&#10003; Pas op elk moment aan of pauzeer</div>
+        <div class="fq__p">&#10003; Exclusieve geuren voor abonnees</div>
+      </div>
+    </div>
+
+    <hr class="dv">
+
+    <!-- BUNDLE SELECTOR -->
+    <div class="bs">
+      <div class="bs__l">&#128230; Kies jouw bundel</div>
+      <div class="bs__g">
+        <div class="bd" onclick="setB(this,10)"><div class="bd__tg bd__tg--g">Beste deal</div><div class="bd__q">10</div><div class="bd__u">stuks</div><div class="bd__pr">&euro;139,50</div><div class="bd__pp">&euro;13,95/st.</div><div class="bd__gi">&#127873; Gifts t.w.v. &euro;84,75</div></div>
+        <div class="bd" onclick="setB(this,5)"><div class="bd__tg bd__tg--d">Populairst</div><div class="bd__q">5</div><div class="bd__u">stuks</div><div class="bd__pr">&euro;79,75</div><div class="bd__pp">&euro;15,95/st.</div><div class="bd__gi">&#127873; Gifts t.w.v. &euro;34,85</div></div>
+        <div class="bd on" onclick="setB(this,2)"><div class="bd__q">2</div><div class="bd__u">stuks</div><div class="bd__pr">&euro;35,90</div><div class="bd__pp">&euro;17,95/st.</div><div class="bd__gi">&#127873; 2x sample</div></div>
+        <div class="bd" onclick="setB(this,1)"><div class="bd__q">1</div><div class="bd__u">stuk</div><div class="bd__pr">&euro;19,95</div><div class="bd__pp">&euro;19,95/st.</div><div class="bd__gi">&#127873; 1x sample</div></div>
+      </div>
+    </div>
+
+    <div class="gf"><span class="gf__i">&#127873;</span><div><b>Gratis bij jouw bestelling:</b> 2x Autoparfum Spray Sample <span class="gf__v">t.w.v. &euro;9,90</span></div></div>
+
+    <hr class="dv">
+
+    <!-- SCENT SELECTOR -->
+    <div class="ss">
+      <div class="ss__h">
+        <div class="ss__l">&#128131; Kies jouw geur</div>
+        <div class="ss__c"><b id="ssel">2</b> van <b id="stot">2</b> gekozen</div>
+      </div>
+      <div class="ss__g">
+        <div class="sc on"><div class="sc__bg">&#127942; #1</div><div class="sc__sw" style="background:linear-gradient(135deg,#2c3e50,#4ca1af)"></div><div class="sc__nm">Savage</div><div class="sc__cr"><button class="sc__bt">-</button><span class="sc__n">1</span><button class="sc__bt">+</button></div></div>
+        <div class="sc on"><div class="sc__bg">Populair</div><div class="sc__sw" style="background:linear-gradient(135deg,#c6a455,#e2cc8b)"></div><div class="sc__nm">Million</div><div class="sc__cr"><button class="sc__bt">-</button><span class="sc__n">1</span><button class="sc__bt">+</button></div></div>
+        <div class="sc"><div class="sc__sw" style="background:linear-gradient(135deg,#8B4513,#D2691E)"></div><div class="sc__nm">Arabian Tonka</div><div class="sc__cr"><button class="sc__bt">-</button><span class="sc__n">0</span><button class="sc__bt">+</button></div></div>
+        <div class="sc"><div class="sc__sw" style="background:linear-gradient(135deg,#ff69b4,#ff1493)"></div><div class="sc__nm">La Vie est Bel</div><div class="sc__cr"><button class="sc__bt">-</button><span class="sc__n">0</span><button class="sc__bt">+</button></div></div>
+        <div class="sc"><div class="sc__sw" style="background:linear-gradient(135deg,#FFD700,#FFA500)"></div><div class="sc__nm">Lady Millionaire</div><div class="sc__cr"><button class="sc__bt">-</button><span class="sc__n">0</span><button class="sc__bt">+</button></div></div>
+        <div class="sc"><div class="sc__sw" style="background:linear-gradient(135deg,#1a1a2e,#16213e)"></div><div class="sc__nm">Boss Bottle</div><div class="sc__cr"><button class="sc__bt">-</button><span class="sc__n">0</span><button class="sc__bt">+</button></div></div>
+        <div class="sc"><div class="sc__sw" style="background:linear-gradient(135deg,#8B0000,#FF4500)"></div><div class="sc__nm">Spicebom</div><div class="sc__cr"><button class="sc__bt">-</button><span class="sc__n">0</span><button class="sc__bt">+</button></div></div>
+        <div class="sc"><div class="sc__sw" style="background:linear-gradient(135deg,#F5DEB3,#D2B48C)"></div><div class="sc__nm">Coco Vanilla</div><div class="sc__cr"><button class="sc__bt">-</button><span class="sc__n">0</span><button class="sc__bt">+</button></div></div>
+        <div class="sc"><div class="sc__sw" style="background:linear-gradient(135deg,#4169E1,#1E90FF)"></div><div class="sc__nm">Blue</div><div class="sc__cr"><button class="sc__bt">-</button><span class="sc__n">0</span><button class="sc__bt">+</button></div></div>
+        <div class="sc"><div class="sc__sw" style="background:linear-gradient(135deg,#2F4F4F,#556B2F)"></div><div class="sc__nm">Oud Wood</div><div class="sc__cr"><button class="sc__bt">-</button><span class="sc__n">0</span><button class="sc__bt">+</button></div></div>
+      </div>
+    </div>
+
+    <hr class="dv">
+
+    <!-- CTA -->
+    <div class="ca">
+      <button class="ca__btn" id="ctab">
+        <span class="ca__bi">&#128722;</span>
+        <div><span id="ctat">Toevoegen aan winkelwagen</span><span class="ca__bs" id="ctas">Vandaag besteld, morgen in huis!</span></div>
+        <span class="ca__bp" id="ctap">&euro;35,90</span>
+      </button>
+      <div class="or">of betaal direct met</div>
+      <div class="ex">
+        <button class="ex__b ex__b--a">&#63743; Apple Pay</button>
+        <button class="ex__b ex__b--k">Klarna. Betaal later</button>
+      </div>
+      <div class="sm">
+        <div class="sm__a">
+          <div class="sm__av" style="background:#4ca1af">M</div>
+          <div class="sm__av" style="background:#c6a455">S</div>
+          <div class="sm__av" style="background:#ff69b4">J</div>
+          <div class="sm__av" style="background:#2c3e50">R</div>
+        </div>
+        <span class="sm__s">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+        <span>2.347 klanten gaven een 4.8/5</span>
+      </div>
+    </div>
+
+    <!-- Trust -->
+    <div class="ts">
+      <div class="ts__i"><span class="ts__ic">&#128666;</span><div>Vandaag besteld<b>Morgen in huis</b></div></div>
+      <div class="ts__i"><span class="ts__ic">&#9989;</span><div>Niet tevreden?<b>Geld terug</b></div></div>
+      <div class="ts__i"><span class="ts__ic">&#128230;</span><div>Gratis verzending<b>Vanaf &euro;50</b></div></div>
+      <div class="ts__i"><span class="ts__ic">&#128179;</span><div>Betaal achteraf<b>Met Klarna</b></div></div>
+    </div>
+  </div>
+</div></section>
+
+<!-- SOCIAL PROOF BAR -->
+<div class="sp"><div class="w sp__in">
+  <div><div class="sp__n">100K+</div><div class="sp__t">Tevreden klanten</div></div>
+  <div><div class="sp__n">4.8/5</div><div class="sp__t">Trustpilot score</div></div>
+  <div><div class="sp__n">4-6 wk</div><div class="sp__t">Geur houdbaarheid</div></div>
+  <div><div class="sp__n">24u</div><div class="sp__t">Levertijd</div></div>
+  <div><div class="sp__n">20+</div><div class="sp__t">Geuren</div></div>
+</div></div>
+
+<!-- VOLUME / AOV BOOSTER -->
+<section class="vl"><div class="w">
+  <h2 class="vl__ti">Hoe meer je bestelt, hoe meer je bespaart</h2>
+  <p class="vl__su">Kies de set die bij jou past &mdash; inclusief gratis gifts</p>
+  <div class="vl__g">
+    <div class="vc"><div class="vc__q">1</div><div class="vc__l">stuk</div><div class="vc__p">&euro;19,95</div><div class="vc__pp">&euro;19,95/st.</div><div class="vc__gi">&#127873; 1x sample</div><a href="#" class="vc__ct">Bekijk &rarr;</a></div>
+    <div class="vc"><div class="vc__q">2</div><div class="vc__l">stuks</div><div class="vc__p">&euro;35,90</div><div class="vc__pp">&euro;17,95/st.</div><div class="vc__d">Bespaar 10%</div><div class="vc__gi">&#127873; 2x sample</div><a href="#" class="vc__ct">Bekijk &rarr;</a></div>
+    <div class="vc vc--h"><div class="vc__tg">&#11088; Meest gekozen</div><div class="vc__q">5</div><div class="vc__l">stuks</div><div class="vc__p">&euro;79,75</div><div class="vc__pp">&euro;15,95/st.</div><div class="vc__d">Bespaar 20%</div><div class="vc__gi">&#127873; Gifts t.w.v. &euro;34,85</div><a href="#" class="vc__ct">Bekijk &rarr;</a></div>
+    <div class="vc"><div class="vc__q">10</div><div class="vc__l">stuks</div><div class="vc__p">&euro;139,50</div><div class="vc__pp">&euro;13,95/st.</div><div class="vc__d">Bespaar 30%</div><div class="vc__gi">&#127873; Gifts t.w.v. &euro;84,75</div><a href="#" class="vc__ct">Bekijk &rarr;</a></div>
+  </div>
+</div></section>
+
+<!-- SUBSCRIPTION EXPLAINER -->
+<section class="se"><div class="w se__in">
+  <div class="se__v"><div class="se__vi">&#128257;</div><div class="se__vt">Nooit meer zonder geur</div><div class="se__vs">Je favoriete autoparfum, automatisch thuisbezorgd</div></div>
+  <div>
+    <div class="se__tg">Nieuw: Abonnement</div>
+    <h2 class="se__ti">Abonneer &amp; bespaar 15%</h2>
+    <p class="se__tx">Stel je abonnement samen en ontvang je favoriete geuren automatisch thuisbezorgd. Je bepaalt zelf de frequentie en kunt op elk moment aanpassen, pauzeren of opzeggen.</p>
+    <div class="se__pk">
+      <div class="se__p"><div class="se__pi">&#128176;</div><div><div class="se__pt">15% korting op elke levering</div><div class="se__pd">Automatisch, geen code nodig</div></div></div>
+      <div class="se__p"><div class="se__pi">&#128666;</div><div><div class="se__pt">Altijd gratis verzending</div><div class="se__pd">Ongeacht het bedrag</div></div></div>
+      <div class="se__p"><div class="se__pi">&#9203;</div><div><div class="se__pt">Flexibel: pas aan, pauzeer of stop</div><div class="se__pd">Via je account in 2 klikken</div></div></div>
+      <div class="se__p"><div class="se__pi">&#127873;</div><div><div class="se__pt">Exclusieve voordelen</div><div class="se__pd">Early access + verrassingssamples</div></div></div>
+    </div>
+    <button class="se__ct" onclick="setType('sub');document.querySelector('.pt').scrollIntoView({behavior:'smooth'})">Start mijn abonnement &rarr;</button>
+  </div>
+</div></section>
+
+<!-- BENEFITS -->
+<section class="bn"><div class="w">
+  <h2 class="bn__ti">Waarom 100.000+ mensen kiezen voor Oduree</h2>
+  <div class="bn__g">
+    <div class="be"><div class="be__i">&#128067;</div><div class="be__t">Ruikt naar jouw parfum</div><div class="be__x">Ge&iuml;nspireerd op designer geuren. Herkenbaar, luxe en betaalbaar.</div></div>
+    <div class="be"><div class="be__i">&#9203;</div><div class="be__t">4-6 weken geurplezier</div><div class="be__x">Langdurig genieten bevestigd door duizenden klanten.</div></div>
+    <div class="be"><div class="be__i">&#128663;</div><div class="be__t">Past in elke auto</div><div class="be__x">Van stadsauto tot bestelbus. Hang aan je spiegel en klaar.</div></div>
+    <div class="be"><div class="be__i">&#127873;</div><div class="be__t">Het perfecte cadeau</div><div class="be__x">Betaalbaar, stijlvol en persoonlijk.</div></div>
+    <div class="be"><div class="be__i">&#128274;</div><div class="be__t">Zonder risico</div><div class="be__x">Niet tevreden? Retourneer eenvoudig, geld terug.</div></div>
+    <div class="be"><div class="be__i">&#11088;</div><div class="be__t">4.8/5 Trustpilot</div><div class="be__x">Best beoordeelde autoparfum van Nederland.</div></div>
+  </div>
+</div></section>
+
+<!-- HOW TO -->
+<section class="hw"><div class="w">
+  <h2 class="hw__ti">In 3 stappen ruikt je auto heerlijk</h2>
+  <div class="hw__st">
+    <div class="hs"><div class="hs__c">1</div><div class="hs__t">Openen</div><div class="hs__x">Draai de dop los en verwijder de plastic verzegeling.</div></div>
+    <div class="hs"><div class="hs__c">2</div><div class="hs__t">Omdraaien</div><div class="hs__x">Dop terugdraaien, flesje 3-5 sec ondersteboven houden.</div></div>
+    <div class="hs"><div class="hs__c">3</div><div class="hs__t">Genieten</div><div class="hs__x">Hang aan de binnenspiegel en geniet wekenlang!</div></div>
+  </div>
+</div></section>
+
+<!-- REVIEWS -->
+<section class="rv"><div class="w">
+  <div class="rv__hd">
+    <h2 class="rv__ti">Wat onze klanten zeggen</h2>
+    <p class="rv__su">Echte reviews van echte klanten</p>
+    <div class="rv__sm"><div class="rv__bg">4.8</div><div class="rv__sr"><div class="rv__ss">&#9733;&#9733;&#9733;&#9733;&#9733;</div><div class="rv__sc">Op basis van 2.347 reviews</div></div></div>
+  </div>
+  <div class="rv__g">
+    <div class="re"><div class="re__t"><div class="re__av" style="background:linear-gradient(135deg,#2c3e50,#4ca1af)">MK</div><div><div class="re__nm">Mohammed K.</div><div class="re__vr">&#10003; Geverifieerd</div></div></div><div class="re__st">&#9733;&#9733;&#9733;&#9733;&#9733;</div><div class="re__tx">Echt super blij mee! De Savage geur ruikt precies zoals het echte parfum. Mijn auto ruikt al 3 weken heerlijk. Ga zeker nabestellen!</div><div class="re__pr">Duo Set &bull; Savage &amp; Million</div></div>
+    <div class="re"><div class="re__t"><div class="re__av" style="background:linear-gradient(135deg,#ff69b4,#c6a455)">SB</div><div><div class="re__nm">Sophie B.</div><div class="re__vr">&#10003; Geverifieerd</div></div></div><div class="re__st">&#9733;&#9733;&#9733;&#9733;&#9733;</div><div class="re__tx">Had de Duo Set als cadeau gekocht voor mijn vriend. Hij is er helemaal weg van! Verpakking ziet er ook heel luxe uit. Aanrader!</div><div class="re__pr">Duo Set &bull; Million &amp; Boss Bottle</div></div>
+    <div class="re"><div class="re__t"><div class="re__av" style="background:linear-gradient(135deg,#2F4F4F,#556B2F)">JV</div><div><div class="re__nm">Jayden V.</div><div class="re__vr">&#10003; Geverifieerd</div></div></div><div class="re__st">&#9733;&#9733;&#9733;&#9733;&#9734;</div><div class="re__tx">Million geur is top, blijft echt lang hangen. Volgende dag al in huis. Flesje is kleiner dan verwacht, maar de geur compenseert dat ruim.</div><div class="re__pr">Duo Set &bull; Million &amp; La Vie est Bel</div></div>
+  </div>
+</div></section>
+
+<!-- CROSS-SELL (AOV BOOSTER) -->
+<section class="xs"><div class="w">
+  <h2 class="xs__ti">Maak je set compleet</h2>
+  <p class="xs__su">Klanten die de Duo Set kochten, bestelden ook:</p>
+  <div class="xs__g">
+    <div class="xc"><div class="xc__im">&#127870;</div><div class="xc__bd"><div class="xc__nm">Huisparfum Spray</div><div class="xc__pr">Vanaf &euro;24,95</div><button class="xc__bt">+ Toevoegen</button></div></div>
+    <div class="xc"><div class="xc__im">&#128141;</div><div class="xc__bd"><div class="xc__nm">Gift Box</div><div class="xc__pr">&euro;9,95</div><button class="xc__bt">+ Toevoegen</button></div></div>
+    <div class="xc"><div class="xc__im">&#129524;</div><div class="xc__bd"><div class="xc__nm">5-Set Autoparfum</div><div class="xc__pr">&euro;79,75</div><button class="xc__bt">+ Toevoegen</button></div></div>
+    <div class="xc"><div class="xc__im">&#127780;</div><div class="xc__bd"><div class="xc__nm">Geurstokjes</div><div class="xc__pr">Vanaf &euro;19,95</div><button class="xc__bt">+ Toevoegen</button></div></div>
+  </div>
+</div></section>
+
+<!-- FAQ -->
+<section class="fq">
+  <h2 class="fq__ti">Veelgestelde vragen</h2>
+  <div class="fq__i op"><button class="fq__q" onclick="this.parentElement.classList.toggle('op')">Hoe lang blijft de geur hangen?<span class="fq__ic">+</span></button><div class="fq__a">Gemiddeld 4 tot 6 weken. Dit verschilt per geur en seizoen. E&eacute;n ding is zeker: je geniet er wekenlang van.</div></div>
+  <div class="fq__i"><button class="fq__q" onclick="this.parentElement.classList.toggle('op')">Hoe werkt het abonnement?<span class="fq__ic">+</span></button><div class="fq__a">Kies je geuren en frequentie (4, 6 of 8 weken). Je ontvangt automatisch je autoparfums met 15% korting en gratis verzending. Via je account kun je op elk moment aanpassen, pauzeren of opzeggen.</div></div>
+  <div class="fq__i"><button class="fq__q" onclick="this.parentElement.classList.toggle('op')">Past dit in mijn auto?<span class="fq__ic">+</span></button><div class="fq__a">Ja! De autoparfum hangt aan je binnenspiegel en past in elk type auto.</div></div>
+  <div class="fq__i"><button class="fq__q" onclick="this.parentElement.classList.toggle('op')">Wanneer wordt mijn bestelling geleverd?<span class="fq__ic">+</span></button><div class="fq__a">V&oacute;&oacute;r 23:59 besteld = volgende dag in huis. Wij verzenden dagelijks via PostNL.</div></div>
+  <div class="fq__i"><button class="fq__q" onclick="this.parentElement.classList.toggle('op')">Wat als ik niet tevreden ben?<span class="fq__ic">+</span></button><div class="fq__a">Niet tevreden? Geld terug. Neem contact op en we regelen het. Geen kleine lettertjes.</div></div>
+  <div class="fq__i"><button class="fq__q" onclick="this.parentElement.classList.toggle('op')">Kan ik het abonnement opzeggen?<span class="fq__ic">+</span></button><div class="fq__a">Ja, op elk moment. Ga naar je account, klik op 'Abonnement beheren'. Geen minimum-termijnen of opzegkosten.</div></div>
+</section>
+
+<!-- GUARANTEE -->
+<section class="gu"><div class="w">
+  <div class="gu__bx">
+    <div class="gu__sh">&#128737;&#65039;</div>
+    <div><div class="gu__ti">Bevalt de geur niet? Geen probleem!</div><div class="gu__tx">Geur is persoonlijk. Bevalt het niet? Retourneer eenvoudig en krijg je geld volledig terug. Geen kleine lettertjes, geen gedoe.</div><a href="#" class="gu__bt">Shop zonder risico &rarr;</a></div>
+  </div>
+</div></section>
+
+<!-- FOOTER -->
+<footer class="ft"><div class="w">
+  <div class="ft__g">
+    <div>
+      <div class="ft__h">Oduree</div>
+      <div class="ft__t">D&eacute; specialist in luxe autoparfums. Langdurige geur, stijlvol design. Vandaag besteld, morgen in huis.</div>
+      <div class="ft__h" style="margin-top:20px">Direct 5% korting?</div>
+      <div class="ft__t">Meld je aan voor de nieuwsbrief.</div>
+      <div class="ft__nl"><input type="email" placeholder="E-mailadres"><button>Aanmelden</button></div>
+    </div>
+    <div><div class="ft__h">Producten</div><div class="ft__lk"><a href="#">Autoparfum</a><a href="#">Huisparfum</a><a href="#">Best Sellers</a><a href="#">Bundels &amp; Sets</a><a href="#">Geurquiz</a></div></div>
+    <div><div class="ft__h">Over Oduree</div><div class="ft__lk"><a href="#">Ons verhaal</a><a href="#">Geurbeleving</a><a href="#">Contact</a></div></div>
+    <div><div class="ft__h">Hulp nodig?</div><div class="ft__lk"><a href="#">Verzendbeleid</a><a href="#">Retourneren</a><a href="#">Algemene voorwaarden</a><a href="#">Privacy</a></div></div>
+  </div>
+  <div class="ft__bt">
+    <span>&copy; 2026 Oduree. Alle rechten voorbehouden.</span>
+    <div class="ft__py"><div class="ft__p">iDEAL</div><div class="ft__p">VISA</div><div class="ft__p">MC</div><div class="ft__p">AMEX</div><div class="ft__p">PayPal</div><div class="ft__p">Klarna</div></div>
+  </div>
+</div></footer>
+
+<!-- JAVASCRIPT -->
+<script>
+// Header scroll
+window.addEventListener('scroll',()=>{document.getElementById('hdr').classList.toggle('hd--s',scrollY>10)});
+
+// Price data per bundle
+const D={
+  1:{once:19.95,sub:16.96,was:24.95,pO:19.95,pS:16.96,sO:4.99,sS:7.98,sh:30.05},
+  2:{once:35.90,sub:30.52,was:45.80,pO:17.95,pS:15.26,sO:9.90,sS:15.28,sh:14.10},
+  5:{once:79.75,sub:67.79,was:99.75,pO:15.95,pS:13.56,sO:20.00,sS:31.96,sh:0},
+  10:{once:139.50,sub:118.58,was:199.50,pO:13.95,pS:11.86,sO:60.00,sS:80.92,sh:0}
+};
+let cB=2,cT='once';
+const f=n=>n.toFixed(2).replace('.',',');
+
+function setType(t){
+  cT=t;
+  document.querySelectorAll('.pt__c').forEach((e,i)=>e.classList.toggle('on',(i===0&&t==='once')||(i===1&&t==='sub')));
+  document.getElementById('fqp').classList.toggle('vis',t==='sub');
+  upd();
+}
+
+function setB(el,q){
+  cB=q;
+  document.querySelectorAll('.bd').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('stot').textContent=q;
+  upd();
+}
+
+function upd(){
+  const d=D[cB],iS=cT==='sub';
+  const p=iS?d.sub:d.once, pp=iS?d.pS:d.pO, sv=iS?d.sS:d.sO;
+  document.getElementById('pn').textContent='\u20AC'+f(p);
+  document.getElementById('pw').textContent='\u20AC'+f(d.was);
+  document.getElementById('ps').textContent='\u2713 Je bespaart \u20AC'+f(sv);
+  document.getElementById('pp').textContent='\u20AC'+f(pp)+' per autoparfum \u2022 Incl. BTW';
+  document.getElementById('ctap').textContent='\u20AC'+f(p);
+
+  // Sub hint
+  const h=document.getElementById('ph');
+  if(!iS){h.style.display='block';h.textContent='\uD83D\uDD01 Met abonnement: \u20AC'+f(d.sub)+' (\u20AC'+f(d.pS)+'/st.)';}
+  else{h.style.display='none';}
+
+  // CTA text
+  document.getElementById('ctat').textContent=iS?'Abonnement starten':'Toevoegen aan winkelwagen';
+  document.getElementById('ctas').textContent=iS?'15% korting + altijd gratis verzending':'Vandaag besteld, morgen in huis!';
+
+  // Purchase type descriptions
+  document.getElementById('pt1d').textContent='\u20AC'+f(d.once);
+  document.getElementById('pt2d').innerHTML='\u20AC'+f(d.sub)+' <s style="color:var(--g4)">\u20AC'+f(d.once)+'</s>';
+
+  // Shipping bar
+  const sr=iS?0:d.sh, pct=iS?100:Math.min(100,Math.round((p/50)*100));
+  document.getElementById('sr').textContent='\u20AC'+f(Math.max(0,sr));
+  document.getElementById('spct').textContent=pct+'%';
+  document.getElementById('sf').style.width=pct+'%';
+  if(pct>=100){document.querySelector('.shp .shp__t span').innerHTML='&#128230; <b>Gratis verzending!</b> &#127881;';}
+  else{document.querySelector('.shp .shp__t span').innerHTML='&#128230; Nog <b id="sr">\u20AC'+f(sr)+'</b> voor <b>gratis verzending!</b>';}
+}
+
+// Live urgency numbers (subtle random variation)
+setInterval(()=>{
+  const v=document.getElementById('vw'),o=document.getElementById('od');
+  let vn=parseInt(v.textContent)+Math.floor(Math.random()*5)-2;
+  let on=parseInt(o.textContent)+Math.floor(Math.random()*3)-1;
+  v.textContent=Math.max(80,Math.min(200,vn));
+  o.textContent=Math.max(30,Math.min(70,on));
+},8000);
+</script>
+</body>
+</html>

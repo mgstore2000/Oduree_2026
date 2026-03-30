@@ -1,0 +1,11 @@
+{
+  "name": "oduree-theme",
+  "version": "1.0.0",
+  "description": "Oduree Shopify Theme",
+  "scripts": {
+    "dev": "shopify theme dev --store 0kk8ai-gy.myshopify.com",
+    "pull": "shopify theme pull --store 0kk8ai-gy.myshopify.com",
+    "push": "shopify theme push --store 0kk8ai-gy.myshopify.com"
+  },
+  "private": true
+}

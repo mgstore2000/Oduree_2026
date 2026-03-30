@@ -1,0 +1,21 @@
+node_modules/
+.DS_Store
+Thumbs.db
+
+# Shopify CLI
+.shopify/
+
+# Optional: uncomment to ignore live theme settings
+# config/settings_data.json
+
+# OS files
+*.swp
+*.swo
+*~
+
+# IDE
+.vscode/
+.idea/
+
+# Standalone HTML mockup (not part of theme)
+product-page-optimized.html

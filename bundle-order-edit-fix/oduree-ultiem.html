@@ -1,0 +1,1519 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Duo Set - Oduree | Luxe Autoparfum</title>
+  <meta name="description" content="Autoparfum kopen? Ontdek Oduree - de specialist in luxe autoparfums. Langdurige geur, stijlvol design. Voor 23:59 besteld, morgen in huis!">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================================================
+       ODUREE - ULTIEME PRODUCTPAGINA
+       Gebouwd met focus op: conversie, vertrouwen, urgentie, premium feel
+       ========================================================================== */
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+    :root {
+      --black: #0a0a0a;
+      --dark: #1a1a1a;
+      --gray-900: #2d2d2d;
+      --gray-700: #555;
+      --gray-500: #888;
+      --gray-300: #ccc;
+      --gray-100: #f5f5f5;
+      --gray-50: #fafafa;
+      --white: #fff;
+      --gold: #c9a96e;
+      --gold-light: #e8d5a3;
+      --gold-dark: #a88a4e;
+      --green: #1b7340;
+      --green-light: #e8f5e9;
+      --green-bg: #f0faf0;
+      --red: #d32f2f;
+      --orange: #e65100;
+      --orange-bg: #fff8e1;
+      --orange-border: #ffe082;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --radius-full: 100px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+      --shadow-lg: 0 8px 30px rgba(0,0,0,0.12);
+      --shadow-xl: 0 12px 40px rgba(0,0,0,0.16);
+      --font: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --transition: 0.2s ease;
+      --page-width: 1280px;
+    }
+
+    body {
+      font-family: var(--font);
+      color: var(--dark);
+      background: var(--white);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; height: auto; display: block; }
+    ul { list-style: none; }
+    button { cursor: pointer; border: none; font-family: var(--font); background: none; }
+    input { font-family: var(--font); }
+
+    .container { max-width: var(--page-width); margin: 0 auto; padding: 0 24px; }
+
+    /* ==========================================================================
+       ANNOUNCEMENT BAR - Scrollend met meerdere USPs
+       ========================================================================== */
+    .announcement {
+      background: var(--black);
+      color: var(--white);
+      overflow: hidden;
+      height: 40px;
+      display: flex;
+      align-items: center;
+    }
+    .announcement__track {
+      display: flex;
+      animation: scroll-left 30s linear infinite;
+      white-space: nowrap;
+    }
+    .announcement__item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 40px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .announcement__item span { color: var(--gold); }
+    @keyframes scroll-left {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ==========================================================================
+       HEADER
+       ========================================================================== */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      transition: box-shadow var(--transition);
+    }
+    .header.scrolled { box-shadow: var(--shadow-sm); }
+    .header__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+    .header__logo {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--black);
+    }
+    .header__nav { display: flex; gap: 28px; }
+    .header__nav a {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-700);
+      transition: color var(--transition);
+      position: relative;
+    }
+    .header__nav a:hover { color: var(--black); }
+    .header__nav a.active {
+      color: var(--black);
+    }
+    .header__nav a.active::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--gold);
+      border-radius: 2px;
+    }
+    .header__right { display: flex; align-items: center; gap: 16px; }
+    .header__icon {
+      width: 20px;
+      height: 20px;
+      color: var(--dark);
+      transition: color var(--transition);
+    }
+    .header__icon:hover { color: var(--gray-700); }
+    .header__cart {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .header__cart-count {
+      position: absolute;
+      top: -6px;
+      right: -8px;
+      background: var(--gold);
+      color: var(--white);
+      font-size: 9px;
+      font-weight: 800;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @media (max-width: 768px) {
+      .header__nav { display: none; }
+      .header__inner { height: 56px; }
+    }
+
+    /* ==========================================================================
+       PRODUCT SECTION
+       ========================================================================== */
+    .product {
+      padding: 40px 0 60px;
+    }
+    .product__grid {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 56px;
+      align-items: start;
+    }
+    @media (max-width: 968px) {
+      .product__grid { grid-template-columns: 1fr; gap: 32px; }
+    }
+
+    /* -- Product Media -- */
+    .media { position: sticky; top: 88px; }
+    .media__main {
+      width: 100%;
+      aspect-ratio: 1;
+      background: linear-gradient(145deg, #f8f4ee 0%, #efe8dc 100%);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      position: relative;
+      margin-bottom: 10px;
+    }
+    .media__main-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+    .media__main-placeholder-emoji { font-size: 96px; filter: drop-shadow(0 8px 24px rgba(0,0,0,0.1)); }
+    .media__main-placeholder-text { font-size: 14px; color: var(--gray-500); font-weight: 500; }
+    .media__badge {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .media__badge-item {
+      padding: 5px 14px;
+      border-radius: var(--radius-full);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .media__badge-item--sale { background: var(--red); color: var(--white); }
+    .media__badge-item--bestseller { background: var(--gold); color: var(--white); }
+    .media__thumbs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+    .media__thumb {
+      aspect-ratio: 1;
+      border-radius: var(--radius-sm);
+      border: 2px solid transparent;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all var(--transition);
+      background: #f0ebe3;
+    }
+    .media__thumb:hover { border-color: var(--gray-300); }
+    .media__thumb--active { border-color: var(--black); }
+
+    @media (max-width: 968px) {
+      .media { position: static; }
+    }
+
+    /* -- Product Details -- */
+    .details { display: flex; flex-direction: column; gap: 20px; }
+
+    /* Breadcrumb */
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--gray-500);
+    }
+    .breadcrumb a:hover { color: var(--dark); }
+    .breadcrumb__sep { color: var(--gray-300); }
+
+    /* Rating */
+    .rating {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      background: var(--gray-50);
+      border-radius: var(--radius-full);
+      width: fit-content;
+      cursor: pointer;
+      transition: background var(--transition);
+    }
+    .rating:hover { background: var(--gray-100); }
+    .rating__stars { display: flex; gap: 1px; }
+    .rating__star { color: #f5a623; font-size: 14px; }
+    .rating__text { font-size: 12px; font-weight: 600; color: var(--gray-700); }
+    .rating__count { font-size: 12px; color: var(--gray-500); }
+
+    /* Title */
+    .details__title {
+      font-size: 34px;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: var(--black);
+    }
+    .details__subtitle {
+      font-size: 15px;
+      color: var(--gray-700);
+      line-height: 1.5;
+      margin-top: -4px;
+    }
+
+    /* Price */
+    .price-block { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .price-block__current { font-size: 30px; font-weight: 800; color: var(--black); }
+    .price-block__compare {
+      font-size: 18px;
+      color: var(--gray-500);
+      text-decoration: line-through;
+    }
+    .price-block__save {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--green-light);
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+    }
+    .price-block__per {
+      width: 100%;
+      font-size: 13px;
+      color: var(--gray-500);
+    }
+
+    /* Urgency */
+    .urgency {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--orange-bg);
+      border: 1px solid var(--orange-border);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--orange);
+    }
+    .urgency__dot {
+      width: 8px;
+      height: 8px;
+      background: var(--orange);
+      border-radius: 50%;
+      flex-shrink: 0;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.85)} }
+    .urgency strong { font-weight: 700; }
+
+    /* Divider */
+    .divider { border: none; border-top: 1px solid var(--gray-100); margin: 4px 0; }
+
+    /* -- Bundle Selector -- */
+    .selector-label {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .selector-label__icon { font-size: 18px; }
+
+    .bundles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    @media (max-width: 520px) { .bundles { grid-template-columns: repeat(2, 1fr); } }
+
+    .bundle {
+      position: relative;
+      border: 2px solid var(--gray-100);
+      border-radius: var(--radius-md);
+      padding: 16px 10px 14px;
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--transition);
+      background: var(--white);
+    }
+    .bundle:hover { border-color: var(--gray-300); transform: translateY(-1px); }
+    .bundle--active {
+      border-color: var(--black);
+      background: var(--gray-50);
+      box-shadow: 0 0 0 1px var(--black);
+    }
+    .bundle__tag {
+      position: absolute;
+      top: -9px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 8px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      white-space: nowrap;
+    }
+    .bundle__tag--gold { background: var(--gold); color: var(--white); }
+    .bundle__tag--dark { background: var(--black); color: var(--white); }
+    .bundle__qty { font-size: 22px; font-weight: 800; line-height: 1; }
+    .bundle__unit { font-size: 11px; color: var(--gray-500); font-weight: 500; margin-top: 2px; }
+    .bundle__price { font-size: 12px; font-weight: 700; color: var(--black); margin-top: 8px; }
+    .bundle__price-per { font-size: 10px; color: var(--gray-500); }
+    .bundle__gift {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--green);
+      margin-top: 6px;
+      line-height: 1.3;
+    }
+
+    /* Gift callout */
+    .gift-callout {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      background: var(--green-bg);
+      border: 1px solid #c8e6c9;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+    }
+    .gift-callout__icon { font-size: 24px; flex-shrink: 0; }
+    .gift-callout strong { font-weight: 700; }
+    .gift-callout__value { color: var(--green); font-weight: 700; }
+
+    /* -- Scent Selector -- */
+    .scents-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 12px;
+    }
+    .scents-header__count {
+      font-size: 13px;
+      color: var(--gray-500);
+      font-weight: 500;
+    }
+    .scents-header__count strong { color: var(--black); font-weight: 700; }
+
+    .scents { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+    @media (max-width: 520px) { .scents { grid-template-columns: repeat(3, 1fr); } }
+
+    .scent {
+      position: relative;
+      border: 2px solid var(--gray-100);
+      border-radius: var(--radius-md);
+      padding: 12px 6px 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--transition);
+      background: var(--white);
+    }
+    .scent:hover { border-color: var(--gray-300); }
+    .scent--selected {
+      border-color: var(--black);
+      background: var(--gray-50);
+    }
+    .scent__badge {
+      position: absolute;
+      top: -7px;
+      right: -2px;
+      font-size: 8px;
+      font-weight: 800;
+      background: var(--gold);
+      color: var(--white);
+      padding: 2px 6px;
+      border-radius: var(--radius-full);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .scent__swatch {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      margin: 0 auto 6px;
+      box-shadow: inset 0 -2px 4px rgba(0,0,0,0.1);
+    }
+    .scent__name { font-size: 10px; font-weight: 700; line-height: 1.3; min-height: 26px; display: flex; align-items: center; justify-content: center; }
+    .scent__controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 6px;
+    }
+    .scent__btn {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--gray-100);
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition);
+      color: var(--dark);
+      line-height: 1;
+    }
+    .scent__btn:hover { background: var(--gray-300); }
+    .scent__num { font-size: 13px; font-weight: 800; min-width: 14px; }
+
+    /* -- CTA Area -- */
+    .cta-area { display: flex; flex-direction: column; gap: 12px; }
+
+    .cta-btn {
+      width: 100%;
+      padding: 18px 24px;
+      background: var(--black);
+      color: var(--white);
+      font-size: 16px;
+      font-weight: 700;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all var(--transition);
+      letter-spacing: 0.01em;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-btn:hover {
+      background: var(--gray-900);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-lg);
+    }
+    .cta-btn:active { transform: translateY(0); }
+    .cta-btn__icon { font-size: 18px; }
+    .cta-btn__sub {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      opacity: 0.7;
+      margin-top: 2px;
+    }
+    .cta-btn__price {
+      position: absolute;
+      right: 20px;
+      font-size: 14px;
+      font-weight: 500;
+      opacity: 0.7;
+    }
+
+    /* Express checkout */
+    .express-checkout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .express-btn {
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all var(--transition);
+    }
+    .express-btn--apple { background: var(--black); color: var(--white); }
+    .express-btn--apple:hover { background: var(--gray-900); }
+    .express-btn--klarna { background: #FFB3C7; color: #0A0A0A; }
+    .express-btn--klarna:hover { background: #ffa3bb; }
+
+    /* Social proof mini */
+    .social-mini {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--gray-500);
+      padding: 4px 0;
+    }
+    .social-mini__avatars { display: flex; }
+    .social-mini__avatar {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid var(--white);
+      margin-left: -6px;
+      font-size: 8px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+    }
+    .social-mini__stars { color: #f5a623; font-size: 12px; }
+
+    /* -- Trust Strip -- */
+    .trust-strip {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      background: var(--gray-50);
+      border-radius: var(--radius-sm);
+      font-size: 11px;
+      line-height: 1.4;
+      font-weight: 500;
+    }
+    .trust-item__icon { font-size: 20px; flex-shrink: 0; }
+    .trust-item strong { font-weight: 700; display: block; }
+
+    /* ==========================================================================
+       VOLUME DISCOUNT TABLE
+       ========================================================================== */
+    .volume-section { padding: 60px 0; }
+    .volume-section__title {
+      font-size: 26px;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .volume-section__sub {
+      text-align: center;
+      font-size: 14px;
+      color: var(--gray-500);
+      margin-bottom: 36px;
+    }
+    .volume-table {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    @media (max-width: 768px) { .volume-table { grid-template-columns: repeat(2, 1fr); } }
+
+    .volume-card {
+      border: 2px solid var(--gray-100);
+      border-radius: var(--radius-lg);
+      padding: 28px 20px;
+      text-align: center;
+      position: relative;
+      transition: all var(--transition);
+      background: var(--white);
+    }
+    .volume-card:hover { border-color: var(--gray-300); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+    .volume-card--highlight {
+      border-color: var(--gold);
+      background: linear-gradient(180deg, #fffdf7 0%, var(--white) 100%);
+    }
+    .volume-card__tag {
+      position: absolute;
+      top: -11px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--gold);
+      color: var(--white);
+      font-size: 10px;
+      font-weight: 800;
+      padding: 4px 14px;
+      border-radius: var(--radius-full);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+    .volume-card__qty { font-size: 36px; font-weight: 800; }
+    .volume-card__label { font-size: 12px; color: var(--gray-500); margin-top: 2px; }
+    .volume-card__price { font-size: 20px; font-weight: 800; margin-top: 12px; }
+    .volume-card__per { font-size: 12px; color: var(--gray-500); margin-top: 2px; }
+    .volume-card__discount {
+      display: inline-block;
+      background: var(--green-light);
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      margin-top: 10px;
+    }
+    .volume-card__gifts {
+      font-size: 11px;
+      color: var(--gold-dark);
+      font-weight: 600;
+      margin-top: 8px;
+    }
+    .volume-card__cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 14px;
+      padding: 10px 20px;
+      background: var(--black);
+      color: var(--white);
+      font-size: 12px;
+      font-weight: 700;
+      border-radius: var(--radius-full);
+      transition: all var(--transition);
+    }
+    .volume-card__cta:hover { background: var(--gray-900); transform: translateY(-1px); }
+
+    /* ==========================================================================
+       BENEFITS
+       ========================================================================== */
+    .benefits {
+      padding: 60px 0;
+      background: var(--gray-50);
+    }
+    .benefits__title { font-size: 26px; font-weight: 800; text-align: center; margin-bottom: 40px; }
+    .benefits__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    @media (max-width: 768px) { .benefits__grid { grid-template-columns: 1fr; } }
+
+    .benefit {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 32px 28px;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+      transition: all var(--transition);
+    }
+    .benefit:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+    .benefit__icon { font-size: 40px; margin-bottom: 16px; }
+    .benefit__title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+    .benefit__text { font-size: 13px; color: var(--gray-500); line-height: 1.6; }
+
+    /* ==========================================================================
+       HOW TO
+       ========================================================================== */
+    .howto { padding: 80px 0; }
+    .howto__title { font-size: 26px; font-weight: 800; text-align: center; margin-bottom: 48px; }
+    .howto__steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; position: relative; }
+    @media (max-width: 768px) { .howto__steps { grid-template-columns: 1fr; gap: 32px; } }
+
+    .howto-step { text-align: center; }
+    .howto-step__circle {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, var(--gold-light), var(--gold));
+      color: var(--white);
+      font-size: 28px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      box-shadow: 0 4px 16px rgba(201, 169, 110, 0.3);
+    }
+    .howto-step__title { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+    .howto-step__text { font-size: 13px; color: var(--gray-500); max-width: 260px; margin: 0 auto; line-height: 1.6; }
+
+    /* ==========================================================================
+       REVIEWS
+       ========================================================================== */
+    .reviews { padding: 60px 0; background: var(--gray-50); }
+    .reviews__header { text-align: center; margin-bottom: 40px; }
+    .reviews__title { font-size: 26px; font-weight: 800; }
+    .reviews__subtitle { font-size: 14px; color: var(--gray-500); margin-top: 8px; }
+    .reviews__summary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .reviews__big-number { font-size: 48px; font-weight: 800; line-height: 1; }
+    .reviews__summary-right { text-align: left; }
+    .reviews__summary-stars { color: #f5a623; font-size: 18px; letter-spacing: 2px; }
+    .reviews__summary-count { font-size: 13px; color: var(--gray-500); }
+
+    .reviews__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    @media (max-width: 768px) { .reviews__grid { grid-template-columns: 1fr; } }
+
+    .review {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+    .review__top { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .review__avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--white);
+    }
+    .review__info {}
+    .review__name { font-size: 13px; font-weight: 700; }
+    .review__verified { font-size: 11px; color: var(--green); font-weight: 500; }
+    .review__stars { color: #f5a623; font-size: 13px; margin-bottom: 8px; }
+    .review__text { font-size: 13px; color: var(--gray-700); line-height: 1.6; }
+    .review__product { font-size: 11px; color: var(--gray-500); margin-top: 10px; font-style: italic; }
+
+    /* ==========================================================================
+       FAQ
+       ========================================================================== */
+    .faq { padding: 60px 0; max-width: 720px; margin: 0 auto; }
+    .faq__title { font-size: 26px; font-weight: 800; text-align: center; margin-bottom: 32px; }
+    .faq__item { border-bottom: 1px solid var(--gray-100); }
+    .faq__q {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 0;
+      font-size: 14px;
+      font-weight: 600;
+      width: 100%;
+      text-align: left;
+      color: var(--dark);
+      transition: color var(--transition);
+    }
+    .faq__q:hover { color: var(--gray-700); }
+    .faq__icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--gray-100);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: var(--gray-500);
+      flex-shrink: 0;
+      transition: all var(--transition);
+    }
+    .faq__a {
+      display: none;
+      padding: 0 0 18px;
+      font-size: 13px;
+      color: var(--gray-700);
+      line-height: 1.7;
+    }
+    .faq__item--open .faq__a { display: block; }
+    .faq__item--open .faq__icon { background: var(--black); color: var(--white); transform: rotate(45deg); }
+
+    /* ==========================================================================
+       GUARANTEE
+       ========================================================================== */
+    .guarantee { padding: 60px 0; }
+    .guarantee__inner {
+      background: linear-gradient(135deg, var(--black) 0%, #2a2a2a 100%);
+      border-radius: var(--radius-xl);
+      padding: 56px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 40px;
+      align-items: center;
+      color: var(--white);
+    }
+    @media (max-width: 768px) {
+      .guarantee__inner { grid-template-columns: 1fr; text-align: center; padding: 36px 28px; }
+    }
+    .guarantee__shield { font-size: 80px; filter: drop-shadow(0 4px 20px rgba(201,169,110,0.3)); }
+    .guarantee__title { font-size: 24px; font-weight: 800; margin-bottom: 10px; }
+    .guarantee__text { font-size: 14px; color: rgba(255,255,255,0.7); line-height: 1.7; max-width: 520px; }
+    .guarantee__btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 20px;
+      padding: 14px 28px;
+      background: var(--gold);
+      color: var(--white);
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: var(--radius-full);
+      transition: all var(--transition);
+    }
+    .guarantee__btn:hover { background: var(--gold-dark); transform: translateY(-1px); }
+
+    /* ==========================================================================
+       FOOTER
+       ========================================================================== */
+    .footer {
+      background: var(--black);
+      color: var(--white);
+      padding: 64px 0 0;
+    }
+    .footer__grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      padding-bottom: 48px;
+    }
+    @media (max-width: 768px) { .footer__grid { grid-template-columns: 1fr 1fr; gap: 32px; } }
+
+    .footer__heading { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 16px; color: var(--white); }
+    .footer__text { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.6; }
+    .footer__links { display: flex; flex-direction: column; gap: 10px; }
+    .footer__links a { font-size: 13px; color: rgba(255,255,255,0.5); transition: color var(--transition); }
+    .footer__links a:hover { color: var(--white); }
+    .footer__newsletter { display: flex; gap: 8px; margin-top: 16px; }
+    .footer__newsletter input {
+      flex: 1;
+      padding: 12px 16px;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: var(--radius-sm);
+      background: rgba(255,255,255,0.05);
+      color: var(--white);
+      font-size: 13px;
+    }
+    .footer__newsletter input::placeholder { color: rgba(255,255,255,0.3); }
+    .footer__newsletter button {
+      padding: 12px 20px;
+      background: var(--gold);
+      color: var(--white);
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: var(--radius-sm);
+      transition: background var(--transition);
+    }
+    .footer__newsletter button:hover { background: var(--gold-dark); }
+    .footer__bottom {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding: 20px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: rgba(255,255,255,0.3);
+    }
+    .footer__payments { display: flex; gap: 8px; }
+    .footer__payment {
+      width: 36px;
+      height: 24px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.5);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ANNOUNCEMENT BAR -->
+  <div class="announcement">
+    <div class="announcement__track">
+      <div class="announcement__item">&#128666; Vandaag besteld, <span>morgen in huis!</span></div>
+      <div class="announcement__item">&#11088; 100.000+ <span>tevreden klanten</span></div>
+      <div class="announcement__item">&#128230; Gratis verzending <span>vanaf &euro;50</span></div>
+      <div class="announcement__item">&#128274; Niet tevreden? <span>Geld terug!</span></div>
+      <div class="announcement__item">&#128179; Betaal achteraf <span>met Klarna</span></div>
+      <div class="announcement__item">&#128666; Vandaag besteld, <span>morgen in huis!</span></div>
+      <div class="announcement__item">&#11088; 100.000+ <span>tevreden klanten</span></div>
+      <div class="announcement__item">&#128230; Gratis verzending <span>vanaf &euro;50</span></div>
+      <div class="announcement__item">&#128274; Niet tevreden? <span>Geld terug!</span></div>
+      <div class="announcement__item">&#128179; Betaal achteraf <span>met Klarna</span></div>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="header" id="header">
+    <div class="container header__inner">
+      <div class="header__logo">Oduree</div>
+      <nav class="header__nav">
+        <a href="#">Shop alles</a>
+        <a href="#">Best Sellers</a>
+        <a href="#" class="active">Bundels &amp; Sets</a>
+        <a href="#">Autoparfum</a>
+        <a href="#">Huisparfum</a>
+        <a href="#">Geurquiz</a>
+      </nav>
+      <div class="header__right">
+        <svg class="header__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <svg class="header__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <div class="header__cart">
+          <svg class="header__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <span class="header__cart-count">0</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- PRODUCT -->
+  <section class="product">
+    <div class="container product__grid">
+
+      <!-- MEDIA -->
+      <div class="media">
+        <div class="media__main">
+          <div class="media__badge">
+            <span class="media__badge-item media__badge-item--sale">-22%</span>
+            <span class="media__badge-item media__badge-item--bestseller">Best Seller</span>
+          </div>
+          <div class="media__main-placeholder">
+            <div class="media__main-placeholder-emoji">&#129524;&#129524;</div>
+            <div class="media__main-placeholder-text">Duo Set - 2x Autoparfum Hanger</div>
+          </div>
+        </div>
+        <div class="media__thumbs">
+          <div class="media__thumb media__thumb--active"></div>
+          <div class="media__thumb" style="background:#ede7db;"></div>
+          <div class="media__thumb" style="background:#e5ddd0;"></div>
+          <div class="media__thumb" style="background:#f2ece4;"></div>
+          <div class="media__thumb" style="background:#e8e0d5;"></div>
+        </div>
+      </div>
+
+      <!-- DETAILS -->
+      <div class="details">
+
+        <div class="breadcrumb">
+          <a href="#">Home</a>
+          <span class="breadcrumb__sep">/</span>
+          <a href="#">Bundels &amp; Sets</a>
+          <span class="breadcrumb__sep">/</span>
+          <span>Duo Set</span>
+        </div>
+
+        <div class="rating" onclick="document.querySelector('.reviews').scrollIntoView({behavior:'smooth'})">
+          <div class="rating__stars">
+            <span class="rating__star">&#9733;</span><span class="rating__star">&#9733;</span><span class="rating__star">&#9733;</span><span class="rating__star">&#9733;</span><span class="rating__star">&#9733;</span>
+          </div>
+          <span class="rating__text">4.8</span>
+          <span class="rating__count">(2.347 reviews)</span>
+        </div>
+
+        <div>
+          <h1 class="details__title">Duo Set</h1>
+          <p class="details__subtitle">2x luxe autoparfum hanger naar keuze + gratis samples</p>
+        </div>
+
+        <div class="price-block">
+          <span class="price-block__current">&euro;35,90</span>
+          <span class="price-block__compare">&euro;45,80</span>
+          <span class="price-block__save">&#10003; Bespaar &euro;9,90</span>
+          <span class="price-block__per">&euro;17,95 per autoparfum &bull; Incl. BTW</span>
+        </div>
+
+        <div class="urgency">
+          <span class="urgency__dot"></span>
+          <span><strong>127 mensen</strong> bekijken dit nu &mdash; vandaag al <strong>43x</strong> besteld</span>
+        </div>
+
+        <hr class="divider">
+
+        <!-- BUNDLE SELECTOR -->
+        <div>
+          <div class="selector-label"><span class="selector-label__icon">&#128230;</span> Kies jouw bundel</div>
+          <div class="bundles">
+            <div class="bundle">
+              <div class="bundle__tag bundle__tag--gold">Beste deal</div>
+              <div class="bundle__qty">10</div>
+              <div class="bundle__unit">stuks</div>
+              <div class="bundle__price">&euro;139,50</div>
+              <div class="bundle__price-per">&euro;13,95/st.</div>
+              <div class="bundle__gift">&#127873; Gifts t.w.v. &euro;84,75</div>
+            </div>
+            <div class="bundle">
+              <div class="bundle__tag bundle__tag--dark">Meest gekozen</div>
+              <div class="bundle__qty">5</div>
+              <div class="bundle__unit">stuks</div>
+              <div class="bundle__price">&euro;79,75</div>
+              <div class="bundle__price-per">&euro;15,95/st.</div>
+              <div class="bundle__gift">&#127873; Gifts t.w.v. &euro;34,85</div>
+            </div>
+            <div class="bundle bundle--active">
+              <div class="bundle__qty">2</div>
+              <div class="bundle__unit">stuks</div>
+              <div class="bundle__price">&euro;35,90</div>
+              <div class="bundle__price-per">&euro;17,95/st.</div>
+              <div class="bundle__gift">&#127873; Gifts t.w.v. &euro;9,90</div>
+            </div>
+            <div class="bundle">
+              <div class="bundle__qty">1</div>
+              <div class="bundle__unit">stuk</div>
+              <div class="bundle__price">&euro;19,95</div>
+              <div class="bundle__price-per">&euro;19,95/st.</div>
+              <div class="bundle__gift">&#127873; Gift t.w.v. &euro;4,95</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="gift-callout">
+          <span class="gift-callout__icon">&#127873;</span>
+          <div><strong>Gratis bij jouw bestelling:</strong> 2x Autoparfum Spray Sample <span class="gift-callout__value">t.w.v. &euro;9,90</span></div>
+        </div>
+
+        <hr class="divider">
+
+        <!-- SCENT SELECTOR -->
+        <div>
+          <div class="scents-header">
+            <div class="selector-label"><span class="selector-label__icon">&#128131;</span> Kies jouw geur</div>
+            <div class="scents-header__count"><strong>2</strong> van 2 geselecteerd</div>
+          </div>
+          <div class="scents">
+            <div class="scent scent--selected">
+              <div class="scent__badge">&#127942; #1</div>
+              <div class="scent__swatch" style="background:linear-gradient(135deg,#2c3e50,#4ca1af);"></div>
+              <div class="scent__name">Savage</div>
+              <div class="scent__controls">
+                <button class="scent__btn">-</button>
+                <span class="scent__num">1</span>
+                <button class="scent__btn">+</button>
+              </div>
+            </div>
+            <div class="scent scent--selected">
+              <div class="scent__badge">Popular</div>
+              <div class="scent__swatch" style="background:linear-gradient(135deg,#c9a96e,#e8d5a3);"></div>
+              <div class="scent__name">Million</div>
+              <div class="scent__controls">
+                <button class="scent__btn">-</button>
+                <span class="scent__num">1</span>
+                <button class="scent__btn">+</button>
+              </div>
+            </div>
+            <div class="scent">
+              <div class="scent__swatch" style="background:linear-gradient(135deg,#8B4513,#D2691E);"></div>
+              <div class="scent__name">Arabian Tonka</div>
+              <div class="scent__controls">
+                <button class="scent__btn">-</button>
+                <span class="scent__num">0</span>
+                <button class="scent__btn">+</button>
+              </div>
+            </div>
+            <div class="scent">
+              <div class="scent__swatch" style="background:linear-gradient(135deg,#ff69b4,#ff1493);"></div>
+              <div class="scent__name">La Vie est Bel</div>
+              <div class="scent__controls">
+                <button class="scent__btn">-</button>
+                <span class="scent__num">0</span>
+                <button class="scent__btn">+</button>
+              </div>
+            </div>
+            <div class="scent">
+              <div class="scent__swatch" style="background:linear-gradient(135deg,#FFD700,#FFA500);"></div>
+              <div class="scent__name">Lady Millionaire</div>
+              <div class="scent__controls">
+                <button class="scent__btn">-</button>
+                <span class="scent__num">0</span>
+                <button class="scent__btn">+</button>
+              </div>
+            </div>
+            <div class="scent">
+              <div class="scent__swatch" style="background:linear-gradient(135deg,#1a1a2e,#16213e);"></div>
+              <div class="scent__name">Boss Bottle</div>
+              <div class="scent__controls">
+                <button class="scent__btn">-</button>
+                <span class="scent__num">0</span>
+                <button class="scent__btn">+</button>
+              </div>
+            </div>
+            <div class="scent">
+              <div class="scent__swatch" style="background:linear-gradient(135deg,#8B0000,#FF4500);"></div>
+              <div class="scent__name">Spicebom</div>
+              <div class="scent__controls">
+                <button class="scent__btn">-</button>
+                <span class="scent__num">0</span>
+                <button class="scent__btn">+</button>
+              </div>
+            </div>
+            <div class="scent">
+              <div class="scent__swatch" style="background:linear-gradient(135deg,#F5DEB3,#D2B48C);"></div>
+              <div class="scent__name">Coco Vanilla</div>
+              <div class="scent__controls">
+                <button class="scent__btn">-</button>
+                <span class="scent__num">0</span>
+                <button class="scent__btn">+</button>
+              </div>
+            </div>
+            <div class="scent">
+              <div class="scent__swatch" style="background:linear-gradient(135deg,#4169E1,#1E90FF);"></div>
+              <div class="scent__name">Blue</div>
+              <div class="scent__controls">
+                <button class="scent__btn">-</button>
+                <span class="scent__num">0</span>
+                <button class="scent__btn">+</button>
+              </div>
+            </div>
+            <div class="scent">
+              <div class="scent__swatch" style="background:linear-gradient(135deg,#2F4F4F,#556B2F);"></div>
+              <div class="scent__name">Oud Wood</div>
+              <div class="scent__controls">
+                <button class="scent__btn">-</button>
+                <span class="scent__num">0</span>
+                <button class="scent__btn">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <hr class="divider">
+
+        <!-- CTA -->
+        <div class="cta-area">
+          <button class="cta-btn">
+            <span class="cta-btn__icon">&#128722;</span>
+            <div>
+              Toevoegen aan winkelwagen
+              <span class="cta-btn__sub">Vandaag besteld, morgen in huis!</span>
+            </div>
+            <span class="cta-btn__price">&euro;35,90</span>
+          </button>
+
+          <div class="express-checkout">
+            <button class="express-btn express-btn--apple">&#63743; Apple Pay</button>
+            <button class="express-btn express-btn--klarna">Klarna. Betaal later</button>
+          </div>
+
+          <div class="social-mini">
+            <div class="social-mini__avatars">
+              <div class="social-mini__avatar" style="background:#4ca1af;">MK</div>
+              <div class="social-mini__avatar" style="background:#c9a96e;">SB</div>
+              <div class="social-mini__avatar" style="background:#ff69b4;">JV</div>
+              <div class="social-mini__avatar" style="background:#2c3e50;">RD</div>
+            </div>
+            <span class="social-mini__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+            <span>2.347 klanten gaven een 4.8/5</span>
+          </div>
+        </div>
+
+        <!-- TRUST -->
+        <div class="trust-strip">
+          <div class="trust-item">
+            <span class="trust-item__icon">&#128666;</span>
+            <div>Vandaag besteld<strong>Morgen in huis!</strong></div>
+          </div>
+          <div class="trust-item">
+            <span class="trust-item__icon">&#9989;</span>
+            <div>Niet tevreden?<strong>Geld terug!</strong></div>
+          </div>
+          <div class="trust-item">
+            <span class="trust-item__icon">&#128230;</span>
+            <div>Gratis verzending<strong>Vanaf &euro;50</strong></div>
+          </div>
+          <div class="trust-item">
+            <span class="trust-item__icon">&#128179;</span>
+            <div>Betaal achteraf<strong>Met Klarna</strong></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- VOLUME DISCOUNT -->
+  <section class="volume-section">
+    <div class="container">
+      <h2 class="volume-section__title">Hoe meer je bestelt, hoe meer je bespaart</h2>
+      <p class="volume-section__sub">Kies de set die bij jou past &mdash; inclusief gratis gifts!</p>
+      <div class="volume-table">
+        <div class="volume-card">
+          <div class="volume-card__qty">1</div>
+          <div class="volume-card__label">stuk</div>
+          <div class="volume-card__price">&euro;19,95</div>
+          <div class="volume-card__per">&euro;19,95 per stuk</div>
+          <div class="volume-card__gifts">&#127873; 1x gratis sample</div>
+          <a href="#" class="volume-card__cta">Bekijk &rarr;</a>
+        </div>
+        <div class="volume-card">
+          <div class="volume-card__qty">2</div>
+          <div class="volume-card__label">stuks</div>
+          <div class="volume-card__price">&euro;35,90</div>
+          <div class="volume-card__per">&euro;17,95 per stuk</div>
+          <div class="volume-card__discount">Bespaar 10%</div>
+          <div class="volume-card__gifts">&#127873; 2x gratis sample</div>
+          <a href="#" class="volume-card__cta">Bekijk &rarr;</a>
+        </div>
+        <div class="volume-card volume-card--highlight">
+          <div class="volume-card__tag">&#11088; Meest gekozen</div>
+          <div class="volume-card__qty">5</div>
+          <div class="volume-card__label">stuks</div>
+          <div class="volume-card__price">&euro;79,75</div>
+          <div class="volume-card__per">&euro;15,95 per stuk</div>
+          <div class="volume-card__discount">Bespaar 20%</div>
+          <div class="volume-card__gifts">&#127873; Gifts t.w.v. &euro;34,85</div>
+          <a href="#" class="volume-card__cta">Bekijk &rarr;</a>
+        </div>
+        <div class="volume-card">
+          <div class="volume-card__qty">10</div>
+          <div class="volume-card__label">stuks</div>
+          <div class="volume-card__price">&euro;139,50</div>
+          <div class="volume-card__per">&euro;13,95 per stuk</div>
+          <div class="volume-card__discount">Bespaar 30%</div>
+          <div class="volume-card__gifts">&#127873; Gifts t.w.v. &euro;84,75</div>
+          <a href="#" class="volume-card__cta">Bekijk &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BENEFITS -->
+  <section class="benefits">
+    <div class="container">
+      <h2 class="benefits__title">Waarom 100.000+ mensen kiezen voor Oduree</h2>
+      <div class="benefits__grid">
+        <div class="benefit">
+          <div class="benefit__icon">&#128067;</div>
+          <div class="benefit__title">Ruikt naar jouw parfum</div>
+          <div class="benefit__text">Ge&iuml;nspireerd op de populairste designer geuren. Van Savage tot Million &mdash; herkenbaar en luxe.</div>
+        </div>
+        <div class="benefit">
+          <div class="benefit__icon">&#9203;</div>
+          <div class="benefit__title">4-6 weken geurplezier</div>
+          <div class="benefit__text">Onze klanten bevestigen: de geur blijft weken hangen. Langdurig genieten van begin tot eind.</div>
+        </div>
+        <div class="benefit">
+          <div class="benefit__icon">&#128663;</div>
+          <div class="benefit__title">Past in elke auto</div>
+          <div class="benefit__text">Van stadsauto tot bestelbus. Hang hem aan je binnenspiegel en je auto ruikt direct heerlijk.</div>
+        </div>
+        <div class="benefit">
+          <div class="benefit__icon">&#127873;</div>
+          <div class="benefit__title">Het perfecte cadeau</div>
+          <div class="benefit__text">Betaalbaar, stijlvol en persoonlijk. Verrassing gegarandeerd bij elke autoliefhebber.</div>
+        </div>
+        <div class="benefit">
+          <div class="benefit__icon">&#128274;</div>
+          <div class="benefit__title">Zonder risico shoppen</div>
+          <div class="benefit__text">Bevalt de geur niet? Retourneer eenvoudig en ontvang je geld volledig terug. Geen gedoe.</div>
+        </div>
+        <div class="benefit">
+          <div class="benefit__icon">&#11088;</div>
+          <div class="benefit__title">4.8/5 op Trustpilot</div>
+          <div class="benefit__text">Met 2.347 reviews en 100.000+ tevreden klanten zijn wij de best beoordeelde autoparfum van NL.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW TO -->
+  <section class="howto">
+    <div class="container">
+      <h2 class="howto__title">In 3 simpele stappen ruikt je auto heerlijk</h2>
+      <div class="howto__steps">
+        <div class="howto-step">
+          <div class="howto-step__circle">1</div>
+          <div class="howto-step__title">Openen</div>
+          <div class="howto-step__text">Draai de dop van de autoparfum en verwijder de plastic dop.</div>
+        </div>
+        <div class="howto-step">
+          <div class="howto-step__circle">2</div>
+          <div class="howto-step__title">Omdraaien</div>
+          <div class="howto-step__text">Draai de dop terug en houd het flesje 3-5 seconden ondersteboven vanaf het glas.</div>
+        </div>
+        <div class="howto-step">
+          <div class="howto-step__circle">3</div>
+          <div class="howto-step__title">Genieten</div>
+          <div class="howto-step__text">Hang de autoparfum aan de binnenspiegel en geniet wekenlang van de geur!</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEWS -->
+  <section class="reviews">
+    <div class="container">
+      <div class="reviews__header">
+        <h2 class="reviews__title">Wat onze klanten zeggen</h2>
+        <p class="reviews__subtitle">Echte reviews van echte klanten &mdash; geen betaalde marketing</p>
+        <div class="reviews__summary">
+          <div class="reviews__big-number">4.8</div>
+          <div class="reviews__summary-right">
+            <div class="reviews__summary-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <div class="reviews__summary-count">Gebaseerd op 2.347 reviews</div>
+          </div>
+        </div>
+      </div>
+      <div class="reviews__grid">
+        <div class="review">
+          <div class="review__top">
+            <div class="review__avatar" style="background:linear-gradient(135deg,#2c3e50,#4ca1af);">MK</div>
+            <div class="review__info">
+              <div class="review__name">Mohammed K.</div>
+              <div class="review__verified">&#10003; Geverifieerde aankoop</div>
+            </div>
+          </div>
+          <div class="review__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <div class="review__text">Echt super blij mee! De Savage geur ruikt precies zoals het echte parfum. Mijn auto ruikt nu al 3 weken heerlijk. Ga zeker nabestellen!</div>
+          <div class="review__product">Duo Set &bull; Savage &amp; Million</div>
+        </div>
+        <div class="review">
+          <div class="review__top">
+            <div class="review__avatar" style="background:linear-gradient(135deg,#ff69b4,#c9a96e);">SB</div>
+            <div class="review__info">
+              <div class="review__name">Sophie B.</div>
+              <div class="review__verified">&#10003; Geverifieerde aankoop</div>
+            </div>
+          </div>
+          <div class="review__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <div class="review__text">Had de Duo Set als cadeau gekocht voor mijn vriend. Hij is er helemaal weg van! De verpakking ziet er ook luxe uit. Volgende keer de 5-set!</div>
+          <div class="review__product">Duo Set &bull; Million &amp; Boss Bottle</div>
+        </div>
+        <div class="review">
+          <div class="review__top">
+            <div class="review__avatar" style="background:linear-gradient(135deg,#2F4F4F,#556B2F);">JV</div>
+            <div class="review__info">
+              <div class="review__name">Jayden V.</div>
+              <div class="review__verified">&#10003; Geverifieerde aankoop</div>
+            </div>
+          </div>
+          <div class="review__stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+          <div class="review__text">Million geur is top, blijft echt lang hangen. Snelle levering, volgende dag al in huis. Enige minpuntje: flesje is iets kleiner dan verwacht maar de geur compenseert dat ruim.</div>
+          <div class="review__product">Duo Set &bull; Million &amp; La Vie est Bel</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq" style="padding: 60px 24px;">
+    <h2 class="faq__title">Veelgestelde vragen</h2>
+    <div class="faq__item faq__item--open">
+      <button class="faq__q" onclick="this.parentElement.classList.toggle('faq__item--open')">Hoe lang blijft de geur hangen?<span class="faq__icon">+</span></button>
+      <div class="faq__a">Volgens onze klanten gemiddeld 4 tot 6 weken. Al verschilt het per geur, seizoen en hoe vaak de autoparfum omdraait. E&eacute;n ding is zeker: je zult er lang van genieten.</div>
+    </div>
+    <div class="faq__item">
+      <button class="faq__q" onclick="this.parentElement.classList.toggle('faq__item--open')">Hoe gebruik ik de autoparfum?<span class="faq__icon">+</span></button>
+      <div class="faq__a">Draai de dop open, verwijder het plastic dopje en draai hem weer dicht. Houd het flesje 3 tot 5 seconden ondersteboven (vanaf het glas), hang 'm aan je binnenspiegel en klaar. Zo simpel is het.</div>
+    </div>
+    <div class="faq__item">
+      <button class="faq__q" onclick="this.parentElement.classList.toggle('faq__item--open')">Past dit wel in mijn auto?<span class="faq__icon">+</span></button>
+      <div class="faq__a">Zeker weten! De autoparfum is geschikt voor elk type auto, van kleine stadsauto tot grote bestelbus. Waar je ook in rijdt, hij past altijd.</div>
+    </div>
+    <div class="faq__item">
+      <button class="faq__q" onclick="this.parentElement.classList.toggle('faq__item--open')">Wanneer wordt mijn bestelling geleverd?<span class="faq__icon">+</span></button>
+      <div class="faq__a">Bestel je v&oacute;&oacute;r 23:59 uur, dan heb je je bestelling de volgende dag al in huis. Lekker snel, zodat je meteen kunt genieten.</div>
+    </div>
+    <div class="faq__item">
+      <button class="faq__q" onclick="this.parentElement.classList.toggle('faq__item--open')">Wat als ik niet tevreden ben?<span class="faq__icon">+</span></button>
+      <div class="faq__a">Geen zorgen! Neem contact op met onze klantenservice en we helpen je persoonlijk en snel verder. In het uiterste geval krijg je gewoon je geld terug. Geen kleine lettertjes.</div>
+    </div>
+    <div class="faq__item">
+      <button class="faq__q" onclick="this.parentElement.classList.toggle('faq__item--open')">Zijn de geuren unisex?<span class="faq__icon">+</span></button>
+      <div class="faq__a">Ja! Al onze geuren zijn geschikt voor iedereen. Sommige geuren leunen meer naar mannelijk (zoals Savage) en anderen naar vrouwelijk (zoals La Vie est Bel), maar uiteindelijk kies je wat jij lekker vindt.</div>
+    </div>
+  </section>
+
+  <!-- GUARANTEE -->
+  <section class="guarantee">
+    <div class="container">
+      <div class="guarantee__inner">
+        <div class="guarantee__shield">&#128737;&#65039;</div>
+        <div>
+          <div class="guarantee__title">Bevalt de geur toch niet? Geen probleem!</div>
+          <div class="guarantee__text">Geur is persoonlijk en daarom shop je bij Oduree zonder risico. Bevalt de geur niet? Dan retourneer je eenvoudig en krijg je je geld volledig terug. Geen kleine lettertjes, geen gedoe. Wij geloven in ons product.</div>
+          <a href="#" class="guarantee__btn">Shop nu zonder risico &#8594;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div>
+          <div class="footer__heading">Oduree</div>
+          <div class="footer__text">D&eacute; specialist in luxe autoparfums. Langdurige geur, stijlvol design. Voor 23:59 besteld, morgen in huis!</div>
+          <div class="footer__heading" style="margin-top:24px;">Direct 5% korting?</div>
+          <div class="footer__text">Ontvang direct korting en blijf op de hoogte van nieuwe acties.</div>
+          <div class="footer__newsletter">
+            <input type="email" placeholder="E-mailadres">
+            <button>Aanmelden</button>
+          </div>
+        </div>
+        <div>
+          <div class="footer__heading">Producten</div>
+          <div class="footer__links">
+            <a href="#">Autoparfum</a>
+            <a href="#">Huisparfum</a>
+            <a href="#">Best Sellers</a>
+            <a href="#">Bundels &amp; Sets</a>
+            <a href="#">Geurquiz</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer__heading">Over Oduree</div>
+          <div class="footer__links">
+            <a href="#">Ons verhaal</a>
+            <a href="#">Geurbeleving</a>
+            <a href="#">Contact</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer__heading">Hulp nodig?</div>
+          <div class="footer__links">
+            <a href="#">Verzendbeleid</a>
+            <a href="#">Retourneren</a>
+            <a href="#">Algemene voorwaarden</a>
+            <a href="#">Privacy</a>
+            <a href="#">Disclaimer</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <span>&copy; 2026 Oduree. Alle rechten voorbehouden.</span>
+        <div class="footer__payments">
+          <div class="footer__payment">iDEAL</div>
+          <div class="footer__payment">VISA</div>
+          <div class="footer__payment">MC</div>
+          <div class="footer__payment">AMEX</div>
+          <div class="footer__payment">PayPal</div>
+          <div class="footer__payment">Klarna</div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- HEADER SCROLL EFFECT -->
+  <script>
+    window.addEventListener('scroll', () => {
+      document.getElementById('header').classList.toggle('scrolled', window.scrollY > 10);
+    });
+  </script>
+
+</body>
+</html>

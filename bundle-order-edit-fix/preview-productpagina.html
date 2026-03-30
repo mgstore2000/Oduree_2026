@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oduree - Duo Set (CRO Geoptimaliseerd)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================
+       RESET & BASE
+       ============================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: #1a1a1a;
+      background: #fff;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; height: auto; display: block; }
+    ul { list-style: none; }
+    button { cursor: pointer; border: none; font-family: inherit; }
+
+    /* ============================================
+       ANNOUNCEMENT BAR
+       ============================================ */
+    .announcement-bar {
+      background: #1a1a1a;
+      color: #fff;
+      text-align: center;
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+    .announcement-bar span { color: #c9a96e; }
+
+    /* ============================================
+       HEADER / NAV
+       ============================================ */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 40px;
+      border-bottom: 1px solid #f0f0f0;
+      position: sticky;
+      top: 0;
+      background: #fff;
+      z-index: 100;
+    }
+    .header__logo {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .header__nav { display: flex; gap: 32px; }
+    .header__nav a {
+      font-size: 14px;
+      font-weight: 500;
+      color: #555;
+      transition: color 0.2s;
+    }
+    .header__nav a:hover { color: #1a1a1a; }
+    .header__actions { display: flex; gap: 20px; align-items: center; }
+    .header__actions svg { width: 22px; height: 22px; }
+    .cart-count {
+      background: #1a1a1a;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      top: -8px;
+      left: -8px;
+    }
+
+    /* ============================================
+       PRODUCT LAYOUT
+       ============================================ */
+    .product { max-width: 1280px; margin: 0 auto; padding: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; }
+
+    @media (max-width: 768px) {
+      .product { grid-template-columns: 1fr; padding: 20px; gap: 30px; }
+      .header { padding: 12px 16px; }
+      .header__nav { display: none; }
+    }
+
+    /* ============================================
+       PRODUCT MEDIA (LEFT)
+       ============================================ */
+    .product__media { display: flex; flex-direction: column; gap: 8px; }
+    .product__main-image {
+      width: 100%;
+      aspect-ratio: 1;
+      background: #f8f6f3;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+    .product__main-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .product__badge {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      background: #c9a96e;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 100px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .product__thumbnails { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .product__thumbnail {
+      aspect-ratio: 1;
+      background: #f8f6f3;
+      border-radius: 8px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .product__thumbnail--active { border-color: #1a1a1a; }
+    .product__thumbnail:hover { border-color: #ccc; }
+
+    /* ============================================
+       PRODUCT DETAILS (RIGHT)
+       ============================================ */
+    .product__details { display: flex; flex-direction: column; gap: 24px; }
+
+    /* CRO: Reviews/Rating */
+    .product__rating {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .product__stars { color: #f5a623; font-size: 16px; letter-spacing: 2px; }
+    .product__rating-text { font-size: 13px; color: #777; }
+    .product__rating-text strong { color: #1a1a1a; }
+
+    .product__title { font-size: 32px; font-weight: 700; line-height: 1.2; }
+
+    .product__price-block { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+    .product__price { font-size: 28px; font-weight: 700; }
+    .product__compare-price { font-size: 18px; color: #999; text-decoration: line-through; }
+    .product__savings {
+      background: #e8f5e9;
+      color: #2e7d32;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 100px;
+    }
+    .product__price-per {
+      font-size: 14px;
+      color: #777;
+      width: 100%;
+    }
+
+    /* CRO: Urgency */
+    .product__urgency {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #fff8e1;
+      border: 1px solid #ffe082;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #e65100;
+    }
+    .product__urgency-dot {
+      width: 8px;
+      height: 8px;
+      background: #e65100;
+      border-radius: 50%;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    /* Divider */
+    .divider { border: none; border-top: 1px solid #f0f0f0; }
+
+    /* ============================================
+       BUNDLE SELECTOR
+       ============================================ */
+    .bundle-selector__title { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
+    .bundle-options { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    @media (max-width: 768px) { .bundle-options { grid-template-columns: repeat(2, 1fr); } }
+
+    .bundle-option {
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 14px 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      background: #fff;
+    }
+    .bundle-option:hover { border-color: #999; }
+    .bundle-option--active {
+      border-color: #1a1a1a;
+      background: #fafafa;
+    }
+    .bundle-option__label {
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 2px 8px;
+      border-radius: 100px;
+      white-space: nowrap;
+    }
+    .bundle-option__label--best { background: #c9a96e; color: #fff; }
+    .bundle-option__label--popular { background: #1a1a1a; color: #fff; }
+    .bundle-option__qty { font-size: 20px; font-weight: 700; }
+    .bundle-option__subtitle { font-size: 11px; color: #777; margin-top: 2px; }
+    .bundle-option__gift { font-size: 11px; color: #2e7d32; font-weight: 600; margin-top: 6px; }
+
+    /* ============================================
+       SCENT SELECTOR
+       ============================================ */
+    .scent-selector__title { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+    .scent-selector__subtitle { font-size: 13px; color: #777; margin-bottom: 12px; }
+    .scent-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    @media (max-width: 768px) { .scent-grid { grid-template-columns: repeat(3, 1fr); } }
+
+    .scent-card {
+      border: 2px solid #e8e8e8;
+      border-radius: 10px;
+      padding: 10px 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      background: #fff;
+    }
+    .scent-card:hover { border-color: #999; }
+    .scent-card--selected {
+      border-color: #1a1a1a;
+      background: #fafafa;
+    }
+    .scent-card__badge {
+      position: absolute;
+      top: -8px;
+      right: -4px;
+      font-size: 9px;
+      font-weight: 700;
+      background: #c9a96e;
+      color: #fff;
+      padding: 2px 6px;
+      border-radius: 100px;
+      white-space: nowrap;
+    }
+    .scent-card__icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      margin: 0 auto 6px;
+    }
+    .scent-card__name { font-size: 11px; font-weight: 600; }
+    .scent-card__counter {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .scent-card__btn {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #f0f0f0;
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .scent-card__btn:hover { background: #e0e0e0; }
+    .scent-card__count { font-size: 14px; font-weight: 700; min-width: 16px; }
+    .scent-selector__status {
+      margin-top: 10px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #999;
+    }
+    .scent-selector__status strong { color: #1a1a1a; }
+
+    /* ============================================
+       CTA / ADD TO CART
+       ============================================ */
+    .product__cta {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .add-to-cart-btn {
+      width: 100%;
+      padding: 18px;
+      background: #1a1a1a;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      border-radius: 12px;
+      text-align: center;
+      transition: all 0.2s;
+      letter-spacing: 0.02em;
+    }
+    .add-to-cart-btn:hover { background: #333; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    .add-to-cart-btn__sub {
+      font-size: 12px;
+      font-weight: 400;
+      opacity: 0.8;
+      display: block;
+      margin-top: 2px;
+    }
+
+    /* CRO: Social proof under CTA */
+    .cta-social-proof {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #777;
+    }
+    .cta-social-proof__stars { color: #f5a623; }
+    .cta-avatars {
+      display: flex;
+      margin-left: 4px;
+    }
+    .cta-avatars__item {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      margin-left: -6px;
+      background: #e0e0e0;
+      font-size: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #777;
+    }
+
+    /* ============================================
+       TRUST BADGES
+       ============================================ */
+    .trust-badges { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .trust-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px;
+      background: #fafafa;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .trust-badge__icon {
+      width: 36px;
+      height: 36px;
+      background: #f0f0f0;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    /* ============================================
+       BENEFITS / USPs
+       ============================================ */
+    .benefits { padding: 60px 40px; max-width: 1280px; margin: 0 auto; }
+    .benefits__title { font-size: 24px; font-weight: 700; text-align: center; margin-bottom: 40px; }
+    .benefits__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    @media (max-width: 768px) { .benefits__grid { grid-template-columns: 1fr; } }
+    .benefit-card {
+      text-align: center;
+      padding: 32px 24px;
+      border-radius: 16px;
+      background: #fafafa;
+    }
+    .benefit-card__icon { font-size: 36px; margin-bottom: 16px; }
+    .benefit-card__title { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+    .benefit-card__text { font-size: 13px; color: #777; line-height: 1.5; }
+
+    /* ============================================
+       HOW TO USE / HANDLEIDING
+       ============================================ */
+    .how-to {
+      padding: 60px 40px;
+      max-width: 1280px;
+      margin: 0 auto;
+      background: #f8f6f3;
+      border-radius: 20px;
+    }
+    .how-to__title { font-size: 24px; font-weight: 700; text-align: center; margin-bottom: 40px; }
+    .how-to__steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+    @media (max-width: 768px) { .how-to__steps { grid-template-columns: 1fr; } }
+    .step {
+      text-align: center;
+      position: relative;
+    }
+    .step__number {
+      width: 48px;
+      height: 48px;
+      background: #1a1a1a;
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 700;
+      margin: 0 auto 16px;
+    }
+    .step__title { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+    .step__text { font-size: 13px; color: #777; }
+
+    /* ============================================
+       SOCIAL PROOF SECTION
+       ============================================ */
+    .social-proof { padding: 60px 40px; max-width: 1280px; margin: 0 auto; text-align: center; }
+    .social-proof__title { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+    .social-proof__subtitle { font-size: 15px; color: #777; margin-bottom: 40px; }
+    .reviews-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    @media (max-width: 768px) { .reviews-grid { grid-template-columns: 1fr; } }
+    .review-card {
+      text-align: left;
+      padding: 24px;
+      border: 1px solid #f0f0f0;
+      border-radius: 16px;
+      background: #fff;
+    }
+    .review-card__header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .review-card__avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      color: #777;
+    }
+    .review-card__name { font-size: 14px; font-weight: 600; }
+    .review-card__verified { font-size: 11px; color: #2e7d32; font-weight: 500; }
+    .review-card__stars { color: #f5a623; font-size: 14px; margin-bottom: 8px; }
+    .review-card__text { font-size: 13px; color: #555; line-height: 1.6; }
+
+    /* ============================================
+       FAQ
+       ============================================ */
+    .faq { padding: 60px 40px; max-width: 800px; margin: 0 auto; }
+    .faq__title { font-size: 24px; font-weight: 700; text-align: center; margin-bottom: 32px; }
+    .faq-item {
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .faq-item__question {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0;
+      font-size: 15px;
+      font-weight: 600;
+      width: 100%;
+      background: none;
+      text-align: left;
+    }
+    .faq-item__icon {
+      font-size: 20px;
+      color: #999;
+      transition: transform 0.2s;
+    }
+    .faq-item__answer {
+      display: none;
+      padding: 0 0 20px;
+      font-size: 14px;
+      color: #666;
+      line-height: 1.7;
+    }
+    .faq-item--open .faq-item__answer { display: block; }
+    .faq-item--open .faq-item__icon { transform: rotate(45deg); }
+
+    /* ============================================
+       GUARANTEE BANNER
+       ============================================ */
+    .guarantee {
+      padding: 60px 40px;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    .guarantee__inner {
+      background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);
+      color: #fff;
+      border-radius: 20px;
+      padding: 48px;
+      display: flex;
+      align-items: center;
+      gap: 40px;
+    }
+    @media (max-width: 768px) { .guarantee__inner { flex-direction: column; text-align: center; padding: 32px 24px; } }
+    .guarantee__icon { font-size: 64px; flex-shrink: 0; }
+    .guarantee__title { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+    .guarantee__text { font-size: 14px; color: #ccc; line-height: 1.6; }
+    .guarantee__cta {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 12px 28px;
+      background: #c9a96e;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 100px;
+      transition: background 0.2s;
+    }
+    .guarantee__cta:hover { background: #b89555; }
+
+    /* ============================================
+       FOOTER
+       ============================================ */
+    .footer {
+      background: #1a1a1a;
+      color: #fff;
+      padding: 60px 40px 30px;
+    }
+    .footer__inner { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; }
+    @media (max-width: 768px) { .footer__inner { grid-template-columns: 1fr 1fr; } }
+    .footer__title { font-size: 14px; font-weight: 700; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .footer__text { font-size: 13px; color: #999; line-height: 1.6; }
+    .footer__links { display: flex; flex-direction: column; gap: 10px; }
+    .footer__links a { font-size: 13px; color: #999; transition: color 0.2s; }
+    .footer__links a:hover { color: #fff; }
+    .footer__newsletter { display: flex; gap: 8px; margin-top: 12px; }
+    .footer__newsletter input {
+      flex: 1;
+      padding: 10px 14px;
+      border: 1px solid #444;
+      border-radius: 8px;
+      background: transparent;
+      color: #fff;
+      font-size: 13px;
+    }
+    .footer__newsletter button {
+      padding: 10px 18px;
+      background: #c9a96e;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 8px;
+    }
+    .footer__bottom {
+      max-width: 1280px;
+      margin: 40px auto 0;
+      padding-top: 20px;
+      border-top: 1px solid #333;
+      text-align: center;
+      font-size: 12px;
+      color: #666;
+    }
+
+    /* ============================================
+       CRO ANNOTATIONS (toggle on/off)
+       ============================================ */
+    .cro-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 999;
+      display: flex;
+      gap: 8px;
+    }
+    .cro-toggle button {
+      padding: 10px 18px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      transition: all 0.2s;
+    }
+    .cro-toggle__on { background: #2e7d32; color: #fff; }
+    .cro-toggle__off { background: #fff; color: #333; border: 1px solid #ddd; }
+    .cro-toggle button:hover { transform: translateY(-2px); }
+
+    .cro-highlight {
+      position: relative;
+    }
+    .cro-highlight::after {
+      content: attr(data-cro);
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: #2e7d32;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 100px;
+      white-space: nowrap;
+      z-index: 10;
+      display: none;
+      pointer-events: none;
+    }
+    body.show-cro .cro-highlight {
+      outline: 2px dashed #2e7d32;
+      outline-offset: 4px;
+    }
+    body.show-cro .cro-highlight::after {
+      display: block;
+    }
+
+    /* ============================================
+       SECTION SEPARATORS
+       ============================================ */
+    .section-separator {
+      max-width: 1280px;
+      margin: 0 auto;
+      border: none;
+      border-top: 1px solid #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================
+       CRO ANNOTATION TOGGLE
+       ========================================== -->
+  <div class="cro-toggle">
+    <button class="cro-toggle__on" onclick="document.body.classList.add('show-cro')">Toon CRO wijzigingen</button>
+    <button class="cro-toggle__off" onclick="document.body.classList.remove('show-cro')">Verberg</button>
+  </div>
+
+  <!-- ==========================================
+       ANNOUNCEMENT BAR
+       ========================================== -->
+  <div class="announcement-bar">
+    Vandaag besteld, morgen in huis! | <span>Gratis verzending vanaf €50</span> | Niet tevreden? Geld terug!
+  </div>
+
+  <!-- ==========================================
+       HEADER
+       ========================================== -->
+  <header class="header">
+    <div class="header__logo">Oduree</div>
+    <nav class="header__nav">
+      <a href="#">Shop alles</a>
+      <a href="#">Best Sellers</a>
+      <a href="#" style="font-weight:700; color:#1a1a1a;">Bundels & Sets</a>
+      <a href="#">Autoparfum</a>
+      <a href="#">Huisparfum</a>
+      <a href="#">Geurquiz</a>
+    </nav>
+    <div class="header__actions">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <div style="display:flex; align-items:flex-start;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <span class="cart-count">0</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================
+       PRODUCT SECTION
+       ========================================== -->
+  <section class="product">
+    <!-- LEFT: Product Images -->
+    <div class="product__media">
+      <div class="product__main-image">
+        <div class="product__badge">Best Seller</div>
+        <div style="width:100%;height:100%;background:linear-gradient(135deg, #f5f0e8 0%, #e8dfd3 100%); display:flex; flex-direction:column; align-items:center; justify-content:center;">
+          <div style="font-size:80px; opacity:0.3;">🧴🧴</div>
+          <div style="font-size:16px; color:#999; margin-top:16px;">Duo Set - Product Afbeelding</div>
+        </div>
+      </div>
+      <div class="product__thumbnails">
+        <div class="product__thumbnail product__thumbnail--active" style="background:#f5f0e8;"></div>
+        <div class="product__thumbnail" style="background:#ede7db;"></div>
+        <div class="product__thumbnail" style="background:#e8e0d0;"></div>
+        <div class="product__thumbnail" style="background:#f0ebe3;"></div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Product Details -->
+    <div class="product__details">
+
+      <!-- CRO: Star Rating -->
+      <div class="product__rating cro-highlight" data-cro="NIEUW: Reviews">
+        <span class="product__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+        <span class="product__rating-text"><strong>4.8</strong>/5 - gebaseerd op <strong>2.347</strong> reviews</span>
+      </div>
+
+      <!-- Title -->
+      <h1 class="product__title">Duo Set</h1>
+
+      <!-- Price -->
+      <div class="product__price-block">
+        <span class="product__price">&euro;35,90</span>
+        <span class="product__compare-price">&euro;45,80</span>
+        <span class="product__savings cro-highlight" data-cro="NIEUW: Besparing">Je bespaart &euro;9,90</span>
+        <span class="product__price-per">&euro;17,95 per autoparfum</span>
+      </div>
+
+      <!-- CRO: Urgency -->
+      <div class="product__urgency cro-highlight" data-cro="NIEUW: Urgency">
+        <span class="product__urgency-dot"></span>
+        <span><strong>127 mensen</strong> bekijken dit product nu &bull; Vandaag 43x besteld</span>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Bundle Selector -->
+      <div>
+        <div class="bundle-selector__title">Kies jouw bundel</div>
+        <div class="bundle-options">
+          <div class="bundle-option">
+            <div class="bundle-option__label bundle-option__label--best">Beste deal</div>
+            <div class="bundle-option__qty">10</div>
+            <div class="bundle-option__subtitle">stuks</div>
+            <div class="bundle-option__gift">Gratis gifts t.w.v. &euro;84,75</div>
+          </div>
+          <div class="bundle-option">
+            <div class="bundle-option__label bundle-option__label--popular">Meest gekozen</div>
+            <div class="bundle-option__qty">5</div>
+            <div class="bundle-option__subtitle">stuks</div>
+            <div class="bundle-option__gift">Gratis gifts t.w.v. &euro;34,85</div>
+          </div>
+          <div class="bundle-option bundle-option--active">
+            <div class="bundle-option__qty">2</div>
+            <div class="bundle-option__subtitle">stuks</div>
+            <div class="bundle-option__gift">Gratis gifts t.w.v. &euro;9,90</div>
+          </div>
+          <div class="bundle-option">
+            <div class="bundle-option__qty">1</div>
+            <div class="bundle-option__subtitle">stuk</div>
+            <div class="bundle-option__gift">Gratis gift t.w.v. &euro;4,95</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Included gift -->
+      <div style="display:flex; align-items:center; gap:10px; padding:12px 16px; background:#f0faf0; border-radius:10px; font-size:13px;">
+        <span style="font-size:20px;">🎁</span>
+        <div><strong>Gratis bij jouw bestelling:</strong> 2x Autoparfum Spray Sample t.w.v. &euro;4,95</div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Scent Selector -->
+      <div>
+        <div class="scent-selector__title">Kies jouw geur</div>
+        <div class="scent-selector__subtitle">Selecteer 2 geuren voor jouw Duo Set</div>
+        <div class="scent-grid">
+          <div class="scent-card scent-card--selected">
+            <div class="scent-card__badge cro-highlight" data-cro="NIEUW: Labels">Best seller</div>
+            <div class="scent-card__icon" style="background:linear-gradient(135deg, #2c3e50, #4ca1af);"></div>
+            <div class="scent-card__name">Savage</div>
+            <div class="scent-card__counter">
+              <button class="scent-card__btn">-</button>
+              <span class="scent-card__count">1</span>
+              <button class="scent-card__btn">+</button>
+            </div>
+          </div>
+          <div class="scent-card scent-card--selected">
+            <div class="scent-card__badge">Populair</div>
+            <div class="scent-card__icon" style="background:linear-gradient(135deg, #c9a96e, #e8d5a3);"></div>
+            <div class="scent-card__name">Million</div>
+            <div class="scent-card__counter">
+              <button class="scent-card__btn">-</button>
+              <span class="scent-card__count">1</span>
+              <button class="scent-card__btn">+</button>
+            </div>
+          </div>
+          <div class="scent-card">
+            <div class="scent-card__icon" style="background:linear-gradient(135deg, #8B4513, #D2691E);"></div>
+            <div class="scent-card__name">Arabian Tonka</div>
+            <div class="scent-card__counter">
+              <button class="scent-card__btn">-</button>
+              <span class="scent-card__count">0</span>
+              <button class="scent-card__btn">+</button>
+            </div>
+          </div>
+          <div class="scent-card">
+            <div class="scent-card__icon" style="background:linear-gradient(135deg, #ff69b4, #ff1493);"></div>
+            <div class="scent-card__name">La Vie est Bel</div>
+            <div class="scent-card__counter">
+              <button class="scent-card__btn">-</button>
+              <span class="scent-card__count">0</span>
+              <button class="scent-card__btn">+</button>
+            </div>
+          </div>
+          <div class="scent-card">
+            <div class="scent-card__icon" style="background:linear-gradient(135deg, #FFD700, #FFA500);"></div>
+            <div class="scent-card__name">Lady Millionaire</div>
+            <div class="scent-card__counter">
+              <button class="scent-card__btn">-</button>
+              <span class="scent-card__count">0</span>
+              <button class="scent-card__btn">+</button>
+            </div>
+          </div>
+          <div class="scent-card">
+            <div class="scent-card__icon" style="background:linear-gradient(135deg, #1a1a2e, #16213e);"></div>
+            <div class="scent-card__name">Boss Bottle</div>
+            <div class="scent-card__counter">
+              <button class="scent-card__btn">-</button>
+              <span class="scent-card__count">0</span>
+              <button class="scent-card__btn">+</button>
+            </div>
+          </div>
+          <div class="scent-card">
+            <div class="scent-card__icon" style="background:linear-gradient(135deg, #8B0000, #FF4500);"></div>
+            <div class="scent-card__name">Spicebom</div>
+            <div class="scent-card__counter">
+              <button class="scent-card__btn">-</button>
+              <span class="scent-card__count">0</span>
+              <button class="scent-card__btn">+</button>
+            </div>
+          </div>
+          <div class="scent-card">
+            <div class="scent-card__icon" style="background:linear-gradient(135deg, #F5DEB3, #D2B48C);"></div>
+            <div class="scent-card__name">Coco Vanilla</div>
+            <div class="scent-card__counter">
+              <button class="scent-card__btn">-</button>
+              <span class="scent-card__count">0</span>
+              <button class="scent-card__btn">+</button>
+            </div>
+          </div>
+        </div>
+        <div class="scent-selector__status"><strong>2</strong> van de 2 geselecteerd</div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- CTA -->
+      <div class="product__cta">
+        <button class="add-to-cart-btn">
+          Toevoegen aan winkelwagen - &euro;35,90
+          <span class="add-to-cart-btn__sub">Vandaag besteld, morgen in huis!</span>
+        </button>
+
+        <!-- CRO: Social proof under CTA -->
+        <div class="cta-social-proof cro-highlight" data-cro="NIEUW: Social proof bij CTA">
+          <span class="cta-social-proof__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+          <span>4.8/5 door 2.347 klanten</span>
+          <div class="cta-avatars">
+            <div class="cta-avatars__item">MK</div>
+            <div class="cta-avatars__item">SB</div>
+            <div class="cta-avatars__item">JV</div>
+            <div class="cta-avatars__item">+</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trust Badges -->
+      <div class="trust-badges">
+        <div class="trust-badge">
+          <div class="trust-badge__icon">🚚</div>
+          <div>Vandaag besteld,<br><strong>morgen in huis!</strong></div>
+        </div>
+        <div class="trust-badge">
+          <div class="trust-badge__icon">✅</div>
+          <div>Niet tevreden?<br><strong>Geld terug!</strong></div>
+        </div>
+        <div class="trust-badge">
+          <div class="trust-badge__icon">📦</div>
+          <div>Gratis verzending<br><strong>vanaf &euro;50</strong></div>
+        </div>
+        <div class="trust-badge">
+          <div class="trust-badge__icon">💳</div>
+          <div>Betaal achteraf<br><strong>met Klarna</strong></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       BENEFITS SECTION
+       ========================================== -->
+  <hr class="section-separator">
+  <section class="benefits cro-highlight" data-cro="VERBETERD: Meer USPs">
+    <h2 class="benefits__title">Waarom 100.000+ mensen kiezen voor Oduree</h2>
+    <div class="benefits__grid">
+      <div class="benefit-card">
+        <div class="benefit-card__icon">👃</div>
+        <div class="benefit-card__title">Ruikt naar jouw parfum</div>
+        <div class="benefit-card__text">Onze autoparfums zijn ge&iuml;nspireerd op de populairste designer geuren. Herkenbaar en luxe.</div>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-card__icon">⏱️</div>
+        <div class="benefit-card__title">4-6 weken geurplezier</div>
+        <div class="benefit-card__text">Volgens onze klanten blijft de geur gemiddeld 4 tot 6 weken hangen. Langdurig genieten gegarandeerd.</div>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-card__icon">🚗</div>
+        <div class="benefit-card__title">Past in elke auto</div>
+        <div class="benefit-card__text">Van kleine stadsauto tot grote bestelbus. Hang hem aan je binnenspiegel en klaar.</div>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-card__icon">🎁</div>
+        <div class="benefit-card__title">Een uniek cadeau</div>
+        <div class="benefit-card__text">Betaalbaar, stijlvol en persoonlijk. Het perfecte cadeau voor autoliefhebbers.</div>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-card__icon">🔄</div>
+        <div class="benefit-card__title">Niet tevreden? Geld terug!</div>
+        <div class="benefit-card__text">Geur is persoonlijk. Bevalt het niet? Retourneer eenvoudig en ontvang je geld volledig terug.</div>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-card__icon">⭐</div>
+        <div class="benefit-card__title">100.000+ tevreden klanten</div>
+        <div class="benefit-card__text">Met een 4.8 uit 5 op Trustpilot zijn wij de best beoordeelde autoparfum van Nederland.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       HOW TO USE
+       ========================================== -->
+  <section class="how-to" style="margin: 0 40px;">
+    <h2 class="how-to__title">In 3 simpele stappen ruikt je auto heerlijk!</h2>
+    <div class="how-to__steps">
+      <div class="step">
+        <div class="step__number">1</div>
+        <div class="step__title">Openen</div>
+        <div class="step__text">Draai de dop van de autoparfum en verwijder de plastic dop.</div>
+      </div>
+      <div class="step">
+        <div class="step__number">2</div>
+        <div class="step__title">Omdraaien</div>
+        <div class="step__text">Draai de dop terug en houd het flesje 3 tot 5 seconden ondersteboven.</div>
+      </div>
+      <div class="step">
+        <div class="step__number">3</div>
+        <div class="step__title">Genieten</div>
+        <div class="step__text">Hang de autoparfum aan de binnenspiegel op in de auto en geniet!</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       SOCIAL PROOF / REVIEWS
+       ========================================== -->
+  <section class="social-proof cro-highlight" data-cro="NIEUW: Reviews sectie">
+    <h2 class="social-proof__title">Wat onze klanten zeggen</h2>
+    <p class="social-proof__subtitle">Meer dan 2.300 beoordelingen met een gemiddelde van 4.8 uit 5 sterren</p>
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="review-card__header">
+          <div class="review-card__avatar">MK</div>
+          <div>
+            <div class="review-card__name">Mohammed K.</div>
+            <div class="review-card__verified">&#10003; Geverifieerde aankoop</div>
+          </div>
+        </div>
+        <div class="review-card__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="review-card__text">Echt super blij mee! De Savage geur ruikt precies zoals het echte parfum. Mijn auto ruikt nu al 3 weken heerlijk. Aanrader!</div>
+      </div>
+      <div class="review-card">
+        <div class="review-card__header">
+          <div class="review-card__avatar">SB</div>
+          <div>
+            <div class="review-card__name">Sophie B.</div>
+            <div class="review-card__verified">&#10003; Geverifieerde aankoop</div>
+          </div>
+        </div>
+        <div class="review-card__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="review-card__text">Had de Duo Set als cadeau gekocht voor mijn vriend. Hij is er helemaal weg van! De volgende keer ga ik voor de 5-set.</div>
+      </div>
+      <div class="review-card">
+        <div class="review-card__header">
+          <div class="review-card__avatar">JV</div>
+          <div>
+            <div class="review-card__name">Jayden V.</div>
+            <div class="review-card__verified">&#10003; Geverifieerde aankoop</div>
+          </div>
+        </div>
+        <div class="review-card__stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+        <div class="review-card__text">Million geur is top, blijft echt lang hangen. Snelle levering ook, volgende dag al in huis. Enige minpuntje: flesje is kleiner dan verwacht.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       FAQ
+       ========================================== -->
+  <section class="faq">
+    <h2 class="faq__title">Veelgestelde vragen</h2>
+
+    <div class="faq-item faq-item--open">
+      <button class="faq-item__question" onclick="this.parentElement.classList.toggle('faq-item--open')">
+        Hoe lang blijft de geur hangen?
+        <span class="faq-item__icon">+</span>
+      </button>
+      <div class="faq-item__answer">
+        Volgens onze klanten gemiddeld 4 tot 6 weken. Al verschilt het per geur, seizoen en hoe vaak de autoparfum omdraait. E&eacute;n ding is zeker: je zult er lang van genieten.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-item__question" onclick="this.parentElement.classList.toggle('faq-item--open')">
+        Hoe gebruik ik de autoparfum?
+        <span class="faq-item__icon">+</span>
+      </button>
+      <div class="faq-item__answer">
+        Draai de dop open, verwijder het plastic dopje en draai hem weer dicht. Houd het flesje 3 tot 5 seconden ondersteboven (vanaf het glas), hang 'm aan je binnenspiegel en klaar.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-item__question" onclick="this.parentElement.classList.toggle('faq-item--open')">
+        Past dit wel in mijn auto?
+        <span class="faq-item__icon">+</span>
+      </button>
+      <div class="faq-item__answer">
+        Zeker weten! De autoparfum is geschikt voor elk type auto, van kleine stadsauto tot grote bestelbus. Waar je ook in rijdt, hij past altijd.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-item__question" onclick="this.parentElement.classList.toggle('faq-item--open')">
+        Wanneer wordt mijn bestelling geleverd?
+        <span class="faq-item__icon">+</span>
+      </button>
+      <div class="faq-item__answer">
+        Bestel je v&oacute;&oacute;r 23:59 uur, dan heb je je bestelling de volgende dag al in huis. Lekker snel, zodat je meteen kunt genieten van de geur.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-item__question" onclick="this.parentElement.classList.toggle('faq-item--open')">
+        Wat als ik niet tevreden ben?
+        <span class="faq-item__icon">+</span>
+      </button>
+      <div class="faq-item__answer">
+        Geen zorgen! Neem contact op met onze klantenservice en we helpen je persoonlijk en snel verder. In het uiterste geval krijg je gewoon je geld terug.
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       GUARANTEE BANNER
+       ========================================== -->
+  <section class="guarantee">
+    <div class="guarantee__inner">
+      <div class="guarantee__icon">🛡️</div>
+      <div>
+        <div class="guarantee__title">Bevalt de geur toch niet? Geen probleem!</div>
+        <div class="guarantee__text">Geur is persoonlijk en daarom shop je bij Oduree zonder risico. Bevalt de geur niet? Dan retourneer je eenvoudig en krijg je je geld volledig terug. Geen kleine lettertjes, geen gedoe.</div>
+        <a href="#" class="guarantee__cta">Shop nu zonder risico</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       FOOTER
+       ========================================== -->
+  <footer class="footer">
+    <div class="footer__inner">
+      <div>
+        <div class="footer__title">Oduree</div>
+        <div class="footer__text">D&eacute; specialist in luxe autoparfums. Langdurige geur, stijlvol design. Voor 23:59 besteld, morgen in huis!</div>
+        <div class="footer__title" style="margin-top:20px;">Direct 5% korting?</div>
+        <div class="footer__text">Ontvang direct korting door je aan te melden.</div>
+        <div class="footer__newsletter">
+          <input type="email" placeholder="E-mailadres">
+          <button>Aanmelden</button>
+        </div>
+      </div>
+      <div>
+        <div class="footer__title">Producten</div>
+        <div class="footer__links">
+          <a href="#">Autoparfum</a>
+          <a href="#">Huisparfum</a>
+          <a href="#">Best Sellers</a>
+          <a href="#">Bundels & Sets</a>
+          <a href="#">Geurquiz</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer__title">Over Oduree</div>
+        <div class="footer__links">
+          <a href="#">Ons verhaal</a>
+          <a href="#">Geurbeleving</a>
+          <a href="#">Contact</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer__title">Hulp nodig?</div>
+        <div class="footer__links">
+          <a href="#">Verzendbeleid</a>
+          <a href="#">Retourneren</a>
+          <a href="#">Algemene voorwaarden</a>
+          <a href="#">Privacy</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      &copy; 2026 Oduree. Alle rechten voorbehouden. | Vandaag besteld, morgen in huis! | 100.000+ tevreden klanten
+    </div>
+  </footer>
+
+</body>
+</html>

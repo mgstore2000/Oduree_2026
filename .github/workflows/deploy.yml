@@ -1,0 +1,31 @@
+name: Deploy Shopify Theme
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Push theme to Shopify
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Shopify CLI
+        uses: shopify/shopify-cli-action@v1
+        with:
+          shopify-cli-version: latest
+
+      - name: Pull latest & rebase (conflict guard)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git pull --rebase origin main || true
+
+      - name: Push theme to Shopify
+        env:
+          SHOPIFY_CLI_THEME_TOKEN: ${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}
+        run: |
+          shopify theme push --store 0kk8ai-gy.myshopify.com --theme 198607798603 --allow-live

@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Duo Set - Oduree | Luxe Autoparfum</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    :root{
+      --bk:#09090b;--dk:#18181b;--g8:#27272a;--g7:#3f3f46;--g6:#52525b;
+      --g5:#71717a;--g4:#a1a1aa;--g3:#d4d4d8;--g2:#e4e4e7;--g1:#f4f4f5;--g0:#fafafa;--wh:#ffffff;
+      --gold:#b08d3b;--gold-l:#caa54e;--gold-bg:#faf7f0;--gold-t:rgba(176,141,59,.08);
+      --grn:#15803d;--grn-l:#dcfce7;--grn-bg:#f0fdf4;
+      --r:10px;--rf:9999px;
+      --f:'Inter',system-ui,-apple-system,sans-serif;
+    }
+    body{font-family:var(--f);color:var(--dk);background:var(--wh);line-height:1.6;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overflow-x:hidden}
+    a{color:inherit;text-decoration:none}img{max-width:100%;display:block}ul{list-style:none}
+    button,input,select{font-family:var(--f);border:none;outline:none;background:none}button{cursor:pointer}
+    .w{max-width:1200px;margin:0 auto;padding:0 24px}
+    @media(min-width:768px){.w{padding:0 40px}}
+
+    /* ── TOPBAR ── */
+    .top{background:var(--bk);color:var(--wh);text-align:center;padding:11px 16px;font-size:12px;font-weight:500;letter-spacing:.02em}
+    .top em{font-style:normal;color:var(--gold-l)}
+
+    /* ── HEADER ── */
+    .hd{position:sticky;top:0;z-index:90;background:var(--wh);border-bottom:1px solid var(--g2);transition:box-shadow .2s}
+    .hd--s{box-shadow:0 1px 8px rgba(0,0,0,.06)}
+    .hd__in{display:flex;align-items:center;justify-content:space-between;height:56px}
+    .hd__logo{font-size:18px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
+    .hd__nav{display:flex;gap:28px}
+    .hd__nav a{font-size:13px;font-weight:500;color:var(--g6);transition:color .15s}
+    .hd__nav a:hover{color:var(--bk)}
+    .hd__r{display:flex;align-items:center;gap:16px}
+    .hd__ic{width:20px;height:20px;color:var(--g6)}
+    @media(max-width:767px){.hd__nav{display:none}}
+
+    /* ── HERO ── */
+    .hero{padding:48px 0 80px}
+    .hero__g{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
+    @media(max-width:899px){.hero__g{grid-template-columns:1fr;gap:32px}}
+
+    /* Gallery */
+    .gl{position:sticky;top:76px}
+    @media(max-width:899px){.gl{position:static}}
+    .gl__main{width:100%;aspect-ratio:1;border-radius:16px;overflow:hidden;background:linear-gradient(155deg,#f5f0e6 0%,#ebe3d3 100%);position:relative;display:flex;align-items:center;justify-content:center}
+    .gl__badge{position:absolute;top:16px;left:16px;background:var(--bk);color:var(--wh);font-size:11px;font-weight:700;padding:6px 14px;border-radius:var(--rf)}
+    .gl__emoji{font-size:110px;filter:drop-shadow(0 16px 40px rgba(0,0,0,.08))}
+    .gl__nav{position:absolute;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;background:var(--wh);box-shadow:0 1px 6px rgba(0,0,0,.1);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;transition:all .18s;color:var(--dk);font-size:16px}
+    .gl__nav:hover{background:var(--g0);box-shadow:0 2px 10px rgba(0,0,0,.14)}
+    .gl__nav--l{left:12px}
+    .gl__nav--r{right:12px}
+    .gl__thumbs{display:flex;gap:8px;margin-top:10px;position:relative}
+    .gl__thumb{flex:0 0 calc(20% - 6.4px);aspect-ratio:1;border-radius:8px;border:1.5px solid transparent;cursor:pointer;transition:all .18s;overflow:hidden}
+    .gl__thumb:hover{border-color:var(--g3)}
+    .gl__thumb.on{border-color:var(--bk)}
+    .gl__thumbs-nav{position:absolute;right:-4px;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:50%;background:var(--wh);box-shadow:0 1px 5px rgba(0,0,0,.1);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;font-size:12px;color:var(--g6);transition:all .18s}
+    .gl__thumbs-nav:hover{box-shadow:0 2px 8px rgba(0,0,0,.14);color:var(--dk)}
+
+    /* Details */
+    .dt{display:flex;flex-direction:column;gap:28px}
+
+    .rat{display:inline-flex;align-items:center;gap:6px;cursor:pointer}
+    .rat__stars{color:#d4a017;font-size:13px;letter-spacing:1px}
+    .rat__txt{font-size:12px;font-weight:500;color:var(--g5)}
+
+    .dt__title{font-size:34px;font-weight:800;line-height:1.1;letter-spacing:-.03em;color:var(--bk)}
+    .dt__sub{font-size:14px;color:var(--g5);margin-top:6px;line-height:1.6}
+
+    /* Price */
+    .prc{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+    .prc__now{font-size:30px;font-weight:800;color:var(--bk)}
+    .prc__was{font-size:15px;color:var(--g4);text-decoration:line-through}
+    .prc__save{font-size:11px;font-weight:700;color:var(--grn);background:var(--grn-l);padding:4px 10px;border-radius:var(--rf)}
+    .prc__unit{width:100%;font-size:12px;color:var(--g5);margin-top:-4px}
+
+    .sep{border:none;border-top:1px solid var(--g2);margin:0}
+
+    /* ── STEP INDICATOR ── */
+    .step-hd{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+    .step-num{width:28px;height:28px;border-radius:50%;background:var(--gold-t);border:1.5px solid var(--gold);color:var(--gold);font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .step-lbl{font-size:13px;font-weight:700;color:var(--dk);text-transform:uppercase;letter-spacing:.06em}
+
+    /* ── BUNDLE SELECTOR ── */
+    .bundles{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+    @media(max-width:520px){.bundles{grid-template-columns:repeat(2,1fr)}}
+    .bun{position:relative;border:1.5px solid var(--g2);border-radius:var(--r);padding:18px 8px 14px;text-align:center;cursor:pointer;transition:all .18s}
+    .bun:hover{border-color:var(--g3);background:var(--g0)}
+    .bun.on{border-color:var(--bk);background:var(--g0)}
+    .bun__tag{position:absolute;top:-9px;left:50%;transform:translateX(-50%);font-size:8px;font-weight:800;padding:3px 10px;border-radius:var(--rf);white-space:nowrap;background:var(--gold);color:var(--wh);text-transform:uppercase;letter-spacing:.06em}
+    .bun__qty{font-size:22px;font-weight:800}
+    .bun__unit{font-size:10px;color:var(--g5);font-weight:500}
+    .bun__price{font-size:12px;font-weight:700;margin-top:6px}
+    .bun__per{font-size:9px;color:var(--g5)}
+
+    /* ── PURCHASE TYPE ── */
+    .pt__opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .pt__opt{position:relative;border:1.5px solid var(--g2);border-radius:var(--r);padding:16px 18px;cursor:pointer;transition:all .18s}
+    .pt__opt:hover{border-color:var(--g3);background:var(--g0)}
+    .pt__opt.on{border-color:var(--bk);background:var(--g0)}
+    .pt__radio{position:absolute;top:16px;right:14px;width:18px;height:18px;border-radius:50%;border:1.5px solid var(--g3);display:flex;align-items:center;justify-content:center;transition:all .18s}
+    .pt__opt.on .pt__radio{border-color:var(--bk)}
+    .pt__opt.on .pt__radio::after{content:'';width:10px;height:10px;background:var(--bk);border-radius:50%}
+    .pt__name{font-size:14px;font-weight:700}
+    .pt__price{font-size:12px;color:var(--g5);margin-top:2px}
+    .pt__tag{display:inline-block;margin-top:8px;font-size:9px;font-weight:800;padding:3px 8px;border-radius:var(--rf);background:var(--gold-bg);color:var(--gold);text-transform:uppercase;letter-spacing:.04em}
+
+    /* Subscription panel */
+    .sub-panel{display:none;padding:14px 16px;background:var(--gold-bg);border:1px solid rgba(176,141,59,.15);border-radius:var(--r)}
+    .sub-panel.vis{display:block}
+    .sub-panel__label{font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
+    .sub-panel select{width:100%;padding:10px 12px;border:1px solid var(--g2);border-radius:8px;font-size:13px;font-weight:600;background:var(--wh);-webkit-appearance:none;appearance:none}
+    .sub-panel__perks{margin-top:10px;display:flex;flex-direction:column;gap:3px}
+    .sub-panel__perk{font-size:11px;color:var(--grn);display:flex;align-items:center;gap:5px}
+
+    /* ── FREE GIFTS ── */
+    .gifts{display:flex;gap:10px;padding:14px 16px;background:var(--gold-bg);border:1px solid rgba(176,141,59,.15);border-radius:var(--r)}
+    .gift{display:flex;align-items:center;gap:10px;flex:1}
+    .gift__icon{width:38px;height:38px;border-radius:8px;background:var(--wh);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+    .gift__name{font-size:11px;font-weight:600;line-height:1.3;color:var(--dk)}
+    .gift__val{font-size:10px;color:var(--gold);font-weight:700}
+    .gift__free{display:inline-block;font-size:8px;font-weight:800;background:var(--gold);color:var(--wh);padding:2px 6px;border-radius:var(--rf);text-transform:uppercase;margin-top:2px}
+
+    /* ── SCENT SELECTOR ── */
+    .scents__head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+    .scents__count{font-size:12px;color:var(--g5)}
+    .scents__count b{color:var(--dk);font-weight:700}
+    .scents{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+    @media(max-width:600px){.scents{grid-template-columns:repeat(3,1fr)}}
+    .sc{position:relative;border:1.5px solid var(--g1);border-radius:var(--r);padding:12px 4px 10px;text-align:center;cursor:pointer;transition:all .18s}
+    .sc:hover{border-color:var(--g3);background:var(--g0)}
+    .sc.on{border-color:var(--bk);background:var(--g0)}
+    .sc__badge{position:absolute;top:-6px;right:-2px;font-size:7px;font-weight:800;background:var(--gold);color:var(--wh);padding:2px 6px;border-radius:var(--rf);text-transform:uppercase}
+    .sc__sw{width:26px;height:26px;border-radius:50%;margin:0 auto 5px;box-shadow:inset 0 -2px 4px rgba(0,0,0,.06)}
+    .sc__nm{font-size:9px;font-weight:600;min-height:22px;display:flex;align-items:center;justify-content:center;line-height:1.2;color:var(--g7)}
+    .sc__ctr{display:flex;align-items:center;justify-content:center;gap:5px;margin-top:5px}
+    .sc__btn{width:20px;height:20px;border-radius:50%;background:var(--g1);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;color:var(--dk);transition:background .15s}
+    .sc__btn:hover{background:var(--g3)}
+    .sc__n{font-size:12px;font-weight:800;min-width:12px}
+
+    /* ── CTA ── */
+    .cta-wrap{display:flex;flex-direction:column;gap:10px;padding-top:4px}
+    .cta{width:100%;padding:17px 24px;background:var(--bk);color:var(--wh);font-size:15px;font-weight:700;border-radius:var(--r);display:flex;align-items:center;justify-content:center;gap:8px;transition:all .18s;position:relative;letter-spacing:.01em}
+    .cta:hover{background:var(--g8);transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,0,0,.1)}
+    .cta:active{transform:translateY(0)}
+    .cta__sub{display:block;font-size:10px;font-weight:500;opacity:.55;margin-top:2px}
+    .cta__price{position:absolute;right:20px;font-size:13px;opacity:.55}
+
+    .pay-alt{display:flex;align-items:center;justify-content:center;gap:10px;font-size:11px;color:var(--g4)}
+    .pay-alt__methods{display:flex;gap:4px}
+    .pay-alt__m{padding:3px 8px;background:var(--g1);border-radius:4px;font-size:9px;font-weight:700;color:var(--g5)}
+
+    /* Micro social proof */
+    .micro{display:flex;align-items:center;justify-content:center;gap:6px;font-size:11px;color:var(--g4);padding:2px 0}
+    .micro__stars{color:#d4a017;font-size:10px}
+
+    /* ── TRUST ── */
+    .trust{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--g2);border-radius:var(--r);overflow:hidden;margin-top:4px}
+    .trust__i{background:var(--g0);padding:14px 10px;text-align:center}
+    .trust__icon{font-size:18px;margin-bottom:3px}
+    .trust__txt{font-size:9px;font-weight:600;color:var(--g6);line-height:1.4;letter-spacing:.01em}
+    @media(max-width:520px){.trust{grid-template-columns:repeat(2,1fr)}}
+
+    /* ═══════════ BELOW THE FOLD ═══════════ */
+
+    /* ── USP SECTION (Alcanside style) ── */
+    .usp{padding:80px 0;border-top:1px solid var(--g1)}
+    .usp__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:32px}
+    @media(max-width:768px){.usp__grid{grid-template-columns:repeat(2,1fr);gap:24px}}
+    .usp__item{text-align:center}
+    .usp__icon{font-size:32px;margin-bottom:12px}
+    .usp__title{font-size:14px;font-weight:700;margin-bottom:4px}
+    .usp__text{font-size:12px;color:var(--g5);line-height:1.5}
+
+    /* ── SOCIAL PROOF BANNER ── */
+    .proof{padding:48px 0;background:var(--bk);color:var(--wh);text-align:center}
+    .proof__number{font-size:48px;font-weight:900;letter-spacing:-.03em}
+    .proof__text{font-size:14px;color:rgba(255,255,255,.5);margin-top:4px}
+    .proof__stats{display:flex;justify-content:center;gap:48px;margin-top:24px}
+    .proof__stat-num{font-size:24px;font-weight:800}
+    .proof__stat-label{font-size:11px;color:rgba(255,255,255,.4)}
+
+    /* ── HOW TO ── */
+    .how{padding:80px 0}
+    .sec-title{font-size:28px;font-weight:900;text-align:center;letter-spacing:-.02em;margin-bottom:48px}
+    .how__steps{display:grid;grid-template-columns:repeat(3,1fr);gap:48px}
+    @media(max-width:768px){.how__steps{grid-template-columns:1fr;gap:32px}}
+    .step{text-align:center}
+    .step__num{width:48px;height:48px;border-radius:50%;background:var(--gold-bg);color:var(--gold);font-size:18px;font-weight:900;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;border:2px solid var(--gold)}
+    .step__title{font-size:15px;font-weight:700;margin-bottom:6px}
+    .step__text{font-size:13px;color:var(--g5);max-width:240px;margin:0 auto;line-height:1.6}
+
+    /* ── REVIEWS ── */
+    .rev{padding:80px 0;background:var(--g0)}
+    .rev__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    @media(max-width:768px){.rev__grid{grid-template-columns:1fr}}
+    .rc{background:var(--wh);border-radius:var(--r);padding:24px}
+    .rc__top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+    .rc__av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:var(--wh);flex-shrink:0}
+    .rc__name{font-size:13px;font-weight:700}
+    .rc__ver{font-size:10px;color:var(--grn)}
+    .rc__stars{color:#f59e0b;font-size:12px;margin-bottom:8px}
+    .rc__text{font-size:13px;color:var(--g6);line-height:1.6}
+
+    /* ── ABO EXPLAINER (Spacegoods style) ── */
+    .abo{padding:80px 0}
+    .abo__grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+    @media(max-width:768px){.abo__grid{grid-template-columns:1fr;gap:32px}}
+    .abo__visual{background:var(--gold-bg);border-radius:20px;padding:60px 40px;text-align:center}
+    .abo__visual-icon{font-size:64px;margin-bottom:16px}
+    .abo__visual-title{font-size:22px;font-weight:800}
+    .abo__visual-sub{font-size:13px;color:var(--g5);margin-top:4px}
+    .abo__tag{display:inline-block;background:var(--bk);color:var(--wh);font-size:10px;font-weight:800;padding:5px 14px;border-radius:var(--rf);text-transform:uppercase;letter-spacing:.06em;margin-bottom:16px}
+    .abo__title{font-size:28px;font-weight:900;letter-spacing:-.02em;margin-bottom:12px}
+    .abo__text{font-size:14px;color:var(--g5);line-height:1.7;margin-bottom:28px}
+    .abo__perks{display:flex;flex-direction:column;gap:16px}
+    .abo__perk{display:flex;gap:14px;align-items:flex-start}
+    .abo__perk-icon{width:40px;height:40px;border-radius:10px;background:var(--grn-l);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+    .abo__perk-title{font-size:14px;font-weight:700}
+    .abo__perk-desc{font-size:12px;color:var(--g5);margin-top:2px}
+    .abo__cta{display:inline-flex;align-items:center;gap:8px;margin-top:28px;padding:14px 28px;background:var(--bk);color:var(--wh);font-size:14px;font-weight:700;border-radius:var(--rf);transition:all .15s}
+    .abo__cta:hover{background:var(--g8);transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,0,0,.12)}
+
+    /* ── FAQ ── */
+    .faq{padding:80px 24px;max-width:680px;margin:0 auto}
+    .faq__item{border-bottom:1px solid var(--g1)}
+    .faq__q{display:flex;justify-content:space-between;align-items:center;padding:20px 0;font-size:15px;font-weight:600;width:100%;text-align:left;color:var(--dk);transition:color .15s}
+    .faq__q:hover{color:var(--g6)}
+    .faq__icon{width:24px;height:24px;border-radius:50%;background:var(--g1);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--g5);flex-shrink:0;transition:all .15s}
+    .faq__a{display:none;padding:0 0 20px;font-size:14px;color:var(--g5);line-height:1.7}
+    .faq__item.op .faq__a{display:block}
+    .faq__item.op .faq__icon{background:var(--bk);color:var(--wh);transform:rotate(45deg)}
+
+    /* ── GUARANTEE (Alcanside style — clean) ── */
+    .guar{padding:80px 0}
+    .guar__box{background:var(--bk);border-radius:20px;padding:56px;display:flex;align-items:center;gap:40px;color:var(--wh)}
+    @media(max-width:768px){.guar__box{flex-direction:column;text-align:center;padding:40px 28px}}
+    .guar__shield{font-size:64px;flex-shrink:0}
+    .guar__title{font-size:22px;font-weight:800;margin-bottom:8px}
+    .guar__text{font-size:14px;color:rgba(255,255,255,.55);line-height:1.7}
+    .guar__cta{display:inline-flex;align-items:center;gap:6px;margin-top:20px;padding:12px 24px;background:var(--gold);color:var(--wh);font-size:13px;font-weight:700;border-radius:var(--rf);transition:all .15s}
+    .guar__cta:hover{background:var(--gold-l)}
+
+    /* ── FOOTER ── */
+    .ft{background:var(--g0);border-top:1px solid var(--g2);padding:48px 0 0}
+    .ft__grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;padding-bottom:40px}
+    @media(max-width:768px){.ft__grid{grid-template-columns:1fr 1fr;gap:24px}}
+    .ft__h{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px;color:var(--dk)}
+    .ft__t{font-size:12px;color:var(--g5);line-height:1.6}
+    .ft__links{display:flex;flex-direction:column;gap:8px}
+    .ft__links a{font-size:12px;color:var(--g5);transition:color .15s}
+    .ft__links a:hover{color:var(--dk)}
+    .ft__nl{display:flex;gap:6px;margin-top:12px}
+    .ft__nl input{flex:1;padding:10px 14px;border:1px solid var(--g2);border-radius:8px;background:var(--wh);font-size:12px}
+    .ft__nl button{padding:10px 16px;background:var(--bk);color:var(--wh);font-size:12px;font-weight:700;border-radius:8px;transition:background .15s}
+    .ft__nl button:hover{background:var(--g8)}
+    .ft__bot{border-top:1px solid var(--g2);padding:16px 0;display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--g4)}
+    .ft__pays{display:flex;gap:6px}
+    .ft__pay{padding:3px 8px;background:var(--wh);border:1px solid var(--g2);border-radius:4px;font-size:8px;font-weight:700;color:var(--g5)}
+  </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="top">Vandaag besteld, <em>morgen in huis</em> &nbsp;&#183;&nbsp; Gratis verzending vanaf &euro;50 &nbsp;&#183;&nbsp; Niet tevreden? <em>Geld terug</em></div>
+
+<!-- HEADER -->
+<header class="hd" id="hdr">
+  <div class="w hd__in">
+    <div class="hd__logo">Oduree</div>
+    <nav class="hd__nav">
+      <a href="#">Shop alles</a>
+      <a href="#">Best Sellers</a>
+      <a href="#">Autoparfum</a>
+      <a href="#">Huisparfum</a>
+    </nav>
+    <div class="hd__r">
+      <svg class="hd__ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <svg class="hd__ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero"><div class="w hero__g">
+
+  <!-- Gallery -->
+  <div class="gl">
+    <div class="gl__main">
+      <span class="gl__badge">Best Seller</span>
+      <button class="gl__nav gl__nav--l" onclick="glNav(-1)">&#8249;</button>
+      <div class="gl__emoji">&#129524;&#129524;</div>
+      <button class="gl__nav gl__nav--r" onclick="glNav(1)">&#8250;</button>
+    </div>
+    <div class="gl__thumbs">
+      <div class="gl__thumb on" style="background:#f0ebe3"></div>
+      <div class="gl__thumb" style="background:#ede7db"></div>
+      <div class="gl__thumb" style="background:#e7dfd3"></div>
+      <div class="gl__thumb" style="background:#f3ede5"></div>
+      <div class="gl__thumb" style="background:#eae3d8"></div>
+      <div class="gl__thumb" style="background:#e2dbd0"></div>
+      <button class="gl__thumbs-nav">&#8250;</button>
+    </div>
+  </div>
+
+  <!-- Details -->
+  <div class="dt">
+
+    <div class="rat" onclick="document.querySelector('.rev').scrollIntoView({behavior:'smooth'})">
+      <span class="rat__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+      <span class="rat__txt">4.8 &mdash; 2.347 reviews</span>
+    </div>
+
+    <div>
+      <h1 class="dt__title">Duo Set</h1>
+      <p class="dt__sub">Luxe autoparfum hangers ge&iuml;nspireerd op designer geuren. 4-6 weken geurplezier per stuk.</p>
+    </div>
+
+    <div class="prc">
+      <span class="prc__now" id="pn">&euro;35,90</span>
+      <span class="prc__was" id="pw">&euro;45,80</span>
+      <span class="prc__save" id="ps">Bespaar &euro;9,90</span>
+      <span class="prc__unit" id="pu">&euro;17,95 per stuk &bull; Incl. BTW</span>
+    </div>
+
+    <hr class="sep">
+
+    <!-- ═══ STAP 1: AANTAL ═══ -->
+    <div>
+      <div class="step-hd"><div class="step-num">1</div><div class="step-lbl">Kies aantal</div></div>
+      <div class="bundles">
+        <div class="bun" onclick="setB(this,10)"><div class="bun__tag">Beste deal</div><div class="bun__qty">10</div><div class="bun__unit">stuks</div><div class="bun__price">&euro;139,50</div><div class="bun__per">&euro;13,95/st.</div></div>
+        <div class="bun" onclick="setB(this,5)"><div class="bun__qty">5</div><div class="bun__unit">stuks</div><div class="bun__price">&euro;79,75</div><div class="bun__per">&euro;15,95/st.</div></div>
+        <div class="bun on" onclick="setB(this,2)"><div class="bun__qty">2</div><div class="bun__unit">stuks</div><div class="bun__price">&euro;35,90</div><div class="bun__per">&euro;17,95/st.</div></div>
+        <div class="bun" onclick="setB(this,1)"><div class="bun__qty">1</div><div class="bun__unit">stuk</div><div class="bun__price">&euro;19,95</div><div class="bun__per">&euro;19,95/st.</div></div>
+      </div>
+    </div>
+
+    <!-- ═══ STAP 2: EENMALIG OF ABONNEMENT ═══ -->
+    <div>
+      <div class="step-hd"><div class="step-num">2</div><div class="step-lbl">Eenmalig of abonnement</div></div>
+      <div class="pt__opts">
+        <div class="pt__opt on" onclick="setType('once')">
+          <div class="pt__radio"></div>
+          <div class="pt__name">Eenmalig</div>
+          <div class="pt__price" id="pt1">&euro;35,90</div>
+        </div>
+        <div class="pt__opt" onclick="setType('sub')">
+          <div class="pt__radio"></div>
+          <div class="pt__name">Abonnement</div>
+          <div class="pt__price" id="pt2">&euro;30,52</div>
+          <div class="pt__tag">Bespaar 15%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-panel" id="subp">
+      <div class="sub-panel__label">Bezorgfrequentie</div>
+      <select><option>Elke 4 weken (aanbevolen)</option><option>Elke 6 weken</option><option>Elke 8 weken</option></select>
+      <div class="sub-panel__perks">
+        <div class="sub-panel__perk">&#10003; 15% korting op elke levering</div>
+        <div class="sub-panel__perk">&#10003; Altijd gratis verzending</div>
+        <div class="sub-panel__perk">&#10003; Op elk moment pauzeren of stoppen</div>
+      </div>
+    </div>
+
+    <!-- Free gifts (alleen bij abonnement) -->
+    <div class="gifts" id="gifts" style="display:none">
+      <div class="gift">
+        <div class="gift__icon">&#127873;</div>
+        <div id="gift-text"><div class="gift__name">2x Spray Sample + Gratis verzending</div><div class="gift__val">t.w.v. &euro;9,90</div><div class="gift__free">Gratis bij abo</div></div>
+      </div>
+    </div>
+
+    <!-- ═══ STAP 3: GEUREN ═══ -->
+    <div>
+      <div class="scents__head">
+        <div class="step-hd" style="margin-bottom:0"><div class="step-num">3</div><div class="step-lbl">Kies jouw geuren</div></div>
+        <div class="scents__count"><b id="ssel">2</b> van <b id="stot">2</b></div>
+      </div>
+      <div class="scents">
+        <div class="sc on"><div class="sc__badge">#1</div><div class="sc__sw" style="background:linear-gradient(135deg,#2c3e50,#4ca1af)"></div><div class="sc__nm">Savage</div><div class="sc__ctr"><button class="sc__btn">-</button><span class="sc__n">1</span><button class="sc__btn">+</button></div></div>
+        <div class="sc on"><div class="sc__badge">Populair</div><div class="sc__sw" style="background:linear-gradient(135deg,#b08d3b,#caa54e)"></div><div class="sc__nm">Million</div><div class="sc__ctr"><button class="sc__btn">-</button><span class="sc__n">1</span><button class="sc__btn">+</button></div></div>
+        <div class="sc"><div class="sc__sw" style="background:linear-gradient(135deg,#8B4513,#D2691E)"></div><div class="sc__nm">Arabian Tonka</div><div class="sc__ctr"><button class="sc__btn">-</button><span class="sc__n">0</span><button class="sc__btn">+</button></div></div>
+        <div class="sc"><div class="sc__sw" style="background:linear-gradient(135deg,#ff69b4,#ff1493)"></div><div class="sc__nm">La Vie est Bel</div><div class="sc__ctr"><button class="sc__btn">-</button><span class="sc__n">0</span><button class="sc__btn">+</button></div></div>
+        <div class="sc"><div class="sc__sw" style="background:linear-gradient(135deg,#FFD700,#FFA500)"></div><div class="sc__nm">Lady Millionaire</div><div class="sc__ctr"><button class="sc__btn">-</button><span class="sc__n">0</span><button class="sc__btn">+</button></div></div>
+        <div class="sc"><div class="sc__sw" style="background:linear-gradient(135deg,#1a1a2e,#16213e)"></div><div class="sc__nm">Boss Bottle</div><div class="sc__ctr"><button class="sc__btn">-</button><span class="sc__n">0</span><button class="sc__btn">+</button></div></div>
+        <div class="sc"><div class="sc__sw" style="background:linear-gradient(135deg,#8B0000,#FF4500)"></div><div class="sc__nm">Spicebom</div><div class="sc__ctr"><button class="sc__btn">-</button><span class="sc__n">0</span><button class="sc__btn">+</button></div></div>
+        <div class="sc"><div class="sc__sw" style="background:linear-gradient(135deg,#F5DEB3,#D2B48C)"></div><div class="sc__nm">Coco Vanilla</div><div class="sc__ctr"><button class="sc__btn">-</button><span class="sc__n">0</span><button class="sc__btn">+</button></div></div>
+        <div class="sc"><div class="sc__sw" style="background:linear-gradient(135deg,#4169E1,#1E90FF)"></div><div class="sc__nm">Blue</div><div class="sc__ctr"><button class="sc__btn">-</button><span class="sc__n">0</span><button class="sc__btn">+</button></div></div>
+        <div class="sc"><div class="sc__sw" style="background:linear-gradient(135deg,#2F4F4F,#556B2F)"></div><div class="sc__nm">Oud Wood</div><div class="sc__ctr"><button class="sc__btn">-</button><span class="sc__n">0</span><button class="sc__btn">+</button></div></div>
+      </div>
+    </div>
+
+    <hr class="sep">
+
+    <!-- CTA -->
+    <div class="cta-wrap">
+      <button class="cta" id="ctab">
+        <div><span id="ctat">Toevoegen aan winkelwagen</span><span class="cta__sub" id="ctas">Morgen in huis &bull; Gratis retour</span></div>
+        <span class="cta__price" id="ctap">&euro;35,90</span>
+      </button>
+      <div class="pay-alt">
+        <span>of betaal met</span>
+        <div class="pay-alt__methods">
+          <span class="pay-alt__m">iDEAL</span>
+          <span class="pay-alt__m">Apple Pay</span>
+          <span class="pay-alt__m">Klarna</span>
+        </div>
+      </div>
+      <div class="micro">
+        <span class="micro__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+        <span>2.347 klanten gaven een 4.8/5</span>
+      </div>
+    </div>
+
+    <!-- Trust -->
+    <div class="trust">
+      <div class="trust__i"><div class="trust__icon">&#128666;</div><div class="trust__txt">Morgen<br>in huis</div></div>
+      <div class="trust__i"><div class="trust__icon">&#128274;</div><div class="trust__txt">Niet tevreden?<br>Geld terug</div></div>
+      <div class="trust__i"><div class="trust__icon">&#128230;</div><div class="trust__txt">Gratis<br>verzending</div></div>
+      <div class="trust__i"><div class="trust__icon">&#9203;</div><div class="trust__txt">4-6 weken<br>geur</div></div>
+    </div>
+
+  </div>
+</div></section>
+
+<!-- USP SECTION (Alcanside style) -->
+<section class="usp"><div class="w usp__grid">
+  <div class="usp__item"><div class="usp__icon">&#128067;</div><div class="usp__title">Designer Geuren</div><div class="usp__text">Ge&iuml;nspireerd op de populairste parfums. Herkenbaar en luxe.</div></div>
+  <div class="usp__item"><div class="usp__icon">&#9203;</div><div class="usp__title">4-6 Weken Geur</div><div class="usp__text">Langdurig genieten, bevestigd door duizenden klanten.</div></div>
+  <div class="usp__item"><div class="usp__icon">&#128663;</div><div class="usp__title">Past In Elke Auto</div><div class="usp__text">Van stadsauto tot bestelbus. Hang aan je spiegel en klaar.</div></div>
+  <div class="usp__item"><div class="usp__icon">&#128274;</div><div class="usp__title">Zonder Risico</div><div class="usp__text">Niet tevreden? Retourneer eenvoudig en krijg je geld terug.</div></div>
+</div></section>
+
+<!-- SOCIAL PROOF -->
+<section class="proof"><div class="w">
+  <div class="proof__number">100.000+</div>
+  <div class="proof__text">Tevreden klanten vertrouwen op Oduree</div>
+  <div class="proof__stats">
+    <div><div class="proof__stat-num">4.8/5</div><div class="proof__stat-label">Trustpilot</div></div>
+    <div><div class="proof__stat-num">24u</div><div class="proof__stat-label">Levertijd</div></div>
+    <div><div class="proof__stat-num">20+</div><div class="proof__stat-label">Geuren</div></div>
+  </div>
+</div></section>
+
+<!-- HOW TO -->
+<section class="how"><div class="w">
+  <h2 class="sec-title">Zo simpel is het</h2>
+  <div class="how__steps">
+    <div class="step"><div class="step__num">1</div><div class="step__title">Openen</div><div class="step__text">Draai de dop los en verwijder de plastic verzegeling.</div></div>
+    <div class="step"><div class="step__num">2</div><div class="step__title">Omdraaien</div><div class="step__text">Dop terugdraaien, flesje 3-5 seconden ondersteboven houden.</div></div>
+    <div class="step"><div class="step__num">3</div><div class="step__title">Genieten</div><div class="step__text">Hang aan de binnenspiegel en geniet wekenlang van de geur.</div></div>
+  </div>
+</div></section>
+
+<!-- REVIEWS -->
+<section class="rev"><div class="w">
+  <h2 class="sec-title">Wat onze klanten zeggen</h2>
+  <div class="rev__grid">
+    <div class="rc"><div class="rc__top"><div class="rc__av" style="background:linear-gradient(135deg,#2c3e50,#4ca1af)">MK</div><div><div class="rc__name">Mohammed K.</div><div class="rc__ver">&#10003; Geverifieerd</div></div></div><div class="rc__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><div class="rc__text">Echt super blij mee! De Savage geur ruikt precies zoals het echte parfum. Mijn auto ruikt al 3 weken heerlijk.</div></div>
+    <div class="rc"><div class="rc__top"><div class="rc__av" style="background:linear-gradient(135deg,#ff69b4,#b8973f)">SB</div><div><div class="rc__name">Sophie B.</div><div class="rc__ver">&#10003; Geverifieerd</div></div></div><div class="rc__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><div class="rc__text">Had de Duo Set als cadeau gekocht voor mijn vriend. Hij is er helemaal weg van! Verpakking ziet er ook luxe uit.</div></div>
+    <div class="rc"><div class="rc__top"><div class="rc__av" style="background:linear-gradient(135deg,#2F4F4F,#556B2F)">JV</div><div><div class="rc__name">Jayden V.</div><div class="rc__ver">&#10003; Geverifieerd</div></div></div><div class="rc__stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div><div class="rc__text">Million geur is top, blijft echt lang hangen. Snelle levering, volgende dag al in huis. Aanrader!</div></div>
+  </div>
+</div></section>
+
+<!-- ABONNEMENT EXPLAINER -->
+<section class="abo"><div class="w abo__grid">
+  <div class="abo__visual"><div class="abo__visual-icon">&#128257;</div><div class="abo__visual-title">Nooit meer zonder geur</div><div class="abo__visual-sub">Automatisch thuisbezorgd, jij bepaalt het ritme</div></div>
+  <div>
+    <div class="abo__tag">Nieuw</div>
+    <h2 class="abo__title">Abonneer &amp; bespaar 15%</h2>
+    <p class="abo__text">Ontvang je favoriete geuren automatisch thuisbezorgd. Kies je frequentie, pas aan wanneer je wilt, pauzeer of stop op elk moment.</p>
+    <div class="abo__perks">
+      <div class="abo__perk"><div class="abo__perk-icon">&#128176;</div><div><div class="abo__perk-title">15% korting op elke levering</div><div class="abo__perk-desc">Automatisch toegepast</div></div></div>
+      <div class="abo__perk"><div class="abo__perk-icon">&#128666;</div><div><div class="abo__perk-title">Altijd gratis verzending</div><div class="abo__perk-desc">Ongeacht het bedrag</div></div></div>
+      <div class="abo__perk"><div class="abo__perk-icon">&#127873;</div><div><div class="abo__perk-title">Exclusieve voordelen</div><div class="abo__perk-desc">Early access + verrassingssamples</div></div></div>
+    </div>
+    <button class="abo__cta" onclick="setType('sub');document.querySelector('.pt__opts').scrollIntoView({behavior:'smooth',block:'center'})">Start mijn abonnement &rarr;</button>
+  </div>
+</div></section>
+
+<!-- FAQ -->
+<section class="faq">
+  <h2 class="sec-title">Veelgestelde vragen</h2>
+  <div class="faq__item op"><button class="faq__q" onclick="this.parentElement.classList.toggle('op')">Hoe lang blijft de geur hangen?<span class="faq__icon">+</span></button><div class="faq__a">Gemiddeld 4 tot 6 weken. Dit verschilt per geur en seizoen.</div></div>
+  <div class="faq__item"><button class="faq__q" onclick="this.parentElement.classList.toggle('op')">Hoe werkt het abonnement?<span class="faq__icon">+</span></button><div class="faq__a">Kies je geuren en frequentie (4, 6 of 8 weken). Je ontvangt automatisch je autoparfums met 15% korting en gratis verzending. Via je account kun je op elk moment aanpassen, pauzeren of opzeggen.</div></div>
+  <div class="faq__item"><button class="faq__q" onclick="this.parentElement.classList.toggle('op')">Wanneer ontvang ik mijn bestelling?<span class="faq__icon">+</span></button><div class="faq__a">V&oacute;&oacute;r 23:59 besteld = volgende werkdag in huis via PostNL.</div></div>
+  <div class="faq__item"><button class="faq__q" onclick="this.parentElement.classList.toggle('op')">Wat als ik niet tevreden ben?<span class="faq__icon">+</span></button><div class="faq__a">Niet tevreden? Geld terug. Neem contact op en we regelen het. Geen kleine lettertjes.</div></div>
+  <div class="faq__item"><button class="faq__q" onclick="this.parentElement.classList.toggle('op')">Kan ik mijn abonnement opzeggen?<span class="faq__icon">+</span></button><div class="faq__a">Ja, op elk moment. Geen minimum-termijnen of opzegkosten.</div></div>
+</section>
+
+<!-- GUARANTEE -->
+<section class="guar"><div class="w">
+  <div class="guar__box">
+    <div class="guar__shield">&#128737;&#65039;</div>
+    <div><div class="guar__title">Niet tevreden? Geld terug.</div><div class="guar__text">Geur is persoonlijk. Bevalt het niet? Retourneer eenvoudig en krijg je geld volledig terug. Geen kleine lettertjes.</div><a href="#" class="guar__cta">Shop zonder risico &rarr;</a></div>
+  </div>
+</div></section>
+
+<!-- FOOTER -->
+<footer class="ft"><div class="w">
+  <div class="ft__grid">
+    <div>
+      <div class="ft__h">Oduree</div>
+      <div class="ft__t">D&eacute; specialist in luxe autoparfums. Langdurige geur, stijlvol design.</div>
+      <div class="ft__h" style="margin-top:20px">Nieuwsbrief</div>
+      <div class="ft__nl"><input type="email" placeholder="E-mailadres"><button>Aanmelden</button></div>
+    </div>
+    <div><div class="ft__h">Shop</div><div class="ft__links"><a href="#">Autoparfum</a><a href="#">Huisparfum</a><a href="#">Best Sellers</a><a href="#">Bundels</a></div></div>
+    <div><div class="ft__h">Info</div><div class="ft__links"><a href="#">Ons verhaal</a><a href="#">Contact</a><a href="#">Verzending</a><a href="#">Retourneren</a></div></div>
+    <div><div class="ft__h">Juridisch</div><div class="ft__links"><a href="#">Algemene voorwaarden</a><a href="#">Privacy</a><a href="#">Disclaimer</a></div></div>
+  </div>
+  <div class="ft__bot">
+    <span>&copy; 2026 Oduree</span>
+    <div class="ft__pays"><div class="ft__pay">iDEAL</div><div class="ft__pay">VISA</div><div class="ft__pay">MC</div><div class="ft__pay">PayPal</div><div class="ft__pay">Klarna</div></div>
+  </div>
+</div></footer>
+
+<script>
+window.addEventListener('scroll',()=>{document.getElementById('hdr').classList.toggle('hd--s',scrollY>10)});
+
+// Gallery navigation
+let glIdx=0;
+const thumbs=document.querySelectorAll('.gl__thumb');
+thumbs.forEach((t,i)=>t.addEventListener('click',()=>{glIdx=i;glUpd()}));
+function glNav(d){glIdx=Math.max(0,Math.min(thumbs.length-1,glIdx+d));glUpd()}
+function glUpd(){thumbs.forEach((t,i)=>t.classList.toggle('on',i===glIdx))}
+
+const D={
+  1:{once:19.95,sub:16.96,was:24.95,pO:19.95,pS:16.96,sO:4.99,sS:7.98},
+  2:{once:35.90,sub:30.52,was:45.80,pO:17.95,pS:15.26,sO:9.90,sS:15.28},
+  5:{once:79.75,sub:67.79,was:99.75,pO:15.95,pS:13.56,sO:20.00,sS:31.96},
+  10:{once:139.50,sub:118.58,was:199.50,pO:13.95,pS:11.86,sO:60.00,sS:80.92}
+};
+let cB=2,cT='once';
+const f=n=>n.toFixed(2).replace('.',',');
+
+function setType(t){
+  cT=t;
+  document.querySelectorAll('.pt__opt').forEach((e,i)=>e.classList.toggle('on',(i===0&&t==='once')||(i===1&&t==='sub')));
+  document.getElementById('subp').classList.toggle('vis',t==='sub');
+  upd();
+}
+function setB(el,q){
+  cB=q;
+  document.querySelectorAll('.bun').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('stot').textContent=q;
+  upd();
+}
+function upd(){
+  const d=D[cB],iS=cT==='sub';
+  const p=iS?d.sub:d.once,pp=iS?d.pS:d.pO,sv=iS?d.sS:d.sO;
+  document.getElementById('pn').textContent='\u20AC'+f(p);
+  document.getElementById('pw').textContent='\u20AC'+f(d.was);
+  document.getElementById('ps').textContent='Bespaar \u20AC'+f(sv);
+  document.getElementById('pu').textContent='\u20AC'+f(pp)+' per stuk \u2022 Incl. BTW';
+  document.getElementById('ctap').textContent='\u20AC'+f(p);
+  document.getElementById('ctat').textContent=iS?'Abonnement starten':'Toevoegen aan winkelwagen';
+  document.getElementById('ctas').textContent=iS?'15% korting \u2022 Altijd gratis verzending':'Morgen in huis \u2022 Gratis retour';
+  document.getElementById('pt1').textContent='\u20AC'+f(d.once);
+  document.getElementById('pt2').textContent='\u20AC'+f(d.sub);
+
+  // Gifts alleen bij abonnement
+  const gEl=document.getElementById('gifts');
+  gEl.style.display=iS?'flex':'none';
+}
+</script>
+</body>
+</html>
