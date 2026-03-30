@@ -2,6 +2,10 @@ node_modules/
 .DS_Store
 Thumbs.db
 
+# Environment secrets — NOOIT committen
+.env
+.env.*
+
 # Shopify CLI
 .shopify/
 
