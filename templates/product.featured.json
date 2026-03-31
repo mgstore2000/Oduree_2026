@@ -1,0 +1,76 @@
+{
+  "sections": {
+    "main": {
+      "type": "product-template",
+      "settings": {
+        "show_vendor": true,
+        "show_share": true,
+        "show_reviews": true,
+        "enable_sticky_gallery": true,
+        "image_ratio": "1/1",
+        "shipping_info": "<ul><li>Gratis verzending boven €50</li><li>2-4 werkdagen levertijd</li><li>Express: volgende werkdag (voor 16:00 besteld)</li><li>30 dagen retour</li><li>Track & Trace</li></ul>",
+        "recommendations_count": 4
+      }
+    },
+    "separator_bottom": {
+      "type": "separator",
+      "settings": {
+        "advanced_heading": false,
+        "heading": "",
+        "heading_richtext": "<h2>Separator</h2>",
+        "size_heading": 100,
+        "size_heading_mobile": 100,
+        "show-separator-line": true,
+        "full-width-line": true,
+        "color-background": "#000000",
+        "color-body-text": "rgba(0,0,0,0)",
+        "color-section-background": "#ffffff",
+        "margin-top": 0,
+        "margin-bottom": 0
+      }
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "Join Our Circle & Save!",
+            "heading_disable_on_mobile": false,
+            "size_heading": 100,
+            "size_heading_mobile": 100
+          }
+        },
+        "paragraph": {
+          "type": "paragraph",
+          "settings": {
+            "paragraph": "<p>Schrijf je nu in en ontvang 10% korting op je eerste bestelling!</p>",
+            "text_disable_on_mobile": false
+          }
+        },
+        "email_form": {
+          "type": "email_form",
+          "settings": {
+            "button_select": "primary"
+          }
+        }
+      },
+      "block_order": [
+        "heading",
+        "paragraph",
+        "email_form"
+      ],
+      "settings": {
+        "color-body-text": "#ffffff",
+        "background_color": "#f29f00",
+        "margin-top": 60,
+        "margin-bottom": 60
+      }
+    }
+  },
+  "order": [
+    "main",
+    "separator_bottom",
+    "newsletter"
+  ]
+}

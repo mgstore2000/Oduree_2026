@@ -1,0 +1,702 @@
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign featured_image = current_variant.featured_image | default: product.featured_image
+  assign on_sale = false
+  if current_variant.compare_at_price > current_variant.price
+    assign on_sale = true
+    assign save_pct = current_variant.compare_at_price | minus: current_variant.price | times: 100.0 | divided_by: current_variant.compare_at_price | round
+  endif
+  assign short_desc = product.metafields.custom.short_description
+  if short_desc == blank
+    assign short_desc = product.description | strip_html | truncatewords: 30
+  endif
+  assign bg_color = section.settings.bg_color
+  assign text_color = section.settings.text_color
+  assign accent_color = section.settings.accent_color
+  assign accent_hover = section.settings.accent_hover_color
+  assign heading_font = section.settings.heading_font
+-%}
+
+<style>
+  .plx{
+    --plx-bg:{{ bg_color }};
+    --plx-text:{{ text_color }};
+    --plx-text-soft:{{ text_color | color_modify: 'alpha', 0.55 }};
+    --plx-accent:{{ accent_color }};
+    --plx-accent-hover:{{ accent_hover }};
+    --plx-border:{{ text_color | color_modify: 'alpha', 0.12 }};
+    --plx-border-strong:{{ text_color | color_modify: 'alpha', 0.25 }};
+    --plx-sale:#b71c1c;
+    --plx-radius:2px;
+    --plx-ease:cubic-bezier(.4,0,.2,1);
+    --plx-max:1340px;
+    --plx-font-heading:{% if heading_font == 'serif' %}'Playfair Display','Georgia','Times New Roman',serif{% elsif heading_font == 'modern_serif' %}'DM Serif Display','Georgia',serif{% else %}'Helvetica Neue',Helvetica,Arial,sans-serif{% endif %};
+    --plx-font-body:'Helvetica Neue',Helvetica,Arial,sans-serif;
+    font-family:var(--plx-font-body);
+    color:var(--plx-text);
+    background:var(--plx-bg);
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  .plx *,.plx *::before,.plx *::after{box-sizing:border-box;margin:0;padding:0}
+  .plx a{color:var(--plx-accent);text-decoration:none;transition:color .3s var(--plx-ease)}
+  .plx a:hover{color:var(--plx-accent-hover)}
+  .plx img{display:block;max-width:100%}
+
+  /* Layout */
+  .plx-container{max-width:var(--plx-max);margin:0 auto;padding:0 48px}
+  .plx-breadcrumb{padding:20px 0;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--plx-text-soft)}
+  .plx-breadcrumb a{color:var(--plx-text-soft);transition:color .3s var(--plx-ease)}
+  .plx-breadcrumb a:hover{color:var(--plx-accent)}
+  .plx-breadcrumb span{margin:0 10px;opacity:.4}
+  .plx-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:72px;padding:16px 0 96px;align-items:start}
+
+  /* Gallery */
+  .plx-gallery{position:sticky;top:32px}
+  .plx-main-media{position:relative;aspect-ratio:3/4;overflow:hidden;border-radius:var(--plx-radius);background:var(--plx-text-soft);cursor:zoom-in}
+  .plx-main-media img{width:100%;height:100%;object-fit:cover;transition:transform .6s var(--plx-ease)}
+  .plx-main-media:hover img{transform:scale(1.08)}
+  .plx-badge{position:absolute;top:20px;left:20px;background:var(--plx-sale);color:#fff;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:6px 14px;border-radius:var(--plx-radius);z-index:2}
+  .plx-thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:8px;margin-top:12px}
+  .plx-thumb{aspect-ratio:1/1;border:2px solid transparent;border-radius:var(--plx-radius);overflow:hidden;cursor:pointer;background:var(--plx-border);padding:0;transition:border-color .3s var(--plx-ease),opacity .3s var(--plx-ease);opacity:.6}
+  .plx-thumb:hover,.plx-thumb.is-active{border-color:var(--plx-accent);opacity:1}
+  .plx-thumb img{width:100%;height:100%;object-fit:cover}
+
+  /* Info */
+  .plx-vendor{font-size:11px;text-transform:uppercase;letter-spacing:.2em;font-weight:500;color:var(--plx-accent);margin-bottom:12px}
+  .plx-title{font-family:var(--plx-font-heading);font-size:38px;font-weight:400;line-height:1.15;letter-spacing:-.01em;margin-bottom:16px}
+  .plx-reviews{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--plx-text-soft);margin-bottom:20px}
+  .plx-stars{color:var(--plx-accent);letter-spacing:3px;font-size:16px}
+  .plx-divider{height:1px;background:var(--plx-border);margin:24px 0}
+  .plx-price-wrap{display:flex;align-items:baseline;gap:16px;margin-bottom:8px}
+  .plx-price-now{font-family:var(--plx-font-heading);font-size:32px;font-weight:400;letter-spacing:.02em}
+  .plx-price-was{font-size:16px;text-decoration:line-through;color:var(--plx-text-soft)}
+  .plx-price-save{font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--plx-sale);background:{{ text_color | color_modify: 'alpha', 0.06 }};padding:3px 10px;border-radius:var(--plx-radius)}
+  .plx-tax-note{font-size:12px;color:var(--plx-text-soft);margin-bottom:4px}
+  .plx-short-desc{font-size:15px;line-height:1.75;color:var(--plx-text-soft);margin-top:20px;margin-bottom:8px}
+
+  /* Options */
+  .plx-option-group{margin-bottom:24px}
+  .plx-option-label{font-size:11px;text-transform:uppercase;letter-spacing:.12em;font-weight:600;margin-bottom:12px;display:block}
+  .plx-option-label span{font-weight:400;color:var(--plx-text-soft);letter-spacing:.04em}
+  .plx-swatches{display:flex;flex-wrap:wrap;gap:10px}
+  .plx-swatch{width:38px;height:38px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:transform .25s var(--plx-ease),box-shadow .25s var(--plx-ease);padding:0}
+  .plx-swatch:hover{transform:scale(1.12)}
+  .plx-swatch.is-active{box-shadow:0 0 0 2px var(--plx-bg),0 0 0 4px var(--plx-accent)}
+  .plx-size-btns{display:flex;flex-wrap:wrap;gap:8px}
+  .plx-size-btn{min-width:52px;height:46px;padding:0 20px;border:1.5px solid var(--plx-border-strong);background:transparent;color:var(--plx-text);font-size:13px;font-weight:500;letter-spacing:.04em;cursor:pointer;border-radius:var(--plx-radius);transition:all .25s var(--plx-ease);position:relative;overflow:hidden;font-family:var(--plx-font-body)}
+  .plx-size-btn:hover{border-color:var(--plx-accent)}
+  .plx-size-btn.is-active{background:var(--plx-accent);color:var(--plx-bg);border-color:var(--plx-accent)}
+  .plx-size-btn.is-soldout{opacity:.25;cursor:not-allowed}
+  .plx-size-btn.is-soldout::after{content:'';position:absolute;top:50%;left:-10%;width:120%;height:1px;background:var(--plx-text);transform:rotate(-12deg)}
+
+  /* Actions */
+  .plx-actions{display:flex;gap:12px;margin-bottom:16px}
+  .plx-qty{display:flex;align-items:center;border:1.5px solid var(--plx-border-strong);border-radius:var(--plx-radius);overflow:hidden}
+  .plx-qty button{width:48px;height:54px;border:none;background:transparent;font-size:18px;cursor:pointer;color:var(--plx-text);transition:background .2s,color .2s;font-family:var(--plx-font-body)}
+  .plx-qty button:hover{background:var(--plx-accent);color:var(--plx-bg)}
+  .plx-qty input{width:52px;height:54px;border:none;border-left:1px solid var(--plx-border);border-right:1px solid var(--plx-border);text-align:center;font-size:15px;font-family:var(--plx-font-body);background:transparent;color:var(--plx-text);-moz-appearance:textfield}
+  .plx-qty input::-webkit-outer-spin-button,.plx-qty input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+  .plx-atc{flex:1;height:54px;background:var(--plx-accent);color:var(--plx-bg);border:none;font-size:13px;text-transform:uppercase;font-weight:600;letter-spacing:.14em;cursor:pointer;border-radius:var(--plx-radius);transition:all .35s var(--plx-ease);font-family:var(--plx-font-body);position:relative;overflow:hidden}
+  .plx-atc::before{content:'';position:absolute;inset:0;background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.12) 50%,transparent 70%);transform:translateX(-100%);transition:transform .6s var(--plx-ease)}
+  .plx-atc:hover{background:var(--plx-accent-hover)}
+  .plx-atc:hover::before{transform:translateX(100%)}
+  .plx-atc:active{transform:scale(.98)}
+  .plx-atc:disabled{opacity:.35;cursor:not-allowed}
+  .plx-atc:disabled:hover::before{transform:translateX(-100%)}
+  .plx-dynamic-btn{margin-bottom:28px}
+  .plx-dynamic-btn .shopify-payment-button__button{border-radius:var(--plx-radius)!important;height:54px!important;font-family:var(--plx-font-body)!important}
+
+  /* Trust */
+  .plx-trust{display:grid;grid-template-columns:repeat(3,1fr);text-align:center;padding:24px 0;border-top:1px solid var(--plx-border);border-bottom:1px solid var(--plx-border);margin-bottom:28px;gap:12px}
+  .plx-trust-item{display:flex;flex-direction:column;align-items:center;gap:8px}
+  .plx-trust-item svg{width:22px;height:22px;stroke:var(--plx-accent);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+  .plx-trust-item span{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+
+  /* Accordion */
+  .plx-accordion{border-bottom:1px solid var(--plx-border)}
+  .plx-accordion summary{display:flex;justify-content:space-between;align-items:center;padding:20px 0;font-size:12px;text-transform:uppercase;font-weight:600;letter-spacing:.1em;cursor:pointer;list-style:none;user-select:none;transition:color .3s var(--plx-ease)}
+  .plx-accordion summary:hover{color:var(--plx-accent)}
+  .plx-accordion summary::-webkit-details-marker{display:none}
+  .plx-accordion summary::after{content:'+';font-size:20px;font-weight:300;transition:transform .3s var(--plx-ease)}
+  .plx-accordion[open] summary::after{content:'\2212'}
+  .plx-accordion-body{padding:0 0 24px;font-size:14px;line-height:1.85;color:var(--plx-text-soft)}
+  .plx-accordion-body ul{padding-left:20px;margin-top:8px}
+  .plx-accordion-body li{margin-bottom:6px}
+
+  /* Share */
+  .plx-share{display:flex;align-items:center;gap:20px;padding:24px 0;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--plx-text-soft)}
+  .plx-share a{color:var(--plx-text-soft);font-weight:500;transition:color .3s var(--plx-ease)}
+  .plx-share a:hover{color:var(--plx-accent)}
+
+  /* Recommendations */
+  .plx-recs{padding:80px 0;text-align:center}
+  .plx-recs-subtitle{font-size:11px;text-transform:uppercase;letter-spacing:.2em;color:var(--plx-accent);font-weight:600;margin-bottom:8px}
+  .plx-recs-title{font-family:var(--plx-font-heading);font-size:28px;font-weight:400;margin-bottom:48px}
+  .plx-recs-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;text-align:left}
+  .plx-rec{text-decoration:none;color:var(--plx-text);display:block}
+  .plx-rec-img{aspect-ratio:3/4;overflow:hidden;border-radius:var(--plx-radius);background:var(--plx-border);margin-bottom:16px}
+  .plx-rec-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--plx-ease)}
+  .plx-rec:hover .plx-rec-img img{transform:scale(1.06)}
+  .plx-rec-vendor{font-size:10px;text-transform:uppercase;letter-spacing:.15em;color:var(--plx-text-soft);margin-bottom:4px}
+  .plx-rec-name{font-size:14px;font-weight:500;margin-bottom:6px}
+  .plx-rec-price{font-size:14px;font-weight:600;color:var(--plx-accent)}
+
+  /* Scroll animation */
+  .plx-fade-in{opacity:0;transform:translateY(24px);transition:opacity .7s var(--plx-ease),transform .7s var(--plx-ease)}
+  .plx-fade-in.is-visible{opacity:1;transform:translateY(0)}
+
+  /* Responsive */
+  @media(max-width:1024px){
+    .plx-grid{gap:48px}
+    .plx-title{font-size:30px}
+    .plx-container{padding:0 32px}
+  }
+  @media(max-width:768px){
+    .plx-grid{grid-template-columns:1fr;gap:40px}
+    .plx-gallery{position:static}
+    .plx-title{font-size:26px}
+    .plx-price-now{font-size:26px}
+    .plx-recs-grid{grid-template-columns:repeat(2,1fr)}
+    .plx-container{padding:0 20px}
+    .plx-main-media{aspect-ratio:1/1}
+  }
+  @media(max-width:480px){
+    .plx-container{padding:0 16px}
+    .plx-actions{flex-direction:column}
+    .plx-trust{grid-template-columns:1fr;gap:16px}
+  }
+</style>
+
+<div class="plx">
+  <div class="plx-container">
+
+    <nav class="plx-breadcrumb" aria-label="Breadcrumb">
+      <a href="{{ routes.root_url }}">Home</a><span>/</span>
+      {%- if product.collections.size > 0 -%}
+        <a href="{{ product.collections.first.url }}">{{ product.collections.first.title | escape }}</a>
+      {%- else -%}
+        <a href="{{ routes.all_products_collection_url }}">Shop</a>
+      {%- endif -%}
+      <span>/</span>{{ product.title | escape }}
+    </nav>
+
+    <div class="plx-grid">
+
+      {%- comment -%} LEFT: Gallery {%- endcomment -%}
+      <div class="plx-gallery" id="plx-gallery">
+        <div class="plx-main-media plx-fade-in">
+          {%- if on_sale -%}<span class="plx-badge">-{{ save_pct }}%</span>{%- endif -%}
+          <img id="plx-main-img"
+            src="{{ featured_image | image_url: width: 1400 }}"
+            alt="{{ featured_image.alt | escape | default: product.title | escape }}"
+            width="1400" height="1867" loading="eager">
+        </div>
+        {%- if product.images.size > 1 -%}
+          <div class="plx-thumbs">
+            {%- for image in product.images -%}
+              <button type="button"
+                class="plx-thumb{% if forloop.first %} is-active{% endif %}"
+                data-image-url="{{ image | image_url: width: 1400 }}"
+                aria-label="Afbeelding {{ forloop.index }}">
+                <img src="{{ image | image_url: width: 200 }}" alt="{{ image.alt | escape }}" width="200" height="267" loading="lazy">
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} RIGHT: Product info {%- endcomment -%}
+      <div class="plx-info">
+
+        {%- if section.settings.show_vendor and product.vendor != blank -%}
+          <p class="plx-vendor plx-fade-in">{{ product.vendor | escape }}</p>
+        {%- endif -%}
+
+        <h1 class="plx-title plx-fade-in">{{ product.title | escape }}</h1>
+
+        {%- if section.settings.show_reviews -%}
+          <div class="plx-reviews plx-fade-in">
+            <span class="plx-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+            <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
+          </div>
+        {%- endif -%}
+
+        <div class="plx-divider"></div>
+
+        <div class="plx-price-wrap plx-fade-in" id="plx-price-wrap">
+          <span class="plx-price-now" id="plx-price">{{ current_variant.price | money }}</span>
+          {%- if on_sale -%}
+            <span class="plx-price-was" id="plx-compare">{{ current_variant.compare_at_price | money }}</span>
+            <span class="plx-price-save" id="plx-save">-{{ save_pct }}%</span>
+          {%- else -%}
+            <span class="plx-price-was" id="plx-compare" style="display:none"></span>
+            <span class="plx-price-save" id="plx-save" style="display:none"></span>
+          {%- endif -%}
+        </div>
+        <p class="plx-tax-note">{{ 'products.product.include_taxes' | t }}</p>
+
+        {%- if short_desc != blank -%}
+          <p class="plx-short-desc plx-fade-in">{{ short_desc }}</p>
+        {%- endif -%}
+
+        <div class="plx-divider"></div>
+
+        {%- form 'product', product, id: 'plx-product-form' -%}
+
+          {%- for option in product.options_with_values -%}
+            {%- assign opt_down = option.name | downcase -%}
+            <div class="plx-option-group plx-fade-in">
+              <label class="plx-option-label">
+                {{ option.name }}: <span id="plx-selected-{{ option.name | handleize }}">{{ option.selected_value }}</span>
+              </label>
+
+              {%- if opt_down == 'color' or opt_down == 'kleur' or opt_down == 'colour' -%}
+                <div class="plx-swatches">
+                  {%- for value in option.values -%}
+                    <button type="button"
+                      class="plx-swatch{% if value == option.selected_value %} is-active{% endif %}"
+                      data-option-index="{{ forloop.parentloop.index0 }}"
+                      data-value="{{ value | escape }}"
+                      style="background-color:{{ value | handleize }}"
+                      aria-label="{{ value | escape }}"></button>
+                  {%- endfor -%}
+                </div>
+              {%- else -%}
+                <div class="plx-size-btns">
+                  {%- for value in option.values -%}
+                    {%- liquid
+                      assign soldout = true
+                      for v in product.variants
+                        case forloop.parentloop.parentloop.index
+                          when 1
+                            if v.option1 == value and v.available
+                              assign soldout = false
+                            endif
+                          when 2
+                            if v.option2 == value and v.available
+                              assign soldout = false
+                            endif
+                          when 3
+                            if v.option3 == value and v.available
+                              assign soldout = false
+                            endif
+                        endcase
+                      endfor
+                    -%}
+                    <button type="button"
+                      class="plx-size-btn{% if value == option.selected_value %} is-active{% endif %}{% if soldout %} is-soldout{% endif %}"
+                      data-option-index="{{ forloop.parentloop.index0 }}"
+                      data-value="{{ value | escape }}"
+                      aria-label="{{ value | escape }}">{{ value | escape }}</button>
+                  {%- endfor -%}
+                </div>
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+
+          <select name="id" id="plx-variant-select" style="display:none" aria-label="Variant">
+            {%- for variant in product.variants -%}
+              <option value="{{ variant.id }}"
+                {% if variant == current_variant %}selected{% endif %}
+                data-price="{{ variant.price }}"
+                data-compare-price="{{ variant.compare_at_price | default: 0 }}"
+                data-available="{{ variant.available }}"
+                data-sku="{{ variant.sku | escape }}"
+                data-option1="{{ variant.option1 | escape }}"
+                data-option2="{{ variant.option2 | escape }}"
+                data-option3="{{ variant.option3 | escape }}"
+                {%- if variant.featured_image -%}data-image="{{ variant.featured_image | image_url: width: 1400 }}"{%- endif -%}>
+                {{ variant.title | escape }}
+              </option>
+            {%- endfor -%}
+          </select>
+
+          <div class="plx-actions plx-fade-in">
+            <div class="plx-qty">
+              <button type="button" data-action="decrease" aria-label="Verminder">&#8722;</button>
+              <input type="number" name="quantity" id="plx-qty-input" value="1" min="1" aria-label="Aantal">
+              <button type="button" data-action="increase" aria-label="Verhoog">+</button>
+            </div>
+            <button type="submit" class="plx-atc" id="plx-atc-btn"
+              {% unless current_variant.available %}disabled{% endunless %}>
+              {%- if current_variant.available -%}{{ section.settings.atc_text | default: 'Add to Cart' }}{%- else -%}{{ section.settings.soldout_text | default: 'Sold Out' }}{%- endif -%}
+            </button>
+          </div>
+
+          {%- if section.settings.show_dynamic_checkout -%}
+            <div class="plx-dynamic-btn">{{ form | payment_button }}</div>
+          {%- endif -%}
+
+        {%- endform -%}
+
+        {%- if section.settings.show_trust_badges -%}
+          <div class="plx-trust plx-fade-in">
+            <div class="plx-trust-item">
+              <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <span>{{ section.settings.trust_1 | default: 'Secure Payment' }}</span>
+            </div>
+            <div class="plx-trust-item">
+              <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8l5 3-5 3z"/><line x1="1" y1="20" x2="23" y2="20"/></svg>
+              <span>{{ section.settings.trust_2 | default: 'Free Shipping' }}</span>
+            </div>
+            <div class="plx-trust-item">
+              <svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+              <span>{{ section.settings.trust_3 | default: '30-Day Returns' }}</span>
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%- comment -%} Accordions {%- endcomment -%}
+        <details class="plx-accordion plx-fade-in" open>
+          <summary>{{ section.settings.tab_1_title | default: 'Description' }}</summary>
+          <div class="plx-accordion-body">{{ product.description }}</div>
+        </details>
+
+        {%- if section.settings.tab_2_title != blank -%}
+          <details class="plx-accordion plx-fade-in">
+            <summary>{{ section.settings.tab_2_title }}</summary>
+            <div class="plx-accordion-body">
+              {%- if section.settings.tab_2_content != blank -%}
+                {{ section.settings.tab_2_content }}
+              {%- elsif product.metafields.custom.materials != blank -%}
+                {{ product.metafields.custom.materials }}
+              {%- endif -%}
+            </div>
+          </details>
+        {%- endif -%}
+
+        {%- if section.settings.tab_3_title != blank -%}
+          <details class="plx-accordion plx-fade-in">
+            <summary>{{ section.settings.tab_3_title }}</summary>
+            <div class="plx-accordion-body">
+              {%- if section.settings.tab_3_content != blank -%}
+                {{ section.settings.tab_3_content }}
+              {%- else -%}
+                <ul>
+                  <li>Free shipping on orders over €50</li>
+                  <li>Express delivery: next business day (order before 4 PM)</li>
+                  <li>Standard delivery: 2-4 business days</li>
+                  <li>30-day return policy</li>
+                  <li>Track & Trace included</li>
+                </ul>
+              {%- endif -%}
+            </div>
+          </details>
+        {%- endif -%}
+
+        {%- if section.settings.show_share -%}
+          {%- assign share_url = shop.url | append: product.url -%}
+          {%- assign share_title = product.title | url_encode -%}
+          <div class="plx-share plx-fade-in">
+            <span>Share</span>
+            <a href="https://www.facebook.com/sharer/sharer.php?u={{ share_url }}" target="_blank" rel="noopener" aria-label="Facebook">Facebook</a>
+            <a href="https://twitter.com/intent/tweet?url={{ share_url }}&text={{ share_title }}" target="_blank" rel="noopener" aria-label="X">X</a>
+            <a href="https://pinterest.com/pin/create/button/?url={{ share_url }}&description={{ share_title }}" target="_blank" rel="noopener" aria-label="Pinterest">Pinterest</a>
+            <a href="mailto:?subject={{ share_title }}&body={{ share_url }}" aria-label="Email">Email</a>
+          </div>
+        {%- endif -%}
+
+      </div>
+    </div>
+  </div>
+
+  {%- if recommendations.products_count > 0 and section.settings.show_recommendations -%}
+    <div class="plx-container">
+      <div class="plx-recs plx-fade-in">
+        <p class="plx-recs-subtitle">{{ section.settings.recs_subtitle | default: 'Curated for You' }}</p>
+        <h2 class="plx-recs-title">{{ section.settings.recs_title | default: 'You May Also Like' }}</h2>
+        <div class="plx-recs-grid">
+          {%- for rec in recommendations.products limit: section.settings.recs_count -%}
+            <a href="{{ rec.url }}" class="plx-rec">
+              <div class="plx-rec-img">
+                <img src="{{ rec.featured_image | image_url: width: 600 }}" alt="{{ rec.featured_image.alt | escape }}" width="600" height="800" loading="lazy">
+              </div>
+              <p class="plx-rec-vendor">{{ rec.vendor | escape }}</p>
+              <p class="plx-rec-name">{{ rec.title | escape }}</p>
+              <p class="plx-rec-price">{{ rec.price | money }}</p>
+            </a>
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+  {%- endif -%}
+</div>
+
+<script>
+(function(){'use strict';
+  var pd={{ product | json }};
+  var opts=pd.options.map(function(_,i){return pd.selected_or_first_available_variant['option'+(i+1)];});
+  var selEls=[].slice.call(document.querySelectorAll('#plx-variant-select option'));
+  var variants=selEls.map(function(o){return{id:+o.value,price:+o.dataset.price,compare:+o.dataset.comparePrice,available:o.dataset.available==='true',image:o.dataset.image||null,opts:[o.dataset.option1,o.dataset.option2,o.dataset.option3]};});
+  var currency={{ shop.currency | json }};
+  var atcAvail={{ section.settings.atc_text | default: 'Add to Cart' | json }};
+  var atcSold={{ section.settings.soldout_text | default: 'Sold Out' | json }};
+
+  function fmt(c){return(c/100).toLocaleString('nl-NL',{style:'currency',currency:currency});}
+
+  function findVariant(){
+    return variants.find(function(v){
+      return opts.every(function(o,i){return v.opts[i]===o;});
+    });
+  }
+
+  function updateUI(v){
+    if(!v)return;
+    document.getElementById('plx-variant-select').value=v.id;
+    document.getElementById('plx-price').textContent=fmt(v.price);
+    var cmp=document.getElementById('plx-compare'),sv=document.getElementById('plx-save');
+    if(v.compare&&v.compare>v.price){
+      var p=Math.round((v.compare-v.price)/v.compare*100);
+      cmp.textContent=fmt(v.compare);cmp.style.display='';
+      sv.textContent='-'+p+'%';sv.style.display='';
+    }else{cmp.style.display='none';sv.style.display='none';}
+    var btn=document.getElementById('plx-atc-btn');
+    btn.disabled=!v.available;btn.textContent=v.available?atcAvail:atcSold;
+    if(v.image){
+      document.getElementById('plx-main-img').src=v.image;
+      [].slice.call(document.querySelectorAll('.plx-thumb')).forEach(function(t){
+        t.classList.toggle('is-active',t.dataset.imageUrl===v.image);
+      });
+    }
+    history.replaceState(null,'',location.pathname+'?variant='+v.id);
+  }
+
+  /* Option clicks */
+  [].slice.call(document.querySelectorAll('.plx-swatch,.plx-size-btn')).forEach(function(b){
+    b.addEventListener('click',function(){
+      var i=+b.dataset.optionIndex,val=b.dataset.value;
+      opts[i]=val;
+      var parent=b.closest('.plx-swatches,.plx-size-btns');
+      [].slice.call(parent.querySelectorAll('.plx-swatch,.plx-size-btn')).forEach(function(s){s.classList.remove('is-active');});
+      b.classList.add('is-active');
+      var lbl=document.getElementById('plx-selected-'+pd.options[i].toLowerCase().replace(/[^a-z0-9]+/g,'-'));
+      if(lbl)lbl.textContent=val;
+      var v=findVariant();if(v)updateUI(v);
+    });
+  });
+
+  /* Thumbnails */
+  [].slice.call(document.querySelectorAll('.plx-thumb')).forEach(function(t){
+    t.addEventListener('click',function(){
+      [].slice.call(document.querySelectorAll('.plx-thumb')).forEach(function(x){x.classList.remove('is-active');});
+      t.classList.add('is-active');
+      document.getElementById('plx-main-img').src=t.dataset.imageUrl;
+    });
+  });
+
+  /* Quantity */
+  var qi=document.getElementById('plx-qty-input');
+  var decBtn=document.querySelector('[data-action="decrease"]');
+  var incBtn=document.querySelector('[data-action="increase"]');
+  if(decBtn)decBtn.addEventListener('click',function(){qi.value=Math.max(1,+qi.value-1);});
+  if(incBtn)incBtn.addEventListener('click',function(){qi.value=+qi.value+1;});
+
+  /* Scroll animation */
+  var fadeEls=document.querySelectorAll('.plx-fade-in');
+  if('IntersectionObserver' in window){
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('is-visible');obs.unobserve(e.target);}});
+    },{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
+    fadeEls.forEach(function(el){obs.observe(el);});
+  }else{
+    fadeEls.forEach(function(el){el.classList.add('is-visible');});
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Product Luxury",
+  "tag": "section",
+  "class": "section-product-luxury",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#0f0f0f"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#f5f0eb"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent / Gold color",
+      "default": "#C9A84C"
+    },
+    {
+      "type": "color",
+      "id": "accent_hover_color",
+      "label": "Accent hover color",
+      "default": "#d4b85e"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "select",
+      "id": "heading_font",
+      "label": "Heading font style",
+      "options": [
+        { "value": "serif", "label": "Playfair Display (Classic Serif)" },
+        { "value": "modern_serif", "label": "DM Serif Display (Modern Serif)" },
+        { "value": "sans", "label": "Helvetica Neue (Sans-serif)" }
+      ],
+      "default": "serif"
+    },
+    {
+      "type": "header",
+      "content": "Product Info"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor / brand",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_reviews",
+      "label": "Show reviews badge",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dynamic_checkout",
+      "label": "Show dynamic checkout button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "atc_text",
+      "label": "Add to cart button text",
+      "default": "Add to Cart"
+    },
+    {
+      "type": "text",
+      "id": "soldout_text",
+      "label": "Sold out button text",
+      "default": "Sold Out"
+    },
+    {
+      "type": "header",
+      "content": "Trust Badges"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_trust_badges",
+      "label": "Show trust badges",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "trust_1",
+      "label": "Badge 1 text",
+      "default": "Secure Payment"
+    },
+    {
+      "type": "text",
+      "id": "trust_2",
+      "label": "Badge 2 text",
+      "default": "Free Shipping"
+    },
+    {
+      "type": "text",
+      "id": "trust_3",
+      "label": "Badge 3 text",
+      "default": "30-Day Returns"
+    },
+    {
+      "type": "header",
+      "content": "Accordion Tabs"
+    },
+    {
+      "type": "text",
+      "id": "tab_1_title",
+      "label": "Tab 1 title (uses product description)",
+      "default": "Description"
+    },
+    {
+      "type": "text",
+      "id": "tab_2_title",
+      "label": "Tab 2 title",
+      "default": "Materials & Care"
+    },
+    {
+      "type": "richtext",
+      "id": "tab_2_content",
+      "label": "Tab 2 content",
+      "default": "<p>Premium materials sourced with care. Please refer to the product label for specific care instructions.</p>"
+    },
+    {
+      "type": "text",
+      "id": "tab_3_title",
+      "label": "Tab 3 title",
+      "default": "Shipping & Returns"
+    },
+    {
+      "type": "richtext",
+      "id": "tab_3_content",
+      "label": "Tab 3 content"
+    },
+    {
+      "type": "header",
+      "content": "Social Sharing"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_share",
+      "label": "Show share links",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Recommendations"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_recommendations",
+      "label": "Show recommended products",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "recs_subtitle",
+      "label": "Recommendations subtitle",
+      "default": "Curated for You"
+    },
+    {
+      "type": "text",
+      "id": "recs_title",
+      "label": "Recommendations title",
+      "default": "You May Also Like"
+    },
+    {
+      "type": "range",
+      "id": "recs_count",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "label": "Number of recommendations",
+      "default": 4
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Luxury"
+    }
+  ]
+}
+{% endschema %}
