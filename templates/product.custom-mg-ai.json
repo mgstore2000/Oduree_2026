@@ -1,7 +1,7 @@
 {
   "sections": {
     "main": {
-      "type": "product-luxury",
+      "type": "product-custom-mg-ai",
       "settings": {
         "bg_color": "#0f0f0f",
         "text_color": "#f5f0eb",

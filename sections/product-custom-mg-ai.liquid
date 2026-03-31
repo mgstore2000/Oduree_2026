@@ -1,0 +1,667 @@
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign featured_image = current_variant.featured_image | default: product.featured_image
+  assign on_sale = false
+  if current_variant.compare_at_price > current_variant.price
+    assign on_sale = true
+    assign save_pct = current_variant.compare_at_price | minus: current_variant.price | times: 100.0 | divided_by: current_variant.compare_at_price | round
+  endif
+  assign short_desc = product.metafields.custom.short_description
+  if short_desc == blank
+    assign short_desc = product.description | strip_html | truncatewords: 30
+  endif
+  assign bg = section.settings.bg_color
+  assign txt = section.settings.text_color
+  assign acc = section.settings.accent_color
+  assign acc_h = section.settings.accent_hover_color
+  assign hf = section.settings.heading_font
+-%}
+
+<style>
+.mga{
+  --mga-bg:{{ bg }};
+  --mga-text:{{ txt }};
+  --mga-text-soft:{{ txt | color_modify: 'alpha', 0.55 }};
+  --mga-accent:{{ acc }};
+  --mga-accent-h:{{ acc_h }};
+  --mga-border:{{ txt | color_modify: 'alpha', 0.12 }};
+  --mga-border-s:{{ txt | color_modify: 'alpha', 0.25 }};
+  --mga-sale:#b71c1c;
+  --mga-r:2px;
+  --mga-ease:cubic-bezier(.4,0,.2,1);
+  --mga-max:1340px;
+  --mga-hf:{% if hf == 'serif' %}'Playfair Display','Georgia','Times New Roman',serif{% elsif hf == 'modern_serif' %}'DM Serif Display','Georgia',serif{% else %}'Helvetica Neue',Helvetica,Arial,sans-serif{% endif %};
+  --mga-bf:'Helvetica Neue',Helvetica,Arial,sans-serif;
+  font-family:var(--mga-bf);color:var(--mga-text);background:var(--mga-bg);
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;line-height:1.6;overflow-x:hidden;
+}
+.mga *,.mga *::before,.mga *::after{box-sizing:border-box;margin:0;padding:0}
+.mga a{color:var(--mga-accent);text-decoration:none;transition:color .3s var(--mga-ease)}
+.mga a:hover{color:var(--mga-accent-h)}
+.mga img{display:block;max-width:100%}
+
+.mga-ctr{max-width:var(--mga-max);margin:0 auto;padding:0 48px}
+.mga-bc{padding:20px 0;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mga-text-soft)}
+.mga-bc a{color:var(--mga-text-soft);transition:color .3s var(--mga-ease)}
+.mga-bc a:hover{color:var(--mga-accent)}
+.mga-bc span{margin:0 10px;opacity:.4}
+
+.mga-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:72px;padding:16px 0 96px;align-items:start}
+
+/* Gallery */
+.mga-gal{position:sticky;top:32px}
+.mga-hero{position:relative;aspect-ratio:3/4;overflow:hidden;border-radius:var(--mga-r);background:var(--mga-text-soft);cursor:zoom-in}
+.mga-hero img{width:100%;height:100%;object-fit:cover;transition:transform .6s var(--mga-ease)}
+.mga-hero:hover img{transform:scale(1.08)}
+.mga-badge{position:absolute;top:20px;left:20px;background:var(--mga-sale);color:#fff;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:6px 14px;border-radius:var(--mga-r);z-index:2}
+.mga-thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:8px;margin-top:12px}
+.mga-th{aspect-ratio:1/1;border:2px solid transparent;border-radius:var(--mga-r);overflow:hidden;cursor:pointer;background:var(--mga-border);padding:0;transition:border-color .3s var(--mga-ease),opacity .3s var(--mga-ease);opacity:.6}
+.mga-th:hover,.mga-th.is-active{border-color:var(--mga-accent);opacity:1}
+.mga-th img{width:100%;height:100%;object-fit:cover}
+
+/* Info */
+.mga-vendor{font-size:11px;text-transform:uppercase;letter-spacing:.2em;font-weight:500;color:var(--mga-accent);margin-bottom:12px}
+.mga-title{font-family:var(--mga-hf);font-size:38px;font-weight:400;line-height:1.15;letter-spacing:-.01em;margin-bottom:16px}
+.mga-reviews{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--mga-text-soft);margin-bottom:20px}
+.mga-stars{color:var(--mga-accent);letter-spacing:3px;font-size:16px}
+.mga-hr{height:1px;background:var(--mga-border);margin:24px 0}
+
+.mga-price-wrap{display:flex;align-items:baseline;gap:16px;margin-bottom:8px}
+.mga-price{font-family:var(--mga-hf);font-size:32px;font-weight:400;letter-spacing:.02em}
+.mga-was{font-size:16px;text-decoration:line-through;color:var(--mga-text-soft)}
+.mga-save{font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--mga-sale);background:{{ txt | color_modify: 'alpha', 0.06 }};padding:3px 10px;border-radius:var(--mga-r)}
+.mga-tax{font-size:12px;color:var(--mga-text-soft);margin-bottom:4px}
+.mga-sdesc{font-size:15px;line-height:1.75;color:var(--mga-text-soft);margin-top:20px;margin-bottom:8px}
+
+/* Options */
+.mga-optg{margin-bottom:24px}
+.mga-optl{font-size:11px;text-transform:uppercase;letter-spacing:.12em;font-weight:600;margin-bottom:12px;display:block}
+.mga-optl span{font-weight:400;color:var(--mga-text-soft);letter-spacing:.04em}
+.mga-swatches{display:flex;flex-wrap:wrap;gap:10px}
+.mga-sw{width:38px;height:38px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:transform .25s var(--mga-ease),box-shadow .25s var(--mga-ease);padding:0}
+.mga-sw:hover{transform:scale(1.12)}
+.mga-sw.is-active{box-shadow:0 0 0 2px var(--mga-bg),0 0 0 4px var(--mga-accent)}
+.mga-sbtns{display:flex;flex-wrap:wrap;gap:8px}
+.mga-sbtn{min-width:52px;height:46px;padding:0 20px;border:1.5px solid var(--mga-border-s);background:transparent;color:var(--mga-text);font-size:13px;font-weight:500;letter-spacing:.04em;cursor:pointer;border-radius:var(--mga-r);transition:all .25s var(--mga-ease);position:relative;overflow:hidden;font-family:var(--mga-bf)}
+.mga-sbtn:hover{border-color:var(--mga-accent)}
+.mga-sbtn.is-active{background:var(--mga-accent);color:var(--mga-bg);border-color:var(--mga-accent)}
+.mga-sbtn.is-soldout{opacity:.25;cursor:not-allowed}
+.mga-sbtn.is-soldout::after{content:'';position:absolute;top:50%;left:-10%;width:120%;height:1px;background:var(--mga-text);transform:rotate(-12deg)}
+
+/* Actions */
+.mga-acts{display:flex;gap:12px;margin-bottom:16px}
+.mga-qty{display:flex;align-items:center;border:1.5px solid var(--mga-border-s);border-radius:var(--mga-r);overflow:hidden}
+.mga-qty button{width:48px;height:54px;border:none;background:transparent;font-size:18px;cursor:pointer;color:var(--mga-text);transition:background .2s,color .2s;font-family:var(--mga-bf)}
+.mga-qty button:hover{background:var(--mga-accent);color:var(--mga-bg)}
+.mga-qty input{width:52px;height:54px;border:none;border-left:1px solid var(--mga-border);border-right:1px solid var(--mga-border);text-align:center;font-size:15px;font-family:var(--mga-bf);background:transparent;color:var(--mga-text);-moz-appearance:textfield}
+.mga-qty input::-webkit-outer-spin-button,.mga-qty input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.mga-atc{flex:1;height:54px;background:var(--mga-accent);color:var(--mga-bg);border:none;font-size:13px;text-transform:uppercase;font-weight:600;letter-spacing:.14em;cursor:pointer;border-radius:var(--mga-r);transition:all .35s var(--mga-ease);font-family:var(--mga-bf);position:relative;overflow:hidden}
+.mga-atc::before{content:'';position:absolute;inset:0;background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.12) 50%,transparent 70%);transform:translateX(-100%);transition:transform .6s var(--mga-ease)}
+.mga-atc:hover{background:var(--mga-accent-h)}
+.mga-atc:hover::before{transform:translateX(100%)}
+.mga-atc:active{transform:scale(.98)}
+.mga-atc:disabled{opacity:.35;cursor:not-allowed}
+.mga-atc:disabled:hover::before{transform:translateX(-100%)}
+.mga-dyn{margin-bottom:28px}
+.mga-dyn .shopify-payment-button__button{border-radius:var(--mga-r)!important;height:54px!important;font-family:var(--mga-bf)!important}
+
+/* Trust */
+.mga-trust{display:grid;grid-template-columns:repeat(3,1fr);text-align:center;padding:24px 0;border-top:1px solid var(--mga-border);border-bottom:1px solid var(--mga-border);margin-bottom:28px;gap:12px}
+.mga-ti{display:flex;flex-direction:column;align-items:center;gap:8px}
+.mga-ti svg{width:22px;height:22px;stroke:var(--mga-accent);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.mga-ti span{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+
+/* Accordion */
+.mga-acc{border-bottom:1px solid var(--mga-border)}
+.mga-acc summary{display:flex;justify-content:space-between;align-items:center;padding:20px 0;font-size:12px;text-transform:uppercase;font-weight:600;letter-spacing:.1em;cursor:pointer;list-style:none;user-select:none;transition:color .3s var(--mga-ease)}
+.mga-acc summary:hover{color:var(--mga-accent)}
+.mga-acc summary::-webkit-details-marker{display:none}
+.mga-acc summary::after{content:'+';font-size:20px;font-weight:300;transition:transform .3s var(--mga-ease)}
+.mga-acc[open] summary::after{content:'\2212'}
+.mga-acc-body{padding:0 0 24px;font-size:14px;line-height:1.85;color:var(--mga-text-soft)}
+.mga-acc-body ul{padding-left:20px;margin-top:8px}
+.mga-acc-body li{margin-bottom:6px}
+
+/* Share */
+.mga-share{display:flex;align-items:center;gap:20px;padding:24px 0;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mga-text-soft)}
+.mga-share a{color:var(--mga-text-soft);font-weight:500;transition:color .3s var(--mga-ease)}
+.mga-share a:hover{color:var(--mga-accent)}
+
+/* Recommendations */
+.mga-recs{padding:80px 0;text-align:center}
+.mga-recs-sub{font-size:11px;text-transform:uppercase;letter-spacing:.2em;color:var(--mga-accent);font-weight:600;margin-bottom:8px}
+.mga-recs-title{font-family:var(--mga-hf);font-size:28px;font-weight:400;margin-bottom:48px}
+.mga-recs-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;text-align:left}
+.mga-rec{text-decoration:none;color:var(--mga-text);display:block}
+.mga-rec-img{aspect-ratio:3/4;overflow:hidden;border-radius:var(--mga-r);background:var(--mga-border);margin-bottom:16px}
+.mga-rec-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--mga-ease)}
+.mga-rec:hover .mga-rec-img img{transform:scale(1.06)}
+.mga-rec-vendor{font-size:10px;text-transform:uppercase;letter-spacing:.15em;color:var(--mga-text-soft);margin-bottom:4px}
+.mga-rec-name{font-size:14px;font-weight:500;margin-bottom:6px}
+.mga-rec-price{font-size:14px;font-weight:600;color:var(--mga-accent)}
+
+/* Scroll animation */
+.mga-fi{opacity:0;transform:translateY(24px);transition:opacity .7s var(--mga-ease),transform .7s var(--mga-ease)}
+.mga-fi.is-visible{opacity:1;transform:translateY(0)}
+
+/* Responsive */
+@media(max-width:1024px){.mga-grid{gap:48px}.mga-title{font-size:30px}.mga-ctr{padding:0 32px}}
+@media(max-width:768px){.mga-grid{grid-template-columns:1fr;gap:40px}.mga-gal{position:static}.mga-title{font-size:26px}.mga-price{font-size:26px}.mga-recs-grid{grid-template-columns:repeat(2,1fr)}.mga-ctr{padding:0 20px}.mga-hero{aspect-ratio:1/1}}
+@media(max-width:480px){.mga-ctr{padding:0 16px}.mga-acts{flex-direction:column}.mga-trust{grid-template-columns:1fr;gap:16px}}
+</style>
+
+<div class="mga">
+  <div class="mga-ctr">
+
+    <nav class="mga-bc" aria-label="Breadcrumb">
+      <a href="{{ routes.root_url }}">Home</a><span>/</span>
+      {%- if product.collections.size > 0 -%}
+        <a href="{{ product.collections.first.url }}">{{ product.collections.first.title | escape }}</a>
+      {%- else -%}
+        <a href="{{ routes.all_products_collection_url }}">Shop</a>
+      {%- endif -%}
+      <span>/</span>{{ product.title | escape }}
+    </nav>
+
+    <div class="mga-grid">
+
+      <div class="mga-gal" id="mga-gallery">
+        <div class="mga-hero mga-fi">
+          {%- if on_sale -%}<span class="mga-badge">-{{ save_pct }}%</span>{%- endif -%}
+          <img id="mga-main-img"
+            src="{{ featured_image | image_url: width: 1400 }}"
+            alt="{{ featured_image.alt | escape | default: product.title | escape }}"
+            width="1400" height="1867" loading="eager">
+        </div>
+        {%- if product.images.size > 1 -%}
+          <div class="mga-thumbs">
+            {%- for image in product.images -%}
+              <button type="button"
+                class="mga-th{% if forloop.first %} is-active{% endif %}"
+                data-image-url="{{ image | image_url: width: 1400 }}"
+                aria-label="Image {{ forloop.index }}">
+                <img src="{{ image | image_url: width: 200 }}" alt="{{ image.alt | escape }}" width="200" height="267" loading="lazy">
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="mga-info">
+
+        {%- if section.settings.show_vendor and product.vendor != blank -%}
+          <p class="mga-vendor mga-fi">{{ product.vendor | escape }}</p>
+        {%- endif -%}
+
+        <h1 class="mga-title mga-fi">{{ product.title | escape }}</h1>
+
+        {%- if section.settings.show_reviews -%}
+          <div class="mga-reviews mga-fi">
+            <span class="mga-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+            <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
+          </div>
+        {%- endif -%}
+
+        <div class="mga-hr"></div>
+
+        <div class="mga-price-wrap mga-fi" id="mga-price-wrap">
+          <span class="mga-price" id="mga-price">{{ current_variant.price | money }}</span>
+          {%- if on_sale -%}
+            <span class="mga-was" id="mga-compare">{{ current_variant.compare_at_price | money }}</span>
+            <span class="mga-save" id="mga-save">-{{ save_pct }}%</span>
+          {%- else -%}
+            <span class="mga-was" id="mga-compare" style="display:none"></span>
+            <span class="mga-save" id="mga-save" style="display:none"></span>
+          {%- endif -%}
+        </div>
+        <p class="mga-tax">{{ 'products.product.include_taxes' | t }}</p>
+
+        {%- if short_desc != blank -%}
+          <p class="mga-sdesc mga-fi">{{ short_desc }}</p>
+        {%- endif -%}
+
+        <div class="mga-hr"></div>
+
+        {%- form 'product', product, id: 'mga-form' -%}
+
+          {%- for option in product.options_with_values -%}
+            {%- assign opt_down = option.name | downcase -%}
+            <div class="mga-optg mga-fi">
+              <label class="mga-optl">
+                {{ option.name }}: <span id="mga-sel-{{ option.name | handleize }}">{{ option.selected_value }}</span>
+              </label>
+
+              {%- if opt_down == 'color' or opt_down == 'kleur' or opt_down == 'colour' -%}
+                <div class="mga-swatches">
+                  {%- for value in option.values -%}
+                    <button type="button"
+                      class="mga-sw{% if value == option.selected_value %} is-active{% endif %}"
+                      data-option-index="{{ forloop.parentloop.index0 }}"
+                      data-value="{{ value | escape }}"
+                      style="background-color:{{ value | handleize }}"
+                      aria-label="{{ value | escape }}"></button>
+                  {%- endfor -%}
+                </div>
+              {%- else -%}
+                <div class="mga-sbtns">
+                  {%- for value in option.values -%}
+                    {%- liquid
+                      assign soldout = true
+                      for v in product.variants
+                        case forloop.parentloop.parentloop.index
+                          when 1
+                            if v.option1 == value and v.available
+                              assign soldout = false
+                            endif
+                          when 2
+                            if v.option2 == value and v.available
+                              assign soldout = false
+                            endif
+                          when 3
+                            if v.option3 == value and v.available
+                              assign soldout = false
+                            endif
+                        endcase
+                      endfor
+                    -%}
+                    <button type="button"
+                      class="mga-sbtn{% if value == option.selected_value %} is-active{% endif %}{% if soldout %} is-soldout{% endif %}"
+                      data-option-index="{{ forloop.parentloop.index0 }}"
+                      data-value="{{ value | escape }}"
+                      aria-label="{{ value | escape }}">{{ value | escape }}</button>
+                  {%- endfor -%}
+                </div>
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+
+          <select name="id" id="mga-variant-sel" style="display:none" aria-label="Variant">
+            {%- for variant in product.variants -%}
+              <option value="{{ variant.id }}"
+                {% if variant == current_variant %}selected{% endif %}
+                data-price="{{ variant.price }}"
+                data-compare-price="{{ variant.compare_at_price | default: 0 }}"
+                data-available="{{ variant.available }}"
+                data-sku="{{ variant.sku | escape }}"
+                data-option1="{{ variant.option1 | escape }}"
+                data-option2="{{ variant.option2 | escape }}"
+                data-option3="{{ variant.option3 | escape }}"
+                {%- if variant.featured_image -%}data-image="{{ variant.featured_image | image_url: width: 1400 }}"{%- endif -%}>
+                {{ variant.title | escape }}
+              </option>
+            {%- endfor -%}
+          </select>
+
+          <div class="mga-acts mga-fi">
+            <div class="mga-qty">
+              <button type="button" data-action="decrease" aria-label="Decrease">&#8722;</button>
+              <input type="number" name="quantity" id="mga-qty-input" value="1" min="1" aria-label="Quantity">
+              <button type="button" data-action="increase" aria-label="Increase">+</button>
+            </div>
+            <button type="submit" class="mga-atc" id="mga-atc-btn"
+              {% unless current_variant.available %}disabled{% endunless %}>
+              {%- if current_variant.available -%}{{ section.settings.atc_text | default: 'Add to Cart' }}{%- else -%}{{ section.settings.soldout_text | default: 'Sold Out' }}{%- endif -%}
+            </button>
+          </div>
+
+          {%- if section.settings.show_dynamic_checkout -%}
+            <div class="mga-dyn">{{ form | payment_button }}</div>
+          {%- endif -%}
+
+        {%- endform -%}
+
+        {%- if section.settings.show_trust_badges -%}
+          <div class="mga-trust mga-fi">
+            <div class="mga-ti">
+              <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <span>{{ section.settings.trust_1 | default: 'Secure Payment' }}</span>
+            </div>
+            <div class="mga-ti">
+              <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8l5 3-5 3z"/><line x1="1" y1="20" x2="23" y2="20"/></svg>
+              <span>{{ section.settings.trust_2 | default: 'Free Shipping' }}</span>
+            </div>
+            <div class="mga-ti">
+              <svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+              <span>{{ section.settings.trust_3 | default: '30-Day Returns' }}</span>
+            </div>
+          </div>
+        {%- endif -%}
+
+        <details class="mga-acc mga-fi" open>
+          <summary>{{ section.settings.tab_1_title | default: 'Description' }}</summary>
+          <div class="mga-acc-body">{{ product.description }}</div>
+        </details>
+
+        {%- if section.settings.tab_2_title != blank -%}
+          <details class="mga-acc mga-fi">
+            <summary>{{ section.settings.tab_2_title }}</summary>
+            <div class="mga-acc-body">
+              {%- if section.settings.tab_2_content != blank -%}
+                {{ section.settings.tab_2_content }}
+              {%- elsif product.metafields.custom.materials != blank -%}
+                {{ product.metafields.custom.materials }}
+              {%- endif -%}
+            </div>
+          </details>
+        {%- endif -%}
+
+        {%- if section.settings.tab_3_title != blank -%}
+          <details class="mga-acc mga-fi">
+            <summary>{{ section.settings.tab_3_title }}</summary>
+            <div class="mga-acc-body">
+              {%- if section.settings.tab_3_content != blank -%}
+                {{ section.settings.tab_3_content }}
+              {%- else -%}
+                <ul>
+                  <li>Free shipping on orders over €50</li>
+                  <li>Express delivery: next business day (order before 4 PM)</li>
+                  <li>Standard delivery: 2-4 business days</li>
+                  <li>30-day return policy</li>
+                  <li>Track & Trace included</li>
+                </ul>
+              {%- endif -%}
+            </div>
+          </details>
+        {%- endif -%}
+
+        {%- if section.settings.show_share -%}
+          {%- assign share_url = shop.url | append: product.url -%}
+          {%- assign share_title = product.title | url_encode -%}
+          <div class="mga-share mga-fi">
+            <span>Share</span>
+            <a href="https://www.facebook.com/sharer/sharer.php?u={{ share_url }}" target="_blank" rel="noopener" aria-label="Facebook">Facebook</a>
+            <a href="https://twitter.com/intent/tweet?url={{ share_url }}&text={{ share_title }}" target="_blank" rel="noopener" aria-label="X">X</a>
+            <a href="https://pinterest.com/pin/create/button/?url={{ share_url }}&description={{ share_title }}" target="_blank" rel="noopener" aria-label="Pinterest">Pinterest</a>
+            <a href="mailto:?subject={{ share_title }}&body={{ share_url }}" aria-label="Email">Email</a>
+          </div>
+        {%- endif -%}
+
+      </div>
+    </div>
+  </div>
+
+  {%- if recommendations.products_count > 0 and section.settings.show_recommendations -%}
+    <div class="mga-ctr">
+      <div class="mga-recs mga-fi">
+        <p class="mga-recs-sub">{{ section.settings.recs_subtitle | default: 'Curated for You' }}</p>
+        <h2 class="mga-recs-title">{{ section.settings.recs_title | default: 'You May Also Like' }}</h2>
+        <div class="mga-recs-grid">
+          {%- for rec in recommendations.products limit: section.settings.recs_count -%}
+            <a href="{{ rec.url }}" class="mga-rec">
+              <div class="mga-rec-img">
+                <img src="{{ rec.featured_image | image_url: width: 600 }}" alt="{{ rec.featured_image.alt | escape }}" width="600" height="800" loading="lazy">
+              </div>
+              <p class="mga-rec-vendor">{{ rec.vendor | escape }}</p>
+              <p class="mga-rec-name">{{ rec.title | escape }}</p>
+              <p class="mga-rec-price">{{ rec.price | money }}</p>
+            </a>
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+  {%- endif -%}
+</div>
+
+<script>
+(function(){'use strict';
+  var pd={{ product | json }};
+  var opts=pd.options.map(function(_,i){return pd.selected_or_first_available_variant['option'+(i+1)];});
+  var selEls=[].slice.call(document.querySelectorAll('#mga-variant-sel option'));
+  var variants=selEls.map(function(o){return{id:+o.value,price:+o.dataset.price,compare:+o.dataset.comparePrice,available:o.dataset.available==='true',image:o.dataset.image||null,opts:[o.dataset.option1,o.dataset.option2,o.dataset.option3]};});
+  var cur={{ shop.currency | json }};
+  var atcA={{ section.settings.atc_text | default: 'Add to Cart' | json }};
+  var atcS={{ section.settings.soldout_text | default: 'Sold Out' | json }};
+
+  function fmt(c){return(c/100).toLocaleString('nl-NL',{style:'currency',currency:cur});}
+  function findV(){return variants.find(function(v){return opts.every(function(o,i){return v.opts[i]===o;});});}
+
+  function updateUI(v){
+    if(!v)return;
+    document.getElementById('mga-variant-sel').value=v.id;
+    document.getElementById('mga-price').textContent=fmt(v.price);
+    var cmp=document.getElementById('mga-compare'),sv=document.getElementById('mga-save');
+    if(v.compare&&v.compare>v.price){
+      var p=Math.round((v.compare-v.price)/v.compare*100);
+      cmp.textContent=fmt(v.compare);cmp.style.display='';
+      sv.textContent='-'+p+'%';sv.style.display='';
+    }else{cmp.style.display='none';sv.style.display='none';}
+    var btn=document.getElementById('mga-atc-btn');
+    btn.disabled=!v.available;btn.textContent=v.available?atcA:atcS;
+    if(v.image){
+      document.getElementById('mga-main-img').src=v.image;
+      [].slice.call(document.querySelectorAll('.mga-th')).forEach(function(t){
+        t.classList.toggle('is-active',t.dataset.imageUrl===v.image);
+      });
+    }
+    history.replaceState(null,'',location.pathname+'?variant='+v.id);
+  }
+
+  [].slice.call(document.querySelectorAll('.mga-sw,.mga-sbtn')).forEach(function(b){
+    b.addEventListener('click',function(){
+      var i=+b.dataset.optionIndex,val=b.dataset.value;opts[i]=val;
+      var p=b.closest('.mga-swatches,.mga-sbtns');
+      [].slice.call(p.querySelectorAll('.mga-sw,.mga-sbtn')).forEach(function(s){s.classList.remove('is-active');});
+      b.classList.add('is-active');
+      var lbl=document.getElementById('mga-sel-'+pd.options[i].toLowerCase().replace(/[^a-z0-9]+/g,'-'));
+      if(lbl)lbl.textContent=val;
+      var v=findV();if(v)updateUI(v);
+    });
+  });
+
+  [].slice.call(document.querySelectorAll('.mga-th')).forEach(function(t){
+    t.addEventListener('click',function(){
+      [].slice.call(document.querySelectorAll('.mga-th')).forEach(function(x){x.classList.remove('is-active');});
+      t.classList.add('is-active');
+      document.getElementById('mga-main-img').src=t.dataset.imageUrl;
+    });
+  });
+
+  var qi=document.getElementById('mga-qty-input');
+  var dec=document.querySelector('[data-action="decrease"]');
+  var inc=document.querySelector('[data-action="increase"]');
+  if(dec)dec.addEventListener('click',function(){qi.value=Math.max(1,+qi.value-1);});
+  if(inc)inc.addEventListener('click',function(){qi.value=+qi.value+1;});
+
+  var fades=document.querySelectorAll('.mga-fi');
+  if('IntersectionObserver' in window){
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('is-visible');obs.unobserve(e.target);}});
+    },{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
+    fades.forEach(function(el){obs.observe(el);});
+  }else{fades.forEach(function(el){el.classList.add('is-visible');});}
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Custom MG AI",
+  "tag": "section",
+  "class": "section-product-custom-mg-ai",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#0f0f0f"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#f5f0eb"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent / Gold color",
+      "default": "#C9A84C"
+    },
+    {
+      "type": "color",
+      "id": "accent_hover_color",
+      "label": "Accent hover color",
+      "default": "#d4b85e"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "select",
+      "id": "heading_font",
+      "label": "Heading font style",
+      "options": [
+        { "value": "serif", "label": "Playfair Display (Classic Serif)" },
+        { "value": "modern_serif", "label": "DM Serif Display (Modern Serif)" },
+        { "value": "sans", "label": "Helvetica Neue (Sans-serif)" }
+      ],
+      "default": "serif"
+    },
+    {
+      "type": "header",
+      "content": "Product Info"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor / brand",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_reviews",
+      "label": "Show reviews badge",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dynamic_checkout",
+      "label": "Show dynamic checkout button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "atc_text",
+      "label": "Add to cart button text",
+      "default": "Add to Cart"
+    },
+    {
+      "type": "text",
+      "id": "soldout_text",
+      "label": "Sold out button text",
+      "default": "Sold Out"
+    },
+    {
+      "type": "header",
+      "content": "Trust Badges"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_trust_badges",
+      "label": "Show trust badges",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "trust_1",
+      "label": "Badge 1 text",
+      "default": "Secure Payment"
+    },
+    {
+      "type": "text",
+      "id": "trust_2",
+      "label": "Badge 2 text",
+      "default": "Free Shipping"
+    },
+    {
+      "type": "text",
+      "id": "trust_3",
+      "label": "Badge 3 text",
+      "default": "30-Day Returns"
+    },
+    {
+      "type": "header",
+      "content": "Accordion Tabs"
+    },
+    {
+      "type": "text",
+      "id": "tab_1_title",
+      "label": "Tab 1 title (uses product description)",
+      "default": "Description"
+    },
+    {
+      "type": "text",
+      "id": "tab_2_title",
+      "label": "Tab 2 title",
+      "default": "Materials & Care"
+    },
+    {
+      "type": "richtext",
+      "id": "tab_2_content",
+      "label": "Tab 2 content",
+      "default": "<p>Premium materials sourced with care. Please refer to the product label for specific care instructions.</p>"
+    },
+    {
+      "type": "text",
+      "id": "tab_3_title",
+      "label": "Tab 3 title",
+      "default": "Shipping & Returns"
+    },
+    {
+      "type": "richtext",
+      "id": "tab_3_content",
+      "label": "Tab 3 content"
+    },
+    {
+      "type": "header",
+      "content": "Social Sharing"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_share",
+      "label": "Show share links",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Recommendations"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_recommendations",
+      "label": "Show recommended products",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "recs_subtitle",
+      "label": "Recommendations subtitle",
+      "default": "Curated for You"
+    },
+    {
+      "type": "text",
+      "id": "recs_title",
+      "label": "Recommendations title",
+      "default": "You May Also Like"
+    },
+    {
+      "type": "range",
+      "id": "recs_count",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "label": "Number of recommendations",
+      "default": 4
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom MG AI"
+    }
+  ]
+}
+{% endschema %}
