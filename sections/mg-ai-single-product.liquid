@@ -1,0 +1,1222 @@
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign product_type = product.type | default: 'Autoparfum'
+
+  assign scent_desc = product.metafields.custom.scent_description
+  if scent_desc == blank
+    assign scent_desc = product.description | strip_html | truncatewords: 60
+  endif
+  assign scent_type = product.metafields.custom.scent_type | default: ''
+  assign scent_strength = product.metafields.custom.scent_strength | default: 75
+  assign scent_inspiration = product.metafields.custom.scent_inspiration | default: ''
+  assign scent_label = product.metafields.custom.scent_label | default: ''
+
+  assign selling_plan_group = product.selling_plan_groups | first
+  assign has_selling_plans = false
+  if selling_plan_group != blank
+    assign has_selling_plans = true
+  endif
+-%}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
+
+<style>
+/* ── Reset & Base ── */
+.mg-ai-pdp { max-width: 480px; width: 100%; margin: 0 auto; font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Proxima Nova', sans-serif; color: #1a1a1a; line-height: 1.45; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+.mg-ai-pdp *, .mg-ai-pdp *::before, .mg-ai-pdp *::after { box-sizing: border-box; margin: 0; padding: 0; }
+.mg-ai-pdp img { display: block; max-width: 100%; height: auto; }
+
+/* ── Image Slider ── */
+.mg-ai-pdp .slider-wrap { position: relative; width: 100%; overflow: hidden; background: #f2ede5; }
+.mg-ai-pdp .slider-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; -ms-overflow-style: none; }
+.mg-ai-pdp .slider-track::-webkit-scrollbar { display: none; }
+.mg-ai-pdp .slide { min-width: 100%; aspect-ratio: 1 / 1; background: #f2ede5; display: flex; align-items: center; justify-content: center; position: relative; scroll-snap-align: start; flex-shrink: 0; }
+.mg-ai-pdp .slide img { width: 100%; height: 100%; object-fit: cover; }
+.mg-ai-pdp .slide .placeholder { width: 55%; height: 55%; background: rgba(255,255,255,0.3); border-radius: 16px; display: flex; align-items: center; justify-content: center; color: #bbb; font-size: 12px; letter-spacing: 0.5px; }
+.mg-ai-pdp .img-badge { position: absolute; top: 14px; right: 14px; background: #2C2C2A; color: white; padding: 4px 10px; border-radius: 5px; font-size: 12px; font-weight: 500; letter-spacing: 0.3px; display: none; z-index: 3; }
+.mg-ai-pdp .slider-shadow { position: absolute; top: 0; right: 0; width: 60px; height: 100%; background: linear-gradient(to left, rgba(242,237,229,0.7) 0%, transparent 100%); z-index: 2; pointer-events: none; }
+.mg-ai-pdp .img-label { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(248,242,230,0.92); backdrop-filter: blur(8px); padding: 10px 16px; display: flex; align-items: center; gap: 8px; z-index: 3; }
+.mg-ai-pdp .img-label .dot { width: 10px; height: 10px; border-radius: 50%; background: #8B6A4F; flex-shrink: 0; box-shadow: 0 0 0 2px rgba(139,106,79,0.2); }
+.mg-ai-pdp .img-label span { font-size: 11px; color: #666; letter-spacing: 0.2px; }
+.mg-ai-pdp .slider-arrow { position: absolute; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; z-index: 4; padding: 12px 8px; transition: opacity 0.2s; }
+.mg-ai-pdp .slider-arrow svg { width: 14px; height: 24px; stroke: rgba(44,44,42,0.4); stroke-width: 1.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.mg-ai-pdp .slider-arrow:hover svg { stroke: rgba(44,44,42,0.8); }
+.mg-ai-pdp .slider-arrow.next { right: 6px; }
+.mg-ai-pdp .slider-arrow.prev { left: 6px; }
+.mg-ai-pdp .slider-arrow:disabled { opacity: 0; pointer-events: none; }
+.mg-ai-pdp .slider-progress { width: 40%; height: 2px; background: #e0d8cc; margin: 8px auto 0; border-radius: 1px; overflow: hidden; }
+.mg-ai-pdp .slider-progress-fill { height: 100%; background: #2C2C2A; border-radius: 1px; transition: width 0.3s ease; }
+
+/* ── Thumbnails ── */
+.mg-ai-pdp .thumbs-wrap { position: relative; padding: 10px 16px 4px; }
+.mg-ai-pdp .thumbs { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; }
+.mg-ai-pdp .thumbs::-webkit-scrollbar { display: none; }
+.mg-ai-pdp .thumb { width: 68px; height: 68px; flex-shrink: 0; border-radius: 6px; border: 1.5px solid transparent; background: linear-gradient(135deg, #ede8df 0%, #e5ddd0 100%); cursor: pointer; transition: all 0.2s ease; overflow: hidden; }
+.mg-ai-pdp .thumb img { width: 100%; height: 100%; object-fit: cover; }
+.mg-ai-pdp .thumb:hover { border-color: #c5b9a8; }
+.mg-ai-pdp .thumb.active { border: 2px solid #2C2C2A; }
+
+/* ── Info Container ── */
+.mg-ai-pdp .info { padding: 0 16px; margin-top: 8px; display: flex; flex-direction: column; gap: 14px; }
+
+/* ── Trustpilot ── */
+.mg-ai-pdp .trustpilot { display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; }
+.mg-ai-pdp .tp-stars { display: flex; gap: 2px; }
+.mg-ai-pdp .tp-star { width: 20px; height: 20px; background: #00B67A; display: flex; align-items: center; justify-content: center; border-radius: 2px; }
+.mg-ai-pdp .tp-star svg { width: 12px; height: 12px; }
+.mg-ai-pdp .tp-info { font-size: 12px; color: #555; letter-spacing: 0.1px; }
+.mg-ai-pdp .tp-info strong { font-weight: 600; color: #1a1a1a; }
+
+/* ── Title ── */
+.mg-ai-pdp .product-subtitle { font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 400; }
+.mg-ai-pdp .product-title { font-family: 'DM Serif Display', Georgia, serif; font-size: 26px; font-weight: 400; color: #1a1a1a; margin-top: 2px; letter-spacing: -0.3px; }
+.mg-ai-pdp .geur-toggle { background: none; border: none; font-family: inherit; font-size: 12px; color: #888; cursor: pointer; padding: 0; margin-top: 6px; display: inline-flex; align-items: center; gap: 4px; transition: color 0.15s; text-decoration: underline; text-decoration-color: rgba(136,136,136,0.3); text-underline-offset: 2px; }
+.mg-ai-pdp .geur-toggle:hover { color: #555; }
+.mg-ai-pdp .geur-toggle svg { transition: transform 0.2s; }
+.mg-ai-pdp .geur-toggle.open svg { transform: rotate(180deg); }
+
+/* ── Geur picker ── */
+.mg-ai-pdp .geur-picker { animation: mgSlideDown 0.25s ease; }
+.mg-ai-pdp .geur-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.mg-ai-pdp .geur-pill { padding: 6px 12px; border-radius: 20px; border: 1px solid #ddd; background: white; font-size: 12px; color: #555; cursor: pointer; transition: all 0.15s ease; font-family: inherit; white-space: nowrap; text-decoration: none; }
+.mg-ai-pdp .geur-pill:hover { border-color: #aaa; color: #1a1a1a; }
+.mg-ai-pdp .geur-pill.active { background: #2C2C2A; color: white; border-color: #2C2C2A; }
+
+/* ── Product Benefits ── */
+.mg-ai-pdp .product-benefits { display: flex; flex-direction: column; gap: 7px; }
+.mg-ai-pdp .benefit-item { display: flex; align-items: center; gap: 8px; }
+.mg-ai-pdp .benefit-item svg { flex-shrink: 0; opacity: 0.7; }
+.mg-ai-pdp .benefit-item span { font-size: 13px; color: #555; letter-spacing: 0.1px; }
+
+/* ── Price Row ── */
+.mg-ai-pdp .price-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.mg-ai-pdp .price-old { font-size: 14px; text-decoration: line-through; color: rgba(68,68,68,0.5); display: none; font-weight: 400; }
+.mg-ai-pdp .price-new { font-size: 22px; font-weight: 500; color: #1a1a1a; }
+.mg-ai-pdp .price-badge { background: #2C2C2A; color: white; font-size: 11px; font-weight: 500; padding: 3px 9px; border-radius: 5px; display: none; letter-spacing: 0.3px; }
+
+/* ── Option Cards ── */
+.mg-ai-pdp .options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.mg-ai-pdp .opt-card { border: 0.5px solid #ccc; border-radius: 12px; padding: 14px; cursor: pointer; background: white; position: relative; transition: all 0.2s ease; }
+.mg-ai-pdp .opt-card:hover { border-color: #aaa; }
+.mg-ai-pdp .opt-card.active { border: 2px solid #2C2C2A; box-shadow: 0 2px 12px rgba(44,44,42,0.08); }
+.mg-ai-pdp .opt-card .opt-title { font-size: 13px; font-weight: 500; color: #1a1a1a; margin-bottom: 10px; }
+.mg-ai-pdp .opt-card .opt-price-single { font-size: 22px; font-weight: 500; color: #1a1a1a; }
+.mg-ai-pdp .opt-card .opt-price-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.mg-ai-pdp .opt-card .opt-old { font-size: 12px; text-decoration: line-through; color: rgba(68,68,68,0.5); }
+.mg-ai-pdp .opt-card .opt-new { font-size: 20px; font-weight: 500; color: #1a1a1a; }
+.mg-ai-pdp .opt-card .opt-badge { background: #2C2C2A; color: white; font-size: 10px; padding: 2px 7px; border-radius: 4px; font-weight: 500; }
+.mg-ai-pdp .opt-card .opt-sub { font-size: 11px; color: #999; margin-top: 8px; letter-spacing: 0.1px; }
+.mg-ai-pdp .most-chosen { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: #2C2C2A; color: white; font-size: 10px; font-weight: 500; padding: 3px 10px; border-radius: 20px; white-space: nowrap; letter-spacing: 0.3px; }
+
+/* ── Abo Section ── */
+.mg-ai-pdp .abo-section { background: #F8F2E6; border-radius: 12px; padding: 16px; border: 0.5px solid #E8D9C0; display: none; animation: mgSlideDown 0.3s ease; }
+@keyframes mgSlideDown { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+.mg-ai-pdp .abo-section h4 { font-size: 13px; font-weight: 500; color: #1a1a1a; margin-bottom: 10px; }
+.mg-ai-pdp .period-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 14px; }
+.mg-ai-pdp .period-btn { border: 1px solid #d8cdb8; border-radius: 8px; padding: 11px 6px; text-align: center; cursor: pointer; background: white; font-size: 12px; font-weight: 500; color: #1a1a1a; transition: all 0.2s ease; font-family: inherit; }
+.mg-ai-pdp .period-btn:hover { border-color: #b5a78e; }
+.mg-ai-pdp .period-btn.active { border: 2px solid #2C2C2A; background: white; box-shadow: 0 1px 6px rgba(44,44,42,0.06); }
+.mg-ai-pdp .voordelen-list { display: flex; flex-direction: column; gap: 9px; margin-bottom: 16px; }
+.mg-ai-pdp .voordeel { display: flex; align-items: center; gap: 10px; }
+.mg-ai-pdp .check { width: 20px; height: 20px; border-radius: 50%; background: #2C2C2A; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.mg-ai-pdp .check svg { width: 10px; height: 10px; }
+.mg-ai-pdp .voordeel span { font-size: 13px; color: #1a1a1a; }
+.mg-ai-pdp .abo-summary { background: white; border-radius: 10px; padding: 12px 14px; border: 0.5px solid #E8D9C0; display: flex; justify-content: space-between; align-items: center; }
+.mg-ai-pdp .abo-summary .label { font-size: 11px; color: #999; letter-spacing: 0.2px; }
+.mg-ai-pdp .abo-summary .val { font-size: 14px; font-weight: 500; color: #1a1a1a; margin-top: 2px; }
+.mg-ai-pdp .abo-summary .price-val { font-size: 18px; font-weight: 500; color: #1a1a1a; }
+
+/* ── Buttons ── */
+.mg-ai-pdp .btn-primary { width: 100%; background: #C9A84C; color: white; border: none; border-radius: 10px; padding: 15px; font-size: 15px; font-weight: 500; cursor: pointer; letter-spacing: 0.2px; transition: all 0.2s ease; font-family: inherit; }
+.mg-ai-pdp .btn-primary:hover { background: #b8963f; }
+.mg-ai-pdp .btn-primary:active { transform: scale(0.99); }
+.mg-ai-pdp .btn-outline { width: 100%; background: white; color: #1a1a1a; border: 1px solid #c5c5c0; border-radius: 10px; padding: 13px; font-size: 13px; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s ease; font-family: inherit; }
+.mg-ai-pdp .btn-outline:hover { border-color: #999; background: #fefefe; }
+.mg-ai-pdp .btn-outline .arrow { font-size: 12px; transition: transform 0.3s ease; display: inline-block; }
+.mg-ai-pdp .btn-sub { font-size: 11px; color: #999; text-align: center; margin-top: 6px; letter-spacing: 0.1px; }
+
+/* ── Bundel Section ── */
+.mg-ai-pdp .bundel-section { background: #F8F2E6; border-radius: 12px; padding: 16px; border: 0.5px solid #E8D9C0; display: none; animation: mgSlideDown 0.3s ease; }
+.mg-ai-pdp .bundel-section h4 { font-size: 13px; font-weight: 500; color: #1a1a1a; margin-bottom: 12px; }
+.mg-ai-pdp .abo-bundel-badge { background: #2C2C2A; color: white; border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; display: none; align-items: center; gap: 8px; font-size: 12px; font-weight: 500; letter-spacing: 0.2px; animation: mgSlideDown 0.25s ease; }
+.mg-ai-pdp .bundel-card { border: 0.5px solid #ccc; border-radius: 12px; padding: 14px; cursor: pointer; background: white; margin-bottom: 8px; position: relative; transition: all 0.2s ease; }
+.mg-ai-pdp .bundel-card:hover { border-color: #aaa; }
+.mg-ai-pdp .bundel-card.active { border: 2px solid #2C2C2A; box-shadow: 0 2px 12px rgba(44,44,42,0.06); }
+.mg-ai-pdp .bundel-card .bundel-inner { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.mg-ai-pdp .bundel-card .bundel-info .bundel-title { font-size: 14px; font-weight: 500; color: #1a1a1a; margin-bottom: 5px; }
+.mg-ai-pdp .bundel-card .bundel-info .bundel-price-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.mg-ai-pdp .bundel-card .bundel-info .bundel-old { font-size: 12px; text-decoration: line-through; color: rgba(68,68,68,0.5); display: none; }
+.mg-ai-pdp .bundel-card .bundel-info .bundel-new { font-size: 18px; font-weight: 500; color: #1a1a1a; }
+.mg-ai-pdp .bundel-card .bundel-info .bundel-badge { background: #2C2C2A; color: white; font-size: 10px; padding: 2px 7px; border-radius: 4px; display: none; font-weight: 500; }
+.mg-ai-pdp .gift-tag { background: linear-gradient(135deg, #F3E3BF 0%, #efe0b8 100%); border-radius: 8px; padding: 8px 12px; text-align: center; border: 0.5px solid #E8D9C0; flex-shrink: 0; min-width: 80px; }
+.mg-ai-pdp .gift-tag .gift-label { font-size: 9px; color: #999; text-transform: uppercase; letter-spacing: 1px; }
+.mg-ai-pdp .gift-tag .gift-val { font-size: 12px; font-weight: 500; color: #1a1a1a; margin-top: 2px; }
+.mg-ai-pdp .pop-badge { position: absolute; top: -10px; right: 14px; background: #2C2C2A; color: white; font-size: 10px; font-weight: 500; padding: 3px 10px; border-radius: 20px; white-space: nowrap; letter-spacing: 0.3px; }
+
+/* ── Gift Unlock ── */
+.mg-ai-pdp .gift-unlock-section { margin-top: 14px; margin-bottom: 14px; }
+.mg-ai-pdp .gift-unlock-section h4 { font-size: 13px; font-weight: 500; color: #1a1a1a; margin-bottom: 10px; }
+.mg-ai-pdp .gift-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.mg-ai-pdp .gift-item { border-radius: 10px; border: 1px solid #E8D9C0; background: white; overflow: hidden; transition: all 0.3s ease; position: relative; display: flex; flex-direction: column; }
+.mg-ai-pdp .gift-item.locked .gift-img-wrap { filter: blur(3px) grayscale(0.3); opacity: 0.45; }
+.mg-ai-pdp .gift-item.locked .gift-item-info { opacity: 0.4; }
+.mg-ai-pdp .gift-item.unlocked { border-color: #c5b08a; box-shadow: 0 2px 8px rgba(195,176,138,0.15); }
+.mg-ai-pdp .gift-img-wrap { width: 100%; height: 68px; background: linear-gradient(135deg, #F8F2E6 0%, #ede8df 100%); display: flex; align-items: center; justify-content: center; transition: filter 0.3s ease, opacity 0.3s ease; position: relative; flex-shrink: 0; }
+.mg-ai-pdp .gift-img-wrap svg { width: 32px; height: 32px; opacity: 0.55; }
+.mg-ai-pdp .gift-item-info { padding: 8px 6px 10px; text-align: center; transition: opacity 0.3s ease; display: flex; flex-direction: column; align-items: center; flex: 1; }
+.mg-ai-pdp .gift-item-name { font-size: 10px; font-weight: 500; color: #1a1a1a; line-height: 1.3; height: 26px; display: flex; align-items: center; justify-content: center; text-align: center; }
+.mg-ai-pdp .gift-price-row { display: flex; flex-direction: column; align-items: center; gap: 3px; margin-top: auto; padding-top: 4px; }
+.mg-ai-pdp .gift-gratis-badge { display: inline-block; background: #2C2C2A; color: white; font-size: 8px; font-weight: 600; padding: 2px 6px; border-radius: 3px; letter-spacing: 0.5px; text-transform: uppercase; flex-shrink: 0; }
+.mg-ai-pdp .gift-gratis-badge.locked-badge { background: #ccc; }
+.mg-ai-pdp .gift-twv { font-size: 9px; color: #999; margin-left: 3px; }
+.mg-ai-pdp .gift-lock-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 24px; height: 24px; background: rgba(44,44,42,0.6); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+.mg-ai-pdp .gift-lock-overlay svg { width: 12px; height: 12px; opacity: 1; }
+
+/* ── Geurkiezer (bundel) ── */
+.mg-ai-pdp .geur-section { margin-bottom: 14px; }
+.mg-ai-pdp .geur-section h4 { font-size: 13px; font-weight: 500; color: #1a1a1a; margin-bottom: 10px; }
+.mg-ai-pdp .geur-slot { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.mg-ai-pdp .geur-slot label { font-size: 12px; color: #999; min-width: 52px; flex-shrink: 0; font-weight: 500; }
+.mg-ai-pdp .geur-slot select { flex: 1; font-size: 12px; padding: 9px 12px; border-radius: 8px; border: 0.5px solid #c5c5c0; background: white; color: #1a1a1a; cursor: pointer; font-family: inherit; appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23999' stroke-width='1.2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px; }
+.mg-ai-pdp .geur-slot select:focus { outline: none; border-color: #2C2C2A; }
+
+/* ── Bundel Voordelen ── */
+.mg-ai-pdp .bundel-voordelen { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; padding: 12px 14px; background: white; border-radius: 10px; border: 0.5px solid #E8D9C0; }
+
+/* ── Info & Trust ── */
+.mg-ai-pdp .info-row { text-align: center; font-size: 12px; color: #888; letter-spacing: 0.1px; }
+.mg-ai-pdp .info-row strong { color: #1a1a1a; font-weight: 500; }
+.mg-ai-pdp .trust-row { background: linear-gradient(90deg, #ede8df 0%, #e8e1d5 100%); border-radius: 10px; padding: 12px 16px; text-align: center; font-size: 12px; color: #666; letter-spacing: 0.1px; }
+
+/* ── Geur Experience ── */
+.mg-ai-pdp .geur-experience { background: #F8F2E6; border-radius: 14px; padding: 20px 16px; border: 0.5px solid #E8D9C0; display: flex; flex-direction: column; gap: 18px; }
+.mg-ai-pdp .geur-exp-title { font-family: 'DM Serif Display', Georgia, serif; font-size: 18px; color: #1a1a1a; font-weight: 400; }
+.mg-ai-pdp .geur-exp-desc { font-size: 13px; color: #666; line-height: 1.65; }
+.mg-ai-pdp .geurnoten-label { font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 1.2px; font-weight: 500; margin-bottom: 8px; }
+.mg-ai-pdp .geurnoten-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.mg-ai-pdp .geurnoot { background: white; border-radius: 10px; border: 0.5px solid #E8D9C0; padding: 10px 6px 10px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.mg-ai-pdp .geurnoot-icon { font-size: 22px; line-height: 1; }
+.mg-ai-pdp .geurnoot-name { font-size: 10px; font-weight: 500; color: #1a1a1a; }
+.mg-ai-pdp .geursterkte-wrap { display: flex; flex-direction: column; gap: 6px; }
+.mg-ai-pdp .geursterkte-bar { height: 6px; background: #E8D9C0; border-radius: 3px; overflow: hidden; position: relative; }
+.mg-ai-pdp .geursterkte-fill { height: 100%; background: #2C2C2A; border-radius: 3px; transition: width 0.4s ease; }
+.mg-ai-pdp .geursterkte-labels { display: flex; justify-content: space-between; font-size: 10px; color: #999; font-weight: 500; }
+.mg-ai-pdp .geur-kenmerken { display: flex; flex-wrap: wrap; gap: 6px; }
+.mg-ai-pdp .geur-kenmerk { padding: 5px 10px; border-radius: 20px; border: 1px solid #d8cdb8; background: white; font-size: 11px; color: #555; display: flex; align-items: center; gap: 5px; }
+.mg-ai-pdp .geur-kenmerk-icon { font-size: 12px; }
+.mg-ai-pdp .geur-type-row { display: flex; gap: 8px; align-items: center; }
+.mg-ai-pdp .geur-type-badge { padding: 4px 10px; border-radius: 6px; background: #2C2C2A; color: white; font-size: 10px; font-weight: 500; letter-spacing: 0.3px; }
+.mg-ai-pdp .geur-type-text { font-size: 11px; color: #888; }
+
+/* ── Tooltip ── */
+.mg-ai-pdp .kenmerk-with-info { position: relative; cursor: pointer; }
+.mg-ai-pdp .kenmerk-info-icon { width: 14px; height: 14px; border-radius: 50%; background: #ccc; color: white; font-size: 9px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; line-height: 1; }
+.mg-ai-pdp .kenmerk-tooltip { display: none; position: absolute; bottom: calc(100% + 10px); left: 0; background: #000; color: #fff; font-size: 13px; line-height: 1.6; padding: 14px 16px; border-radius: 10px; width: 280px; z-index: 10; box-shadow: 0 6px 24px rgba(0,0,0,0.25); font-weight: 400; }
+.mg-ai-pdp .kenmerk-tooltip::after { content: ''; position: absolute; top: 100%; left: 24px; border: 6px solid transparent; border-top-color: #000; }
+.mg-ai-pdp .kenmerk-with-info:hover .kenmerk-tooltip,
+.mg-ai-pdp .kenmerk-with-info.show-tooltip .kenmerk-tooltip { display: block; }
+.mg-ai-pdp .kenmerk-tooltip.tooltip-down { bottom: auto; top: calc(100% + 10px); }
+.mg-ai-pdp .kenmerk-tooltip.tooltip-down::after { top: auto; bottom: 100%; border-top-color: transparent; border-bottom-color: #000; }
+
+/* ── Video Reels ── */
+.mg-ai-pdp .video-reels { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; padding: 0; }
+.mg-ai-pdp .video-reels::-webkit-scrollbar { display: none; }
+.mg-ai-pdp .video-reel { flex-shrink: 0; width: 130px; height: 184px; border-radius: 12px; background: linear-gradient(145deg, #e8e1d5 0%, #ddd6c8 100%); position: relative; overflow: hidden; cursor: pointer; }
+.mg-ai-pdp .video-reel-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+.mg-ai-pdp .video-play-btn { width: 36px; height: 36px; border-radius: 50%; background: rgba(0,0,0,0.45); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+.mg-ai-pdp .video-reel:hover .video-play-btn { background: rgba(0,0,0,0.6); }
+.mg-ai-pdp .video-play-btn svg { width: 14px; height: 14px; fill: white; margin-left: 2px; }
+.mg-ai-pdp .video-reel-label { position: absolute; bottom: 0; left: 0; right: 0; padding: 8px 10px; background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 100%); color: white; font-size: 10px; font-weight: 500; letter-spacing: 0.2px; }
+.mg-ai-pdp .video-section-header { padding: 0 16px; margin-bottom: 10px; font-size: 13px; font-weight: 500; color: #1a1a1a; }
+
+/* ── Sticky Bar ── */
+.mg-ai-pdp .sticky-bar { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-top: 0.5px solid #e0e0e0; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; z-index: 99; transform: translateY(100%); transition: transform 0.3s ease; }
+.mg-ai-pdp .sticky-bar.visible { transform: translateY(0); }
+.mg-ai-pdp .sticky-prices { display: flex; align-items: center; gap: 8px; }
+.mg-ai-pdp .sticky-old { font-size: 12px; text-decoration: line-through; color: rgba(68,68,68,0.5); display: none; }
+.mg-ai-pdp .sticky-new { font-size: 17px; font-weight: 500; color: #1a1a1a; }
+.mg-ai-pdp .sticky-badge { background: #2C2C2A; color: white; font-size: 10px; padding: 2px 7px; border-radius: 4px; display: none; font-weight: 500; }
+.mg-ai-pdp .sticky-btn { background: #C9A84C; color: white; border: none; border-radius: 8px; padding: 10px 18px; font-size: 13px; font-weight: 500; cursor: pointer; white-space: nowrap; font-family: inherit; transition: background 0.2s ease; letter-spacing: 0.2px; }
+.mg-ai-pdp .sticky-btn:hover { background: #b8963f; }
+
+/* ── Utility ── */
+.mg-ai-pdp .sep { height: 1px; background: #eee; margin: 2px 0; }
+@media (max-width: 480px) {
+  .mg-ai-pdp .thumbs { padding-left: 16px; padding-right: 16px; }
+}
+</style>
+
+<div class="mg-ai-pdp" data-product-id="{{ product.id }}" data-section-id="{{ section.id }}">
+
+  <!-- ═══════ IMAGE SLIDER ═══════ -->
+  <div class="slider-wrap">
+    <div class="img-badge" id="imgBadge">-20%</div>
+    <div class="slider-track" id="sliderTrack">
+      {%- for image in product.images -%}
+        <div class="slide">
+          <img src="{{ image | image_url: width: 800 }}"
+               alt="{{ image.alt | escape | default: product.title | escape }}"
+               width="800" height="800"
+               loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
+        </div>
+      {%- endfor -%}
+      {%- if product.images.size == 0 -%}
+        <div class="slide"><div class="placeholder">{{ product.title | escape }}</div></div>
+      {%- endif -%}
+    </div>
+    <div class="slider-shadow" id="sliderShadow"></div>
+    <button class="slider-arrow prev" id="sliderPrev" disabled aria-label="Previous">
+      <svg viewBox="0 0 14 24"><polyline points="12 2 2 12 12 22"/></svg>
+    </button>
+    <button class="slider-arrow next" id="sliderNext" aria-label="Next">
+      <svg viewBox="0 0 14 24"><polyline points="2 2 12 12 2 22"/></svg>
+    </button>
+    {%- if scent_label != blank -%}
+      <div class="img-label">
+        <div class="dot"></div>
+        <span>{{ scent_label }}</span>
+      </div>
+    {%- endif -%}
+  </div>
+  <div class="slider-progress">
+    <div class="slider-progress-fill" id="sliderProgress" style="width:{% if product.images.size > 0 %}{{ 100.0 | divided_by: product.images.size }}%{% else %}100%{% endif %};"></div>
+  </div>
+
+  <!-- ═══════ THUMBNAILS ═══════ -->
+  {%- if product.images.size > 1 -%}
+    <div class="thumbs-wrap">
+      <div class="thumbs" id="thumbsRow">
+        {%- for image in product.images -%}
+          <div class="thumb{% if forloop.first %} active{% endif %}" data-slide-index="{{ forloop.index0 }}">
+            <img src="{{ image | image_url: width: 200 }}" alt="{{ image.alt | escape }}" width="200" height="200" loading="lazy">
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+
+  <!-- ═══════ PRODUCT INFO ═══════ -->
+  <div class="info">
+
+    <!-- Trustpilot -->
+    <div class="trustpilot">
+      <div class="tp-stars">
+        {%- for i in (1..5) -%}
+          <div class="tp-star"><svg viewBox="0 0 12 12" fill="none"><path d="M6 1l1.5 3.1 3.4.3-2.5 2.2.7 3.4L6 8.2 2.9 10l.7-3.4L1.1 4.4l3.4-.3z" fill="white"/></svg></div>
+        {%- endfor -%}
+      </div>
+      <span class="tp-info"><strong>{{ section.settings.tp_rating | default: '4,5' }}</strong> · {{ section.settings.tp_text | default: '200.000+ Tevreden Gebruikers' }}</span>
+    </div>
+
+    <!-- Titel -->
+    <div>
+      <p class="product-subtitle">{{ product_type }}</p>
+      <h1 class="product-title">{{ product.title | escape }}</h1>
+      {%- if product.variants.size > 1 -%}
+        <button class="geur-toggle" id="geurToggleBtn">
+          Andere geur kiezen
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 5l3 3 3-3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      {%- endif -%}
+    </div>
+
+    <!-- Geur kiezer -->
+    {%- if product.variants.size > 1 -%}
+      <div class="geur-picker" id="geurPicker" style="display:none;">
+        <div class="geur-pills">
+          {%- for variant in product.variants -%}
+            <a href="{{ variant.url }}"
+               class="geur-pill{% if variant == current_variant %} active{% endif %}"
+               data-variant-id="{{ variant.id }}">
+              {{ variant.title | escape }}
+            </a>
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+    <!-- Product voordelen -->
+    <div class="product-benefits">
+      <div class="benefit-item kenmerk-with-info">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="#2C2C2A" stroke-width="1"/><path d="M4.5 8l2.5 2.5L11.5 6" stroke="#2C2C2A" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>{{ section.settings.benefit_1 | default: 'Tot 45 dagen langdurige geur' }}</span>
+        <span class="kenmerk-info-icon" style="margin-left:2px;">i</span>
+        <span class="kenmerk-tooltip tooltip-down">{{ section.settings.benefit_1_tooltip | default: 'De geurduur verschilt per geur en is afhankelijk van temperatuur, ventilatie en gebruik. Uit feedback van 500.000+ verkochte stuks geven klanten gemiddeld 4–6 weken aan.' }}</span>
+      </div>
+      <div class="benefit-item">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="#2C2C2A" stroke-width="1"/><path d="M4.5 8l2.5 2.5L11.5 6" stroke="#2C2C2A" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>{{ section.settings.benefit_2 | default: 'Ruikt naar bekende parfums' }}</span>
+      </div>
+      <div class="benefit-item">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="#2C2C2A" stroke-width="1"/><path d="M4.5 8l2.5 2.5L11.5 6" stroke="#2C2C2A" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>{{ section.settings.benefit_3 | default: 'Het perfecte, betaalbare cadeau' }}</span>
+      </div>
+    </div>
+
+    <!-- Prijs (hidden row, synced by JS) -->
+    <div class="price-row" style="display:none;">
+      <span class="price-old" id="oldPrice">{{ current_variant.price | money }}</span>
+      <span class="price-new" id="priceDisplay">{{ current_variant.price | money }}</span>
+      <span class="price-badge" id="mainBadge">-20%</span>
+    </div>
+
+    <!-- ═══════ KEUZEKAARTEN ═══════ -->
+    <div class="options">
+      <div class="opt-card active" id="optEenmalig">
+        <div class="opt-title">Eenmalig</div>
+        <div class="opt-price-single" id="optEenmaligPrice">{{ current_variant.price | money }}</div>
+      </div>
+      <div class="opt-card" id="optAbo">
+        <div class="most-chosen">Meest gekozen</div>
+        <div class="opt-title">Abonnement</div>
+        <div class="opt-price-row">
+          <span class="opt-old" id="optAboOld">{{ current_variant.price | money }}</span>
+          <span class="opt-new" id="optAboNew"></span>
+          <span class="opt-badge" id="optAboBadge">-20%</span>
+        </div>
+        <div class="opt-sub">Maandelijks · altijd opzegbaar</div>
+      </div>
+    </div>
+
+    <!-- ═══════ ABO SECTIE ═══════ -->
+    <div class="abo-section" id="aboSection">
+      <h4>Hoe vaak wil je levering?</h4>
+      <div class="period-grid" id="periodGrid">
+        <div class="period-btn active" id="p1" data-label="Elke maand">Elke maand</div>
+        <div class="period-btn" id="p2" data-label="Elke 2 maanden">Elke 2 maanden</div>
+        <div class="period-btn" id="p3" data-label="Elke 3 maanden">Elke 3 maanden</div>
+        <div class="period-btn" id="p4" data-label="Elke 6 maanden" style="display:none;">Elke 6 maanden</div>
+      </div>
+      <h4>Voordelen van een abonnement</h4>
+      <div class="voordelen-list">
+        <div class="voordeel"><div class="check"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2 2 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>20% korting op elke levering</span></div>
+        <div class="voordeel"><div class="check"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2 2 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>Gratis verzending, altijd</span></div>
+        <div class="voordeel"><div class="check"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2 2 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>Geen gedoe — automatisch geleverd</span></div>
+        <div class="voordeel"><div class="check"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2 2 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>Elk moment pauzeren of opzeggen</span></div>
+        <div class="voordeel"><div class="check"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2 2 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>Geur wisselen wanneer je wil</span></div>
+      </div>
+      <div class="abo-summary">
+        <div><div class="label">Leveringsfrequentie</div><div class="val" id="aboSummaryPeriod">Elke maand</div></div>
+        <div style="text-align:right;"><div class="label">Jouw prijs</div><div class="price-val" id="aboSummaryPrice"></div></div>
+      </div>
+    </div>
+
+    <!-- ═══════ ADD TO CART ═══════ -->
+    <button class="btn-primary" id="cartBtn">Voeg toe aan winkelwagen</button>
+
+    <!-- ═══════ BUNDEL KNOP ═══════ -->
+    <div>
+      <button class="btn-outline" id="bundelToggleBtn">
+        <span>Bekijk bundelaanbiedingen</span>
+        <span class="arrow" id="bundelArrow">&#9662;</span>
+      </button>
+      <p class="btn-sub">Koop meer, ontvang een gratis gift</p>
+    </div>
+
+    <!-- ═══════ BUNDEL SECTIE ═══════ -->
+    <div class="bundel-section" id="bundelSection">
+      <div class="abo-bundel-badge" id="aboBundelBadge">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 3 3.5.5-2.5 2.5.5 3.5L7 9l-3 1.5.5-3.5L2 4.5 5.5 4z" stroke="white" stroke-width="1" stroke-linejoin="round"/></svg>
+        Abonnement actief — 20% korting ook op bundel!
+      </div>
+      <h4>Kies je bundel</h4>
+
+      <div class="bundel-card active" id="b1" data-stuks="2">
+        <div class="bundel-inner">
+          <div class="bundel-info">
+            <div class="bundel-title">2 {{ product_type | downcase }}s</div>
+            <div class="bundel-price-row">
+              <span class="bundel-old" id="b1-old"></span>
+              <span class="bundel-new" id="b1-new"></span>
+              <span class="bundel-badge" id="b1-badge">-20%</span>
+            </div>
+          </div>
+          <div class="gift-tag"><div class="gift-label">Gift</div><div class="gift-val">t.w.v. €4,95</div></div>
+        </div>
+      </div>
+
+      <div class="bundel-card" id="b2" data-stuks="5">
+        <div class="pop-badge">Populairste keuze</div>
+        <div class="bundel-inner">
+          <div class="bundel-info">
+            <div class="bundel-title">5 {{ product_type | downcase }}s</div>
+            <div class="bundel-price-row">
+              <span class="bundel-old" id="b2-old"></span>
+              <span class="bundel-new" id="b2-new"></span>
+              <span class="bundel-badge" id="b2-badge">-20%</span>
+            </div>
+          </div>
+          <div class="gift-tag"><div class="gift-label">Gift</div><div class="gift-val">t.w.v. €24,90</div></div>
+        </div>
+      </div>
+
+      <div class="bundel-card" id="b3" data-stuks="10" style="margin-bottom:14px;">
+        <div class="bundel-inner">
+          <div class="bundel-info">
+            <div class="bundel-title">10 {{ product_type | downcase }}s</div>
+            <div class="bundel-price-row">
+              <span class="bundel-old" id="b3-old"></span>
+              <span class="bundel-new" id="b3-new"></span>
+              <span class="bundel-badge" id="b3-badge">-20%</span>
+            </div>
+          </div>
+          <div class="gift-tag"><div class="gift-label">Gift</div><div class="gift-val">t.w.v. €74,80</div></div>
+        </div>
+      </div>
+
+      <!-- Gift unlock row -->
+      <div class="gift-unlock-section">
+        <h4>Jouw gratis gifts</h4>
+        <div class="gift-grid" id="giftGrid">
+          <div class="gift-item unlocked" id="gift1">
+            <div class="gift-img-wrap">
+              <svg viewBox="0 0 40 40" fill="none"><rect x="14" y="6" width="12" height="28" rx="3" stroke="#8B6A4F" stroke-width="1.5" fill="none"/><rect x="16" y="2" width="8" height="6" rx="1.5" stroke="#8B6A4F" stroke-width="1.2" fill="none"/><line x1="20" y1="8" x2="20" y2="14" stroke="#8B6A4F" stroke-width="1" stroke-linecap="round"/><circle cx="20" cy="24" r="4" stroke="#8B6A4F" stroke-width="1" fill="none"/></svg>
+            </div>
+            <div class="gift-item-info">
+              <div class="gift-item-name">Autoparfum Spray Sample</div>
+              <div class="gift-price-row">
+                <span class="gift-gratis-badge">Gratis</span>
+                <span class="gift-twv">t.w.v. €4,95</span>
+              </div>
+            </div>
+          </div>
+          <div class="gift-item locked" id="gift2">
+            <div class="gift-img-wrap">
+              <svg viewBox="0 0 40 40" fill="none"><rect x="8" y="8" width="18" height="24" rx="2" stroke="#8B6A4F" stroke-width="1.5" fill="none" transform="rotate(-5 17 20)"/><rect x="14" y="8" width="18" height="24" rx="2" stroke="#8B6A4F" stroke-width="1.5" fill="none" transform="rotate(5 23 20)"/><text x="20" y="23" font-size="10" fill="#8B6A4F" text-anchor="middle" font-weight="500">&#9824;</text></svg>
+              <div class="gift-lock-overlay"><svg viewBox="0 0 12 12" fill="none"><rect x="2" y="5.5" width="8" height="5.5" rx="1" stroke="white" stroke-width="1"/><path d="M4 5.5V4a2 2 0 114 0v1.5" stroke="white" stroke-width="1" stroke-linecap="round"/></svg></div>
+            </div>
+            <div class="gift-item-info">
+              <div class="gift-item-name">Premium Speelkaarten</div>
+              <div class="gift-price-row">
+                <span class="gift-gratis-badge locked-badge">Bij 5+</span>
+                <span class="gift-twv">t.w.v. €19,95</span>
+              </div>
+            </div>
+          </div>
+          <div class="gift-item locked" id="gift3">
+            <div class="gift-img-wrap">
+              <svg viewBox="0 0 40 40" fill="none"><rect x="6" y="16" width="28" height="18" rx="2" stroke="#8B6A4F" stroke-width="1.5" fill="none"/><rect x="6" y="12" width="28" height="6" rx="1.5" stroke="#8B6A4F" stroke-width="1.5" fill="none"/><line x1="20" y1="12" x2="20" y2="34" stroke="#8B6A4F" stroke-width="1.2"/><path d="M20 12C20 12 16 6 12 8C8 10 12 12 20 12Z" stroke="#8B6A4F" stroke-width="1" fill="none"/><path d="M20 12C20 12 24 6 28 8C32 10 28 12 20 12Z" stroke="#8B6A4F" stroke-width="1" fill="none"/></svg>
+              <div class="gift-lock-overlay"><svg viewBox="0 0 12 12" fill="none"><rect x="2" y="5.5" width="8" height="5.5" rx="1" stroke="white" stroke-width="1"/><path d="M4 5.5V4a2 2 0 114 0v1.5" stroke="white" stroke-width="1" stroke-linecap="round"/></svg></div>
+            </div>
+            <div class="gift-item-info">
+              <div class="gift-item-name">Luxe Giftbox</div>
+              <div class="gift-price-row">
+                <span class="gift-gratis-badge locked-badge">Bij 10</span>
+                <span class="gift-twv">t.w.v. €9,95</span>
+              </div>
+            </div>
+          </div>
+          <div class="gift-item locked" id="gift4">
+            <div class="gift-img-wrap">
+              <svg viewBox="0 0 40 40" fill="none"><path d="M20 8C12 8 6 14 6 20H34C34 14 28 8 20 8Z" stroke="#8B6A4F" stroke-width="1.5" fill="none"/><line x1="20" y1="8" x2="20" y2="34" stroke="#8B6A4F" stroke-width="1.5" stroke-linecap="round"/><path d="M20 34C20 34 16 34 16 32" stroke="#8B6A4F" stroke-width="1.5" stroke-linecap="round" fill="none"/><line x1="20" y1="5" x2="20" y2="8" stroke="#8B6A4F" stroke-width="1.5" stroke-linecap="round"/></svg>
+              <div class="gift-lock-overlay"><svg viewBox="0 0 12 12" fill="none"><rect x="2" y="5.5" width="8" height="5.5" rx="1" stroke="white" stroke-width="1"/><path d="M4 5.5V4a2 2 0 114 0v1.5" stroke="white" stroke-width="1" stroke-linecap="round"/></svg></div>
+            </div>
+            <div class="gift-item-info">
+              <div class="gift-item-name">Signature Paraplu</div>
+              <div class="gift-price-row">
+                <span class="gift-gratis-badge locked-badge">Bij 10</span>
+                <span class="gift-twv">t.w.v. €39,95</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Geurkiezer (bundel) -->
+      <div class="geur-section">
+        <h4>Kies je geuren (<span id="geurAantal">2</span> stuks)</h4>
+        <div id="geurSlots"></div>
+      </div>
+
+      <!-- Bundel voordelen -->
+      <div class="bundel-voordelen">
+        <div class="voordeel"><div class="check"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2 2 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span style="font-size:13px;color:#1a1a1a;">Zelf geuren combineren</span></div>
+        <div class="voordeel"><div class="check"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2 2 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span style="font-size:13px;color:#1a1a1a;">Gratis gift bij elke bundel</span></div>
+        <div class="voordeel" id="bundelVerzendingVoordeel" style="display:none;"><div class="check"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2 2 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span style="font-size:13px;color:#1a1a1a;">Gratis verzending</span></div>
+      </div>
+
+      <button class="btn-primary" id="bundelCartBtn">Bundel toevoegen</button>
+    </div>
+
+    <!-- ═══════ LEVERING ═══════ -->
+    <p class="info-row">Vandaag besteld → <strong>morgen bezorgd</strong></p>
+
+    <!-- ═══════ SERVICE BENEFITS ═══════ -->
+    <div class="trust-row" id="trustRow">&#10003; <span id="shippingText">Verzending vanaf €3,95</span> &nbsp;·&nbsp; &#10003; 30 dagen retour &nbsp;·&nbsp; &#10003; Veilig betalen</div>
+
+    <!-- ═══════ GEUR EXPERIENCE ═══════ -->
+    {%- if scent_desc != blank -%}
+      <div class="geur-experience">
+        <div>
+          <p class="geur-exp-title">Over deze geur</p>
+          <p class="geur-exp-desc" style="margin-top:8px;">{{ scent_desc }}</p>
+        </div>
+        {%- if scent_type != blank -%}
+          <div class="geur-type-row">
+            <span class="geur-type-badge">{{ scent_type }}</span>
+            {%- if scent_inspiration != blank -%}
+              <span class="geur-type-text">Geïnspireerd op {{ scent_inspiration }}</span>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+        {%- if product.metafields.custom.scent_notes != blank -%}
+          <div>
+            <p class="geurnoten-label">Geurnoten</p>
+            <div class="geurnoten-grid" id="geurnotenGrid"></div>
+          </div>
+        {%- endif -%}
+        <div class="geursterkte-wrap">
+          <p class="geurnoten-label">Geursterkte</p>
+          <div class="geursterkte-bar">
+            <div class="geursterkte-fill" style="width:{{ scent_strength }}%;"></div>
+          </div>
+          <div class="geursterkte-labels"><span>Licht</span><span>Sterk</span></div>
+        </div>
+        <div>
+          <p class="geurnoten-label">Goed om te weten</p>
+          <div class="geur-kenmerken">
+            <span class="geur-kenmerk">Intensiteit zelf regelbaar</span>
+            <span class="geur-kenmerk kenmerk-with-info">Tot 45 dagen geur <span class="kenmerk-info-icon">i</span>
+              <span class="kenmerk-tooltip">De geurduur verschilt per geur en is afhankelijk van temperatuur, ventilatie en gebruik. Uit feedback van 500.000+ verkochte stuks geven klanten gemiddeld 4–6 weken aan.</span>
+            </span>
+            <span class="geur-kenmerk">Veilig voor je interieur</span>
+            <span class="geur-kenmerk">Geen hoofdpijn</span>
+            <span class="geur-kenmerk">Past in elke auto</span>
+          </div>
+        </div>
+      </div>
+    {%- endif -%}
+
+    <!-- ═══════ VIDEO REELS ═══════ -->
+    <div class="video-reels" style="padding:0;">
+      <div class="video-reel">
+        <div class="video-reel-placeholder"><div class="video-play-btn"><svg viewBox="0 0 14 14"><polygon points="3,1 12,7 3,13"/></svg></div></div>
+        <div class="video-reel-label">Unboxing</div>
+      </div>
+      <div class="video-reel">
+        <div class="video-reel-placeholder"><div class="video-play-btn"><svg viewBox="0 0 14 14"><polygon points="3,1 12,7 3,13"/></svg></div></div>
+        <div class="video-reel-label">Review</div>
+      </div>
+      <div class="video-reel">
+        <div class="video-reel-placeholder"><div class="video-play-btn"><svg viewBox="0 0 14 14"><polygon points="3,1 12,7 3,13"/></svg></div></div>
+        <div class="video-reel-label">In de auto</div>
+      </div>
+      <div class="video-reel">
+        <div class="video-reel-placeholder"><div class="video-play-btn"><svg viewBox="0 0 14 14"><polygon points="3,1 12,7 3,13"/></svg></div></div>
+        <div class="video-reel-label">Geur test</div>
+      </div>
+    </div>
+
+  </div><!-- /.info -->
+
+  <!-- ═══════ STICKY BAR ═══════ -->
+  <div class="sticky-bar" id="stickyBar">
+    <div class="sticky-prices">
+      <span class="sticky-old" id="stickyOld"></span>
+      <span class="sticky-new" id="stickyPrice">{{ current_variant.price | money }}</span>
+      <span class="sticky-badge" id="stickyBadge">-20%</span>
+    </div>
+    <button class="sticky-btn" id="stickyBtn">Voeg toe aan winkelwagen</button>
+  </div>
+
+</div><!-- /.mg-ai-pdp -->
+
+<script>
+(function() {
+  'use strict';
+
+  // ─── State ───
+  var isAbo = false;
+  var bundelOpen = false;
+  var isBundelSelected = false;
+  var huidigeBundel = 'b1';
+  var basePrice = {{ current_variant.price | times: 1.0 | divided_by: 100 }};
+  var currentVariantId = {{ current_variant.id }};
+
+  var geuren = [
+    {%- for variant in product.variants -%}
+      { id: {{ variant.id }}, title: {{ variant.title | json }}, url: {{ variant.url | json }}, price: {{ variant.price | times: 1.0 | divided_by: 100 }}, available: {{ variant.available }} }{%- unless forloop.last -%},{%- endunless -%}
+    {%- endfor -%}
+  ];
+
+  var geurNames = geuren.map(function(g) { return g.title; });
+
+  var bundelBase = {
+    b1: { stuks: 2, giftWaarde: 4.95, giftLabel: '1 gift', giftCount: 1 },
+    b2: { stuks: 5, giftWaarde: 24.90, giftLabel: '2 gifts', giftCount: 2 },
+    b3: { stuks: 10, giftWaarde: 74.80, giftLabel: '4 gifts', giftCount: 4 }
+  };
+  // Calculate bundel prices dynamically from base price
+  Object.keys(bundelBase).forEach(function(k) {
+    bundelBase[k].prijs = Math.round(bundelBase[k].stuks * basePrice * 100) / 100;
+  });
+
+  {%- if has_selling_plans -%}
+  var sellingPlans = [
+    {%- for plan in selling_plan_group.selling_plans -%}
+      { id: {{ plan.id }}, name: {{ plan.name | json }} }{%- unless forloop.last -%},{%- endunless -%}
+    {%- endfor -%}
+  ];
+  {%- else -%}
+  var sellingPlans = [];
+  {%- endif -%}
+
+  // Scent notes from metafield
+  {%- if product.metafields.custom.scent_notes != blank -%}
+  try {
+    var scentNotes = {{ product.metafields.custom.scent_notes | json }};
+    if (typeof scentNotes === 'string') scentNotes = JSON.parse(scentNotes);
+    var grid = document.getElementById('geurnotenGrid');
+    if (grid && Array.isArray(scentNotes)) {
+      scentNotes.forEach(function(note) {
+        var div = document.createElement('div');
+        div.className = 'geurnoot';
+        div.innerHTML = '<span class="geurnoot-icon">' + (note.emoji || '') + '</span><span class="geurnoot-name">' + (note.name || '') + '</span>';
+        grid.appendChild(div);
+      });
+    }
+  } catch(e) {}
+  {%- endif -%}
+
+  // ─── Helpers ───
+  function fmt(n) {
+    return '\u20AC' + n.toFixed(2).replace('.', ',');
+  }
+
+  function calcBadge(oldP, newP) {
+    var diff = oldP - newP;
+    if (diff >= 100) return '-\u20AC' + Math.round(diff);
+    return '-' + Math.round((diff / oldP) * 100) + '%';
+  }
+
+  function $(id) { return document.getElementById(id); }
+
+  // ═══════════════════════════════════════
+  // CENTRAL PRICE UPDATE
+  // ═══════════════════════════════════════
+  function updateAllPrices() {
+    var currentBase, currentAbo, beforePrice;
+    var isBundel = isBundelSelected && bundelOpen;
+
+    if (isBundel) {
+      var bd = bundelBase[huidigeBundel];
+      currentBase = bd.prijs;
+      currentAbo = Math.round(bd.prijs * 0.8 * 100) / 100;
+      beforePrice = Math.round((bd.prijs + bd.giftWaarde) * 100) / 100;
+    } else {
+      currentBase = basePrice;
+      currentAbo = Math.round(basePrice * 0.8 * 100) / 100;
+      beforePrice = basePrice;
+    }
+
+    var showPrice = isAbo ? currentAbo : currentBase;
+    var hasDiscount = isAbo || isBundel;
+
+    // Main price row
+    $('priceDisplay').textContent = fmt(showPrice);
+    $('oldPrice').textContent = fmt(beforePrice);
+    $('oldPrice').style.display = hasDiscount ? 'inline' : 'none';
+    $('mainBadge').style.display = hasDiscount ? 'inline' : 'none';
+    if (hasDiscount) $('mainBadge').textContent = calcBadge(beforePrice, showPrice);
+
+    // Image badge
+    $('imgBadge').style.display = hasDiscount ? 'block' : 'none';
+    if (hasDiscount) $('imgBadge').textContent = calcBadge(beforePrice, showPrice);
+
+    // Eenmalig card
+    $('optEenmaligPrice').textContent = fmt(currentBase);
+
+    // Abo card
+    $('optAboOld').textContent = fmt(isBundel ? beforePrice : currentBase);
+    $('optAboNew').textContent = fmt(currentAbo);
+    $('optAboBadge').textContent = calcBadge(isBundel ? beforePrice : currentBase, currentAbo);
+
+    // Abo summary
+    $('aboSummaryPrice').textContent = fmt(currentAbo);
+
+    // Sticky bar
+    $('stickyPrice').textContent = fmt(showPrice);
+    $('stickyOld').textContent = fmt(beforePrice);
+    $('stickyOld').style.display = hasDiscount ? 'inline' : 'none';
+    $('stickyBadge').style.display = hasDiscount ? 'inline' : 'none';
+    if (hasDiscount) $('stickyBadge').textContent = calcBadge(beforePrice, showPrice);
+
+    // Bundel cart button
+    if (bundelOpen) {
+      var bdc = bundelBase[huidigeBundel];
+      var bundelPrijs = isAbo ? Math.round(bdc.prijs * 0.8 * 100) / 100 : bdc.prijs;
+      $('bundelCartBtn').textContent = isAbo
+        ? 'Bundel abonneren \u2014 ' + fmt(bundelPrijs) + '/levering'
+        : 'Bundel toevoegen \u2014 ' + fmt(bundelPrijs);
+    }
+
+    // Main + sticky button text
+    var cartText;
+    if (isBundel) {
+      var bd2 = bundelBase[huidigeBundel];
+      var bp = isAbo ? Math.round(bd2.prijs * 0.8 * 100) / 100 : bd2.prijs;
+      cartText = isAbo
+        ? 'Bundel abonneren \u2014 ' + fmt(bp) + '/levering'
+        : 'Bundel toevoegen \u2014 ' + fmt(bp);
+    } else {
+      cartText = isAbo ? 'Abonneer & bespaar 20%' : 'Voeg toe aan winkelwagen';
+    }
+    $('cartBtn').textContent = cartText;
+    $('stickyBtn').textContent = cartText;
+
+    // Gratis verzending
+    var gratisVerzending = isAbo || showPrice >= 50;
+    $('shippingText').textContent = gratisVerzending
+      ? 'Gratis verzending'
+      : 'Gratis verzending vanaf \u20AC50';
+    var bvEl = $('bundelVerzendingVoordeel');
+    if (bvEl) {
+      var bundelTotaal = bundelBase[huidigeBundel].prijs;
+      if (isAbo) bundelTotaal = Math.round(bundelTotaal * 0.8 * 100) / 100;
+      bvEl.style.display = (isAbo || bundelTotaal >= 50) ? 'flex' : 'none';
+    }
+  }
+
+  // ─── Image Slider ───
+  var currentSlide = 0;
+  var totalSlides = {{ product.images.size | default: 1 }};
+
+  function slideTo(idx) {
+    currentSlide = Math.max(0, Math.min(idx, totalSlides - 1));
+    var track = $('sliderTrack');
+    if (!track || !track.children.length) return;
+    var slideW = track.children[0].offsetWidth;
+    track.scrollTo({ left: currentSlide * slideW, behavior: 'smooth' });
+    updateSliderUI();
+  }
+
+  function updateSliderUI() {
+    var prog = $('sliderProgress');
+    if (prog) prog.style.width = ((currentSlide + 1) / totalSlides * 100) + '%';
+    var thumbs = document.querySelectorAll('.mg-ai-pdp .thumb');
+    thumbs.forEach(function(t, i) { t.classList.toggle('active', i === currentSlide); });
+    var prevBtn = $('sliderPrev');
+    var nextBtn = $('sliderNext');
+    if (prevBtn) prevBtn.disabled = currentSlide === 0;
+    if (nextBtn) nextBtn.disabled = currentSlide === totalSlides - 1;
+    var shadow = $('sliderShadow');
+    if (shadow) shadow.style.opacity = currentSlide === totalSlides - 1 ? '0' : '1';
+    var row = $('thumbsRow');
+    if (row && row.children[currentSlide]) {
+      row.children[currentSlide].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    }
+  }
+
+  // Slider arrow clicks
+  var prevBtn = $('sliderPrev');
+  var nextBtn = $('sliderNext');
+  if (prevBtn) prevBtn.addEventListener('click', function() { slideTo(currentSlide - 1); });
+  if (nextBtn) nextBtn.addEventListener('click', function() { slideTo(currentSlide + 1); });
+
+  // Listen to native scroll for swipe detection
+  var track = $('sliderTrack');
+  if (track) {
+    var scrollTimer;
+    track.addEventListener('scroll', function() {
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(function() {
+        if (!track.children.length) return;
+        var slideW = track.children[0].offsetWidth;
+        var newIdx = Math.round(track.scrollLeft / slideW);
+        if (newIdx !== currentSlide) {
+          currentSlide = newIdx;
+          updateSliderUI();
+        }
+      }, 60);
+    }, { passive: true });
+  }
+
+  // Thumbnail clicks
+  document.querySelectorAll('.mg-ai-pdp .thumb').forEach(function(thumb) {
+    thumb.addEventListener('click', function() {
+      var idx = parseInt(thumb.dataset.slideIndex, 10);
+      if (!isNaN(idx)) slideTo(idx);
+    });
+  });
+
+  // ─── Geur kiezer toggle ───
+  var geurToggle = $('geurToggleBtn');
+  if (geurToggle) {
+    geurToggle.addEventListener('click', function() {
+      var picker = $('geurPicker');
+      if (!picker) return;
+      var isOpen = picker.style.display !== 'none';
+      picker.style.display = isOpen ? 'none' : 'block';
+      geurToggle.classList.toggle('open', !isOpen);
+    });
+  }
+
+  // Geur pill click
+  document.querySelectorAll('.mg-ai-pdp .geur-pill').forEach(function(pill) {
+    pill.addEventListener('click', function(e) {
+      e.preventDefault();
+      document.querySelectorAll('.mg-ai-pdp .geur-pill').forEach(function(p) { p.classList.remove('active'); });
+      pill.classList.add('active');
+      var url = pill.getAttribute('href');
+      if (url) window.location.href = url;
+    });
+  });
+
+  // Tooltip toggle on mobile
+  document.querySelectorAll('.mg-ai-pdp .kenmerk-with-info').forEach(function(el) {
+    el.addEventListener('click', function() {
+      el.classList.toggle('show-tooltip');
+    });
+  });
+
+  // ─── Period selector ───
+  function selectPeriod(id, label) {
+    ['p1', 'p2', 'p3', 'p4'].forEach(function(p) {
+      var el = $(p);
+      if (!el || el.style.display === 'none') return;
+      el.classList.remove('active');
+      el.style.border = '1px solid #d8cdb8';
+    });
+    var sel = $(id);
+    if (sel) {
+      sel.classList.add('active');
+      sel.style.border = '2px solid #2C2C2A';
+    }
+    $('aboSummaryPeriod').textContent = label;
+  }
+
+  // Period button clicks
+  document.querySelectorAll('.mg-ai-pdp .period-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      selectPeriod(btn.id, btn.dataset.label || btn.textContent);
+    });
+  });
+
+  // ─── Update period tabs based on bundel ───
+  function updatePeriodTabs() {
+    var grid = $('periodGrid');
+    var p4 = $('p4');
+    if (!grid || !p4) return;
+
+    if (isBundelSelected && bundelOpen) {
+      p4.style.display = '';
+      grid.style.gridTemplateColumns = 'repeat(4, 1fr)';
+      var preselect = { b1: ['p2', 'Elke 2 maanden'], b2: ['p3', 'Elke 3 maanden'], b3: ['p4', 'Elke 6 maanden'] };
+      var ps = preselect[huidigeBundel];
+      if (ps) selectPeriod(ps[0], ps[1]);
+    } else {
+      p4.style.display = 'none';
+      grid.style.gridTemplateColumns = 'repeat(3, 1fr)';
+      selectPeriod('p1', 'Elke maand');
+    }
+  }
+
+  // ─── Eenmalig / Abo toggle ───
+  function selectOpt(opt) {
+    isAbo = opt === 'abo';
+    var optE = $('optEenmalig');
+    var optA = $('optAbo');
+    if (optE) { optE.classList.toggle('active', !isAbo); optE.style.border = isAbo ? '0.5px solid #ccc' : '2px solid #2C2C2A'; }
+    if (optA) { optA.classList.toggle('active', isAbo); optA.style.border = isAbo ? '2px solid #2C2C2A' : '0.5px solid #ccc'; }
+
+    var aboSec = $('aboSection');
+    if (aboSec) aboSec.style.display = isAbo ? 'block' : 'none';
+    if (isAbo) updatePeriodTabs();
+
+    if (bundelOpen) {
+      var badge = $('aboBundelBadge');
+      if (badge) badge.style.display = isAbo ? 'flex' : 'none';
+      updateBundelCardPrices();
+    }
+    updateAllPrices();
+  }
+
+  // Option card clicks
+  var optE = $('optEenmalig');
+  var optA = $('optAbo');
+  if (optE) optE.addEventListener('click', function() { selectOpt('eenmalig'); });
+  if (optA) optA.addEventListener('click', function() { selectOpt('abo'); });
+
+  // ─── Bundel card prices ───
+  function updateBundelCardPrices() {
+    Object.keys(bundelBase).forEach(function(id) {
+      var d = bundelBase[id];
+      var beforePrijs = Math.round((d.prijs + d.giftWaarde) * 100) / 100;
+      var afterPrijs = isAbo ? Math.round(d.prijs * 0.8 * 100) / 100 : d.prijs;
+      var oldEl = $(id + '-old');
+      var newEl = $(id + '-new');
+      var badgeEl = $(id + '-badge');
+      if (oldEl) { oldEl.style.display = 'inline'; oldEl.textContent = fmt(beforePrijs); }
+      if (newEl) newEl.textContent = fmt(afterPrijs);
+      if (badgeEl) { badgeEl.style.display = 'inline'; badgeEl.textContent = calcBadge(beforePrijs, afterPrijs); }
+    });
+  }
+
+  // ─── Bundel toggle ───
+  function toggleBundel() {
+    bundelOpen = !bundelOpen;
+    var sec = $('bundelSection');
+    var arrow = $('bundelArrow');
+    if (sec) sec.style.display = bundelOpen ? 'block' : 'none';
+    if (arrow) arrow.style.transform = bundelOpen ? 'rotate(180deg)' : 'rotate(0)';
+
+    if (bundelOpen) {
+      updateBundelCardPrices();
+      buildGeurSlots(bundelBase[huidigeBundel].stuks);
+      updateGiftUnlocks(bundelBase[huidigeBundel].stuks);
+      isBundelSelected = true;
+    } else {
+      isBundelSelected = false;
+    }
+
+    var aboBadge = $('aboBundelBadge');
+    if (aboBadge) aboBadge.style.display = (bundelOpen && isAbo) ? 'flex' : 'none';
+    updatePeriodTabs();
+    updateAllPrices();
+  }
+
+  var bundelToggle = $('bundelToggleBtn');
+  if (bundelToggle) bundelToggle.addEventListener('click', toggleBundel);
+
+  // ─── Select bundel card ───
+  function selectBundel(id, stuks) {
+    Object.keys(bundelBase).forEach(function(b) {
+      var el = $(b);
+      if (el) { el.classList.remove('active'); el.style.border = '0.5px solid #ccc'; }
+    });
+    var sel = $(id);
+    if (sel) { sel.classList.add('active'); sel.style.border = '2px solid #2C2C2A'; }
+    huidigeBundel = id;
+    isBundelSelected = true;
+    buildGeurSlots(stuks);
+    updateGiftUnlocks(stuks);
+    updatePeriodTabs();
+    updateAllPrices();
+  }
+
+  // Bundel card clicks
+  document.querySelectorAll('.mg-ai-pdp .bundel-card').forEach(function(card) {
+    card.addEventListener('click', function() {
+      selectBundel(card.id, parseInt(card.dataset.stuks, 10));
+    });
+  });
+
+  // ─── Gift unlock logic ───
+  var giftConfig = [
+    { id: 'gift1', minStuks: 2 },
+    { id: 'gift2', minStuks: 5 },
+    { id: 'gift3', minStuks: 10 },
+    { id: 'gift4', minStuks: 10 }
+  ];
+
+  function updateGiftUnlocks(stuks) {
+    giftConfig.forEach(function(g) {
+      var el = $(g.id);
+      if (!el) return;
+      var unlocked = stuks >= g.minStuks;
+      el.classList.toggle('unlocked', unlocked);
+      el.classList.toggle('locked', !unlocked);
+      var badge = el.querySelector('.gift-gratis-badge');
+      if (badge) {
+        if (unlocked) {
+          badge.textContent = 'Gratis';
+          badge.classList.remove('locked-badge');
+        } else {
+          badge.textContent = 'Bij ' + g.minStuks + (g.minStuks < 10 ? '+' : '');
+          badge.classList.add('locked-badge');
+        }
+      }
+      var lock = el.querySelector('.gift-lock-overlay');
+      if (lock) lock.style.display = unlocked ? 'none' : 'flex';
+    });
+  }
+
+  // ─── Build geur dropdowns ───
+  function buildGeurSlots(aantal) {
+    var c = $('geurSlots');
+    var countEl = $('geurAantal');
+    if (countEl) countEl.textContent = aantal;
+    if (!c) return;
+    c.innerHTML = '';
+    for (var i = 0; i < aantal; i++) {
+      var row = document.createElement('div');
+      row.className = 'geur-slot';
+      var lbl = document.createElement('label');
+      lbl.textContent = 'Geur ' + (i + 1);
+      var sel = document.createElement('select');
+      geurNames.forEach(function(g, idx) {
+        var opt = document.createElement('option');
+        opt.value = g;
+        opt.textContent = g;
+        sel.appendChild(opt);
+      });
+      sel.selectedIndex = i % geurNames.length;
+      row.appendChild(lbl);
+      row.appendChild(sel);
+      c.appendChild(row);
+    }
+  }
+
+  // ─── Add to Cart (Shopify AJAX API) ───
+  function addToCart(variantId, qty, sellingPlanId) {
+    var body = { id: variantId, quantity: qty };
+    if (sellingPlanId) body.selling_plan = sellingPlanId;
+
+    return fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(body)
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.status) {
+        console.error('Cart error:', data.description);
+        return;
+      }
+      window.location.href = '/cart';
+    })
+    .catch(function(err) { console.error('Add to cart failed:', err); });
+  }
+
+  function getSelectedSellingPlan() {
+    if (!isAbo || sellingPlans.length === 0) return null;
+    return sellingPlans[0].id;
+  }
+
+  // Main ATC button
+  var cartBtn = $('cartBtn');
+  if (cartBtn) {
+    cartBtn.addEventListener('click', function() {
+      var isBundel = isBundelSelected && bundelOpen;
+      var spId = getSelectedSellingPlan();
+
+      if (isBundel) {
+        // Add multiple items for bundle
+        var stuks = bundelBase[huidigeBundel].stuks;
+        var slots = document.querySelectorAll('#geurSlots select');
+        var items = [];
+        slots.forEach(function(sel) {
+          var name = sel.value;
+          var variant = geuren.find(function(g) { return g.title === name; });
+          if (variant) {
+            var existing = items.find(function(it) { return it.id === variant.id; });
+            if (existing) { existing.quantity++; }
+            else {
+              var item = { id: variant.id, quantity: 1 };
+              if (spId) item.selling_plan = spId;
+              items.push(item);
+            }
+          }
+        });
+        if (items.length === 0) {
+          items.push({ id: currentVariantId, quantity: stuks });
+          if (spId) items[0].selling_plan = spId;
+        }
+        fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ items: items })
+        })
+        .then(function(r) { return r.json(); })
+        .then(function() { window.location.href = '/cart'; })
+        .catch(function(err) { console.error('Bundle add failed:', err); });
+      } else {
+        addToCart(currentVariantId, 1, spId);
+      }
+    });
+  }
+
+  // Bundel ATC button
+  var bundelBtn = $('bundelCartBtn');
+  if (bundelBtn) {
+    bundelBtn.addEventListener('click', function() {
+      cartBtn.click();
+    });
+  }
+
+  // Sticky button
+  var stickyBtn = $('stickyBtn');
+  if (stickyBtn) {
+    stickyBtn.addEventListener('click', function() {
+      if (cartBtn) {
+        cartBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    });
+  }
+
+  // ─── Sticky bar: show when main ATC is out of view ───
+  var stickyBar = $('stickyBar');
+  if (cartBtn && stickyBar && 'IntersectionObserver' in window) {
+    var stickyObs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        stickyBar.classList.toggle('visible', !entry.isIntersecting);
+      });
+    }, { threshold: 0 });
+    stickyObs.observe(cartBtn);
+  }
+
+  // ─── Init ───
+  updateAllPrices();
+
+})();
+</script>
+
+{% schema %}
+{
+  "name": "MG AI Product Page",
+  "tag": "section",
+  "class": "section-mg-ai-single-product",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Trustpilot"
+    },
+    {
+      "type": "text",
+      "id": "tp_rating",
+      "label": "Trustpilot rating",
+      "default": "4,5"
+    },
+    {
+      "type": "text",
+      "id": "tp_text",
+      "label": "Trustpilot text",
+      "default": "200.000+ Tevreden Gebruikers"
+    },
+    {
+      "type": "header",
+      "content": "Product Benefits"
+    },
+    {
+      "type": "text",
+      "id": "benefit_1",
+      "label": "Benefit 1",
+      "default": "Tot 45 dagen langdurige geur"
+    },
+    {
+      "type": "textarea",
+      "id": "benefit_1_tooltip",
+      "label": "Benefit 1 tooltip",
+      "default": "De geurduur verschilt per geur en is afhankelijk van temperatuur, ventilatie en gebruik. Uit feedback van 500.000+ verkochte stuks geven klanten gemiddeld 4–6 weken aan."
+    },
+    {
+      "type": "text",
+      "id": "benefit_2",
+      "label": "Benefit 2",
+      "default": "Ruikt naar bekende parfums"
+    },
+    {
+      "type": "text",
+      "id": "benefit_3",
+      "label": "Benefit 3",
+      "default": "Het perfecte, betaalbare cadeau"
+    }
+  ],
+  "presets": [
+    {
+      "name": "MG AI Product Page"
+    }
+  ]
+}
+{% endschema %}
