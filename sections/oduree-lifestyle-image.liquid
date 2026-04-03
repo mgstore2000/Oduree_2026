@@ -1,0 +1,84 @@
+{% render 'oduree-base' %}
+<style>
+  .od-lifestyle { padding: 0; }
+  .od-lifestyle__img {
+    position: relative;
+    border-radius: 14px;
+    overflow: hidden;
+    background: linear-gradient(145deg, #d4c8b8, #c5b9a8);
+  }
+  .od-lifestyle__img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .od-lifestyle__overlay {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 20px;
+    background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 100%);
+    color: white;
+  }
+  .od-lifestyle__overlay p {
+    font-family: var(--od-font-display);
+    font-size: clamp(18px, 4vw, 24px);
+    margin: 0;
+  }
+  .od-lifestyle__overlay span {
+    font-size: 12px;
+    opacity: 0.7;
+    display: block;
+    margin-top: 4px;
+  }
+  .od-lifestyle__subtitle {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 8px;
+    display: block;
+  }
+</style>
+
+<div class="oduree-section od-lifestyle" style="padding-top:{{ section.settings.padding_top }}px;padding-bottom:{{ section.settings.padding_bottom }}px;">
+  <div class="od-lifestyle__img" style="aspect-ratio:{{ section.settings.aspect_ratio | replace: '-', '/' }};">
+    {%- if section.settings.image != blank -%}
+      {{ section.settings.image | image_url: width: 960 | image_tag: loading: 'lazy', style: 'width:100%;height:100%;object-fit:cover;display:block;' }}
+    {%- endif -%}
+    <div class="od-lifestyle__overlay">
+      {%- if section.settings.subtitle != blank -%}
+        <span class="od-lifestyle__subtitle">{{ section.settings.subtitle }}</span>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <p>{{ section.settings.heading }}</p>
+      {%- endif -%}
+      {%- if section.settings.subheading != blank -%}
+        <span>{{ section.settings.subheading }}</span>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Oduree — Lifestyle foto",
+  "class": "oduree-lifestyle-section",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Afbeelding" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Elke rit een ervaring" },
+    { "type": "text", "id": "subheading", "label": "Subheading", "default": "Ontdek de geur die bij jou past" },
+    { "type": "text", "id": "subtitle", "label": "Subtitle (boven heading)" },
+    {
+      "type": "select",
+      "id": "aspect_ratio",
+      "label": "Beeldverhouding",
+      "options": [
+        { "value": "16-10", "label": "16:10 (landscape)" },
+        { "value": "16-9", "label": "16:9 (wide)" },
+        { "value": "3-4", "label": "3:4 (portrait)" },
+        { "value": "1-1", "label": "1:1 (vierkant)" }
+      ],
+      "default": "16-10"
+    },
+    { "type": "range", "id": "padding_top", "label": "Padding boven", "min": 0, "max": 60, "step": 4, "unit": "px", "default": 16 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding onder", "min": 0, "max": 60, "step": 4, "unit": "px", "default": 16 }
+  ],
+  "presets": [{ "name": "Oduree — Lifestyle foto" }]
+}
+{% endschema %}

@@ -1,0 +1,38 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+  .oduree-section {
+    --od-bg: #FAF7F0;
+    --od-text: #1a1a1a;
+    --od-text-secondary: #555;
+    --od-text-muted: #999;
+    --od-dark: #2C2C2A;
+    --od-gold: #C9A84C;
+    --od-tp-green: #00B67A;
+    --od-beige: #F8F2E6;
+    --od-border: #E8D9C0;
+    --od-radius: 12px;
+    --od-radius-btn: 10px;
+    --od-font: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Proxima Nova', sans-serif;
+    --od-font-display: 'DM Serif Display', Georgia, serif;
+    font-family: var(--od-font);
+    color: var(--od-text);
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+  .oduree-section *, .oduree-section *::before, .oduree-section *::after { box-sizing: border-box; }
+  .oduree-section .od-title {
+    font-family: var(--od-font-display);
+    font-size: clamp(20px, 4.5vw, 26px);
+    font-weight: 400;
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--od-text);
+  }
+  @media (min-width: 750px) {
+    .oduree-section { max-width: 1200px; padding: 0 24px; }
+  }
+</style>

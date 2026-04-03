@@ -1,0 +1,61 @@
+{% render 'oduree-base' %}
+<style>
+  .od-brand { padding: 28px 0; }
+  .od-brand__block {
+    background: var(--od-dark); border-radius: 14px; overflow: hidden;
+    color: white;
+  }
+  .od-brand__img {
+    width: 100%; aspect-ratio: 16/9; background: linear-gradient(145deg, #3a3a38, #2C2C2A);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .od-brand__img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .od-brand__text {
+    padding: 24px 20px;
+  }
+  .od-brand__text h3 {
+    font-family: var(--od-font-display);
+    font-size: clamp(20px, 4vw, 26px);
+    font-weight: 400; margin: 0 0 12px;
+  }
+  .od-brand__text p {
+    font-size: 13px; color: rgba(255,255,255,0.7);
+    line-height: 1.65; margin: 0;
+  }
+</style>
+
+<div class="oduree-section od-brand">
+  <div class="od-brand__block">
+    {%- if section.settings.image != blank -%}
+      <div class="od-brand__img">
+        {{ section.settings.image | image_url: width: 960 | image_tag: loading: 'lazy', style: 'width:100%;height:100%;object-fit:cover;display:block;' }}
+      </div>
+    {%- else -%}
+      <div class="od-brand__img">
+        <span style="font-size:11px;color:rgba(255,255,255,0.2);">Foto placeholder</span>
+      </div>
+    {%- endif -%}
+    <div class="od-brand__text">
+      <h3>{{ section.settings.heading }}</h3>
+      {{ section.settings.text }}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Oduree — Merkverhaal",
+  "class": "oduree-brand-section",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Afbeelding" },
+    { "type": "text", "id": "heading", "label": "Titel", "default": "Dit is Oduree" },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Tekst",
+      "default": "<p>Wij geloven dat je auto net zo goed mag ruiken als jijzelf. Daarom maken we autoparfums geïnspireerd op de geuren die je kent en waar je van houdt — maar dan voor onderweg. Premium kwaliteit, stijlvol design, en een geur die weken blijft hangen.</p>"
+    }
+  ],
+  "presets": [{ "name": "Oduree — Merkverhaal" }]
+}
+{% endschema %}

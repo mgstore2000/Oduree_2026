@@ -1,0 +1,97 @@
+{% render 'oduree-base' %}
+<style>
+  .od-compare { padding: 28px 0; }
+  .od-compare__table {
+    width: 100%; border-collapse: collapse; font-size: 12px;
+  }
+  .od-compare__table th {
+    padding: 10px 8px; font-weight: 500; font-size: 11px;
+    text-align: center; border-bottom: 1px solid var(--od-border);
+  }
+  .od-compare__table th.od-compare__col-oduree {
+    background: var(--od-dark); color: white; border-radius: 8px 8px 0 0;
+  }
+  .od-compare__table td {
+    padding: 10px 8px; text-align: center;
+    border-bottom: 0.5px solid #f0ebe3; font-size: 12px;
+  }
+  .od-compare__table td:first-child { text-align: left; font-weight: 500; color: var(--od-text); }
+  .od-compare__table td.od-compare__col-oduree-body { background: rgba(44,44,42,0.03); }
+  .od-compare__check { color: var(--od-gold); font-weight: 700; }
+  .od-compare__x { color: #ccc; }
+</style>
+
+<div class="oduree-section od-compare">
+  {%- if section.settings.title != blank -%}
+    <p class="od-title">{{ section.settings.title }}</p>
+  {%- endif -%}
+  <table class="od-compare__table">
+    <thead>
+      <tr>
+        <th></th>
+        <th class="od-compare__col-oduree">Oduree</th>
+        <th>{{ section.settings.competitor_1 }}</th>
+        <th>{{ section.settings.competitor_2 }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {%- for block in section.blocks -%}
+        <tr {{ block.shopify_attributes }}>
+          <td>{{ block.settings.feature }}</td>
+          <td class="od-compare__col-oduree-body">
+            {%- if block.settings.oduree_check -%}<span class="od-compare__check">✓</span>{%- endif -%}
+            {%- if block.settings.oduree_text != blank %} {{ block.settings.oduree_text }}{%- endif -%}
+          </td>
+          <td>
+            {%- if block.settings.comp1_check -%}<span class="od-compare__check">✓</span>{%- else -%}<span class="od-compare__x">✕</span>{%- endif -%}
+            {%- if block.settings.comp1_text != blank %} {{ block.settings.comp1_text }}{%- endif -%}
+          </td>
+          <td>
+            {%- if block.settings.comp2_check -%}<span class="od-compare__check">✓</span>{%- else -%}<span class="od-compare__x">✕</span>{%- endif -%}
+            {%- if block.settings.comp2_text != blank %} {{ block.settings.comp2_text }}{%- endif -%}
+          </td>
+        </tr>
+      {%- endfor -%}
+    </tbody>
+  </table>
+</div>
+
+{% schema %}
+{
+  "name": "Oduree — Vergelijking",
+  "class": "oduree-compare-section",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Titel", "default": "Waarom Oduree?" },
+    { "type": "text", "id": "competitor_1", "label": "Concurrent 1", "default": "Geurboom" },
+    { "type": "text", "id": "competitor_2", "label": "Concurrent 2", "default": "Ventilatie clip" }
+  ],
+  "blocks": [
+    {
+      "type": "row",
+      "name": "Rij",
+      "settings": [
+        { "type": "text", "id": "feature", "label": "Kenmerk" },
+        { "type": "checkbox", "id": "oduree_check", "label": "Oduree ✓", "default": true },
+        { "type": "text", "id": "oduree_text", "label": "Oduree tekst" },
+        { "type": "checkbox", "id": "comp1_check", "label": "Concurrent 1 ✓", "default": false },
+        { "type": "text", "id": "comp1_text", "label": "Concurrent 1 tekst" },
+        { "type": "checkbox", "id": "comp2_check", "label": "Concurrent 2 ✓", "default": false },
+        { "type": "text", "id": "comp2_text", "label": "Concurrent 2 tekst" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Oduree — Vergelijkingstabel",
+      "blocks": [
+        { "type": "row", "settings": { "feature": "Geurduur", "oduree_check": true, "oduree_text": "4-6 weken", "comp1_check": false, "comp1_text": "1-2 weken", "comp2_check": false, "comp2_text": "2-3 weken" } },
+        { "type": "row", "settings": { "feature": "Intensiteit regelbaar", "oduree_check": true, "comp1_check": false, "comp2_check": false } },
+        { "type": "row", "settings": { "feature": "Luxe design", "oduree_check": true, "comp1_check": false, "comp2_check": true } },
+        { "type": "row", "settings": { "feature": "Bekende geuren", "oduree_check": true, "comp1_check": false, "comp2_check": false } },
+        { "type": "row", "settings": { "feature": "Geen schade interieur", "oduree_check": true, "comp1_check": true, "comp2_check": false } },
+        { "type": "row", "settings": { "feature": "Cadeau-waardig", "oduree_check": true, "comp1_check": false, "comp2_check": false } }
+      ]
+    }
+  ]
+}
+{% endschema %}

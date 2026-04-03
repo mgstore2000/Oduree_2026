@@ -951,37 +951,48 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background: rgba(255,255,255,0.95);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-top: 0.5px solid #e0e0e0;
-    padding: 10px 20px;
+    z-index: 999;
+    background: white;
+    border-top: 0.5px solid #e0d8cc;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
-    z-index: 99;
+    padding: 10px 16px;
+    gap: 10px;
+    box-shadow: 0 -2px 12px rgba(0,0,0,0.06);
     transform: translateY(100%);
     transition: transform 0.3s ease;
   }
   .sticky-bar.visible { transform: translateY(0); }
-  .sticky-prices { display: flex; align-items: center; gap: 8px; }
-  .sticky-old { font-size: 12px; text-decoration: line-through; color: rgba(68,68,68,0.5); display: none; }
-  .sticky-new { font-size: 17px; font-weight: 500; color: var(--text-primary); }
-  .sticky-badge { background: var(--accent-dark); color: white; font-size: 10px; padding: 2px 7px; border-radius: 4px; display: none; font-weight: 500; }
+  .sticky-prices {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+    white-space: nowrap;
+    min-width: 0;
+  }
+  .sticky-old { font-size: 11px; text-decoration: line-through; color: rgba(68,68,68,0.5); display: none; }
+  .sticky-new { font-size: 15px; font-weight: 600; color: var(--text-primary); white-space: nowrap; }
+  .sticky-badge { background: var(--accent-dark); color: white; font-size: 9px; padding: 2px 5px; border-radius: 4px; display: none; font-weight: 500; white-space: nowrap; line-height: 1.3; }
   .sticky-btn {
     background: var(--accent-gold);
     color: white;
     border: none;
-    border-radius: 8px;
-    padding: 10px 18px;
-    font-size: 13px;
-    font-weight: 500;
+    padding: 12px 16px;
+    border-radius: var(--radius-btn);
+    font-size: 12px;
+    font-weight: 600;
+    font-family: var(--font-primary);
     cursor: pointer;
+    flex: 1;
+    min-width: 0;
     white-space: nowrap;
-    font-family: inherit;
+    overflow: hidden;
+    text-overflow: ellipsis;
     transition: background 0.2s ease;
     letter-spacing: 0.2px;
+    text-transform: uppercase;
   }
   .sticky-btn:hover { filter: brightness(0.92); }
 
@@ -1507,398 +1518,6 @@
 
     </div>{%- comment -%} /.info {%- endcomment -%}
   </div>{%- comment -%} /.oduree-product__above-fold {%- endcomment -%}
-
-{%- comment -%} ════════════ BELOW THE FOLD ════════════ {%- endcomment -%}
-  <div class="oduree-product__below-fold below-fold">
-
-    {%- comment -%} ═══ 14. STATS STRIP (1 rij, 3 cijfers met dividers) ═══ {%- endcomment -%}
-    <div class="section-block" style="text-align:center;">
-      <p class="section-title">{{ section.settings.social_proof_title }}</p>
-      <div class="stats-row">
-        <div class="stats-row__item">
-          <div class="stats-row__number">{{ section.settings.stat_1_number }}</div>
-          <div class="stats-row__label">{{ section.settings.stat_1_label }}</div>
-        </div>
-        <div class="stats-row__divider"></div>
-        <div class="stats-row__item">
-          <div class="stats-row__number">{{ section.settings.stat_2_number }}</div>
-          <div class="stats-row__label">{{ section.settings.stat_2_label }}</div>
-        </div>
-        <div class="stats-row__divider"></div>
-        <div class="stats-row__item">
-          <div class="stats-row__number">{{ section.settings.stat_3_number }}</div>
-          <div class="stats-row__label">{{ section.settings.stat_3_label }}</div>
-        </div>
-      </div>
-    </div>
-
-    {%- comment -%} ═══ 15. LIFESTYLE HERO ("Elke rit een ervaring") ═══ {%- endcomment -%}
-    {%- if section.settings.lifestyle_hero_image != blank -%}
-      <div class="section-block">
-        <div class="lifestyle-img" style="aspect-ratio:16/10;">
-          {{ section.settings.lifestyle_hero_image | image_url: width: 960 | image_tag: loading: 'lazy', style: 'width:100%;height:100%;object-fit:cover;display:block;' }}
-          <div class="lifestyle-img-overlay">
-            <p>{{ section.settings.lifestyle_hero_heading | default: 'Elke rit een ervaring' }}</p>
-            <span>{{ section.settings.lifestyle_hero_subheading | default: 'Ontdek de geur die bij jou past' }}</span>
-          </div>
-        </div>
-      </div>
-    {%- else -%}
-      <div class="section-block">
-        <div class="lifestyle-img" style="aspect-ratio:16/10;background:linear-gradient(145deg,#d4c8b8,#c5b9a8);">
-          <div class="lifestyle-img-overlay">
-            <p>{{ section.settings.lifestyle_hero_heading | default: 'Elke rit een ervaring' }}</p>
-            <span>{{ section.settings.lifestyle_hero_subheading | default: 'Ontdek de geur die bij jou past' }}</span>
-          </div>
-        </div>
-      </div>
-    {%- endif -%}
-
-    {%- comment -%} ═══ 16. IN 3 STAPPEN ═══ {%- endcomment -%}
-    <div class="section-block">
-      <p class="section-title">{{ section.settings.steps_title }}</p>
-      <div class="steps-list">
-        {%- for i in (1..3) -%}
-          {%- assign title_key = 'step_' | append: i | append: '_title' -%}
-          {%- assign text_key = 'step_' | append: i | append: '_text' -%}
-          {%- assign s_title = section.settings[title_key] -%}
-          {%- assign s_text = section.settings[text_key] -%}
-          {%- if s_title != blank -%}
-            <div class="step-item">
-              <div class="step-num">{{ i }}</div>
-              <div class="step-text"><strong>{{ s_title }}</strong> — {{ s_text }}</div>
-            </div>
-          {%- endif -%}
-        {%- endfor -%}
-      </div>
-    </div>
-
-    {%- comment -%} ═══ 17. LIFESTYLE STATEMENT ("Jouw geur, jouw stijl") ═══ {%- endcomment -%}
-    {%- if section.settings.lifestyle_statement_image != blank -%}
-      <div class="section-block">
-        <div class="lifestyle-img" style="aspect-ratio:3/4;">
-          {{ section.settings.lifestyle_statement_image | image_url: width: 960 | image_tag: loading: 'lazy', style: 'width:100%;height:100%;object-fit:cover;display:block;' }}
-          <div class="lifestyle-img-overlay" style="padding:28px 20px;">
-            <span style="font-size:10px;text-transform:uppercase;letter-spacing:2px;color:rgba(255,255,255,0.5);margin-bottom:8px;display:block;">{{ section.settings.lifestyle_statement_subtitle | default: '20 geuren · 1 keuze' }}</span>
-            <p style="font-size:22px;">{{ section.settings.lifestyle_statement_heading | default: 'Jouw geur, jouw stijl' }}</p>
-          </div>
-        </div>
-      </div>
-    {%- else -%}
-      <div class="section-block">
-        <div class="lifestyle-img" style="aspect-ratio:3/4;background:linear-gradient(145deg,#c5b9a8,#b5a898);">
-          <div class="lifestyle-img-overlay" style="padding:28px 20px;">
-            <span style="font-size:10px;text-transform:uppercase;letter-spacing:2px;color:rgba(255,255,255,0.5);margin-bottom:8px;display:block;">{{ section.settings.lifestyle_statement_subtitle | default: '20 geuren · 1 keuze' }}</span>
-            <p style="font-size:22px;">{{ section.settings.lifestyle_statement_heading | default: 'Jouw geur, jouw stijl' }}</p>
-          </div>
-        </div>
-      </div>
-    {%- endif -%}
-
-    {%- comment -%} ═══ 18. FAQ (6 vragen, accordion) ═══ {%- endcomment -%}
-    {%- assign has_faq = false -%}
-    {%- for block in section.blocks -%}
-      {%- if block.type == 'faq_item' -%}{%- assign has_faq = true -%}{%- break -%}{%- endif -%}
-    {%- endfor -%}
-    <div class="section-block">
-      <p class="section-title">Veelgestelde vragen</p>
-      <div class="faq-list">
-        {%- if has_faq -%}
-          {%- for block in section.blocks -%}
-            {%- if block.type == 'faq_item' -%}
-              <div class="faq-item" {{ block.shopify_attributes }}>
-                <div class="faq-question">{{ block.settings.question }} <span class="faq-icon">+</span></div>
-                <div class="faq-answer">{{ block.settings.answer }}</div>
-              </div>
-            {%- endif -%}
-          {%- endfor -%}
-        {%- else -%}
-          <div class="faq-item">
-            <div class="faq-question">Hoe lang gaat de geur mee? <span class="faq-icon">+</span></div>
-            <div class="faq-answer">De meeste geuren gaan 4 tot 6 weken mee, afhankelijk van de temperatuur, ventilatie en hoe ver je de dop opendraait. Hoe losser de dop, hoe intenser de geur — maar dan is hij ook sneller op.</div>
-          </div>
-          <div class="faq-item">
-            <div class="faq-question">Kan ik de geurintensiteit aanpassen? <span class="faq-icon">+</span></div>
-            <div class="faq-answer">Ja! Door de dop losser of strakker te draaien bepaal je zelf hoeveel geur er vrijkomt. Strakker = subtieler, losser = krachtiger.</div>
-          </div>
-          <div class="faq-item">
-            <div class="faq-question">Is het veilig voor mijn auto-interieur? <span class="faq-icon">+</span></div>
-            <div class="faq-answer">Absoluut. Onze autoparfums zijn lekvrij ontworpen en komen niet in contact met je dashboard of bekleding. Ze hangen aan je achteruitkijkspiegel.</div>
-          </div>
-          <div class="faq-item">
-            <div class="faq-question">Op welke parfums zijn de geuren geïnspireerd? <span class="faq-icon">+</span></div>
-            <div class="faq-answer">Elke geur is geïnspireerd op een iconisch parfum. Savage is geïnspireerd op Dior Sauvage, Million op Paco Rabanne 1 Million, enzovoort. Bekijk de geuromschrijving bij elk product voor details.</div>
-          </div>
-          <div class="faq-item">
-            <div class="faq-question">Hoe werkt het abonnement? <span class="faq-icon">+</span></div>
-            <div class="faq-answer">Je kiest een geur en leveringsfrequentie. Wij leveren automatisch op het gekozen interval. Je krijgt 20% korting en gratis verzending. Pauzeren, geur wisselen of opzeggen kan op elk moment — zonder vragen.</div>
-          </div>
-          <div class="faq-item">
-            <div class="faq-question">Wat als ik de geur niet lekker vind? <span class="faq-icon">+</span></div>
-            <div class="faq-answer">Geen probleem. Je hebt 30 dagen om het te proberen. Niet tevreden? Dan krijg je je geld terug. Stuur een mailtje naar ons team en we regelen het direct.</div>
-          </div>
-        {%- endif -%}
-      </div>
-    </div>
-
-    {%- comment -%} ═══ 19. WAAROM ODUREE? (vergelijkingstabel) ═══ {%- endcomment -%}
-    <div class="section-block">
-      <p class="section-title">{{ section.settings.compare_title }}</p>
-      <table class="compare-table">
-        <thead>
-          <tr>
-            <th></th>
-            <th class="col-oduree">Oduree</th>
-            <th>{{ section.settings.compare_col_2 }}</th>
-            <th>{{ section.settings.compare_col_3 }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {%- assign has_compare = false -%}
-          {%- for block in section.blocks -%}
-            {%- if block.type == 'compare_row' -%}{%- assign has_compare = true -%}{%- break -%}{%- endif -%}
-          {%- endfor -%}
-          {%- if has_compare -%}
-            {%- for block in section.blocks -%}
-              {%- if block.type == 'compare_row' -%}
-                <tr {{ block.shopify_attributes }}>
-                  <td>{{ block.settings.feature }}</td>
-                  <td class="col-oduree-body">
-                    {%- if block.settings.oduree_check -%}<span class="compare-check">✓</span>{%- endif -%}
-                    {%- if block.settings.oduree_value != blank %} {{ block.settings.oduree_value }}{%- endif -%}
-                  </td>
-                  <td>
-                    {%- if block.settings.competitor_1_check -%}<span class="compare-check">✓</span>{%- else -%}<span class="compare-x">✕</span>{%- endif -%}
-                    {%- if block.settings.competitor_1 != blank %} {{ block.settings.competitor_1 }}{%- endif -%}
-                  </td>
-                  <td>
-                    {%- if block.settings.competitor_2_check -%}<span class="compare-check">✓</span>{%- else -%}<span class="compare-x">✕</span>{%- endif -%}
-                    {%- if block.settings.competitor_2 != blank %} {{ block.settings.competitor_2 }}{%- endif -%}
-                  </td>
-                </tr>
-              {%- endif -%}
-            {%- endfor -%}
-          {%- else -%}
-            <tr><td>Geurduur</td><td class="col-oduree-body"><span class="compare-check">✓</span> 4-6 weken</td><td><span class="compare-x">✕</span> 1-2 weken</td><td><span class="compare-x">✕</span> 2-3 weken</td></tr>
-            <tr><td>Intensiteit regelbaar</td><td class="col-oduree-body"><span class="compare-check">✓</span></td><td><span class="compare-x">✕</span></td><td><span class="compare-x">✕</span></td></tr>
-            <tr><td>Luxe design</td><td class="col-oduree-body"><span class="compare-check">✓</span></td><td><span class="compare-x">✕</span></td><td><span class="compare-check">✓</span></td></tr>
-            <tr><td>Bekende geuren</td><td class="col-oduree-body"><span class="compare-check">✓</span></td><td><span class="compare-x">✕</span></td><td><span class="compare-x">✕</span></td></tr>
-            <tr><td>Geen schade interieur</td><td class="col-oduree-body"><span class="compare-check">✓</span></td><td><span class="compare-check">✓</span></td><td><span class="compare-x">✕</span></td></tr>
-            <tr><td>Cadeau-waardig</td><td class="col-oduree-body"><span class="compare-check">✓</span></td><td><span class="compare-x">✕</span></td><td><span class="compare-x">✕</span></td></tr>
-          {%- endif -%}
-        </tbody>
-      </table>
-    </div>
-
-    {%- comment -%} ═══ 20. LIFESTYLE WIDE ("Meer dan een luchtverfrisser") ═══ {%- endcomment -%}
-    {%- if section.settings.lifestyle_wide_image != blank -%}
-      <div class="section-block" style="padding-bottom:0;">
-        <div class="lifestyle-img" style="aspect-ratio:16/9;">
-          {{ section.settings.lifestyle_wide_image | image_url: width: 960 | image_tag: loading: 'lazy', style: 'width:100%;height:100%;object-fit:cover;display:block;' }}
-          <div class="lifestyle-img-overlay">
-            <p>{{ section.settings.lifestyle_wide_heading | default: 'Meer dan een luchtverfrisser' }}</p>
-            <span>{{ section.settings.lifestyle_wide_subheading | default: 'Een statement. Elke keer als je instapt.' }}</span>
-          </div>
-        </div>
-      </div>
-    {%- else -%}
-      <div class="section-block" style="padding-bottom:0;">
-        <div class="lifestyle-img" style="aspect-ratio:16/9;background:linear-gradient(145deg,#b5a898,#a59888);">
-          <div class="lifestyle-img-overlay">
-            <p>{{ section.settings.lifestyle_wide_heading | default: 'Meer dan een luchtverfrisser' }}</p>
-            <span>{{ section.settings.lifestyle_wide_subheading | default: 'Een statement. Elke keer als je instapt.' }}</span>
-          </div>
-        </div>
-      </div>
-    {%- endif -%}
-
-    {%- comment -%} ═══ 21. TRUSTPILOT REVIEWS (4 kaarten carousel) ═══ {%- endcomment -%}
-    {%- assign has_reviews = false -%}
-    {%- for block in section.blocks -%}
-      {%- if block.type == 'review' -%}{%- assign has_reviews = true -%}{%- break -%}{%- endif -%}
-    {%- endfor -%}
-    <div class="section-block" style="text-align:center;">
-      <div class="review-carousel">
-        {%- if has_reviews -%}
-          {%- for block in section.blocks -%}
-            {%- if block.type == 'review' -%}
-              <div class="review-card" {{ block.shopify_attributes }}>
-                <div class="tp-stars" style="justify-content:flex-start;">
-                  {%- for s in (1..5) -%}
-                    <div class="tp-star" style="background:{% if s <= block.settings.stars %}#00B67A{% else %}#ddd{% endif %};"><svg viewBox="0 0 12 12" fill="none"><path d="M6 1l1.5 3.1 3.4.3-2.5 2.2.7 3.4L6 8.2 2.9 10l.7-3.4L1.1 4.4l3.4-.3z" fill="white"/></svg></div>
-                  {%- endfor -%}
-                </div>
-                {%- if block.settings.title != blank -%}
-                  <p class="review-card-title">{{ block.settings.title }}</p>
-                {%- endif -%}
-                <p class="review-card-text">"{{ block.settings.text }}"</p>
-                <div class="review-card-bottom">
-                  <div class="review-card-avatar">{{ block.settings.author | slice: 0 }}</div>
-                  <div><div class="review-card-author"><strong>{{ block.settings.author }}</strong>, {{ block.settings.date }}</div><div class="review-verified">✓ Geverifieerde aankoop</div></div>
-                </div>
-              </div>
-            {%- endif -%}
-          {%- endfor -%}
-        {%- else -%}
-          <div class="review-card">
-            <div class="tp-stars" style="justify-content:flex-start;">{%- for s in (1..5) -%}<div class="tp-star" style="background:#00B67A;"><svg viewBox="0 0 12 12" fill="none"><path d="M6 1l1.5 3.1 3.4.3-2.5 2.2.7 3.4L6 8.2 2.9 10l.7-3.4L1.1 4.4l3.4-.3z" fill="white"/></svg></div>{%- endfor -%}</div>
-            <p class="review-card-title">Geur blijft lang hangen</p>
-            <p class="review-card-text">"Na 3 weken ruikt mijn auto nog steeds heerlijk. Veel beter dan die dennenbomen van het tankstation."</p>
-            <div class="review-card-bottom"><div class="review-card-avatar">T</div><div><div class="review-card-author"><strong>Thomas D.</strong>, 3 dagen geleden</div><div class="review-verified">✓ Geverifieerde aankoop</div></div></div>
-          </div>
-          <div class="review-card">
-            <div class="tp-stars" style="justify-content:flex-start;">{%- for s in (1..5) -%}<div class="tp-star" style="background:#00B67A;"><svg viewBox="0 0 12 12" fill="none"><path d="M6 1l1.5 3.1 3.4.3-2.5 2.2.7 3.4L6 8.2 2.9 10l.7-3.4L1.1 4.4l3.4-.3z" fill="white"/></svg></div>{%- endfor -%}</div>
-            <p class="review-card-title">Ruikt als de echte Sauvage</p>
-            <p class="review-card-text">"Ik draag Dior Sauvage dagelijks en dit is echt een goede match. Mijn vrouw dacht dat ik parfum in mijn auto had gespoten."</p>
-            <div class="review-card-bottom"><div class="review-card-avatar">M</div><div><div class="review-card-author"><strong>Mohammed A.</strong>, 1 week geleden</div><div class="review-verified">✓ Geverifieerde aankoop</div></div></div>
-          </div>
-          <div class="review-card">
-            <div class="tp-stars" style="justify-content:flex-start;">{%- for s in (1..5) -%}<div class="tp-star" style="background:#00B67A;"><svg viewBox="0 0 12 12" fill="none"><path d="M6 1l1.5 3.1 3.4.3-2.5 2.2.7 3.4L6 8.2 2.9 10l.7-3.4L1.1 4.4l3.4-.3z" fill="white"/></svg></div>{%- endfor -%}</div>
-            <p class="review-card-title">Perfect cadeau</p>
-            <p class="review-card-text">"Gekocht als cadeau voor mijn vriend. Hij is er helemaal weg van. Ziet er luxe uit en ruikt fantastisch."</p>
-            <div class="review-card-bottom"><div class="review-card-avatar">S</div><div><div class="review-card-author"><strong>Sophie L.</strong>, 2 weken geleden</div><div class="review-verified">✓ Geverifieerde aankoop</div></div></div>
-          </div>
-          <div class="review-card">
-            <div class="tp-stars" style="justify-content:flex-start;">{%- for s in (1..4) -%}<div class="tp-star" style="background:#00B67A;"><svg viewBox="0 0 12 12" fill="none"><path d="M6 1l1.5 3.1 3.4.3-2.5 2.2.7 3.4L6 8.2 2.9 10l.7-3.4L1.1 4.4l3.4-.3z" fill="white"/></svg></div>{%- endfor -%}<div class="tp-star" style="background:#ddd;"><svg viewBox="0 0 12 12" fill="none"><path d="M6 1l1.5 3.1 3.4.3-2.5 2.2.7 3.4L6 8.2 2.9 10l.7-3.4L1.1 4.4l3.4-.3z" fill="white"/></svg></div></div>
-            <p class="review-card-title">Goede geur, mooi design</p>
-            <p class="review-card-text">"Looks premium, smells great. Enige minpunt: had iets langer mogen meegaan bij warm weer."</p>
-            <div class="review-card-bottom"><div class="review-card-avatar">J</div><div><div class="review-card-author"><strong>Jesse v.D.</strong>, 3 weken geleden</div><div class="review-verified">✓ Geverifieerde aankoop</div></div></div>
-          </div>
-        {%- endif -%}
-      </div>
-      <div style="margin-top:16px;">
-        <p style="font-size:12px;color:#555;">Beoordeeld met <strong>{{ section.settings.trustpilot_rating | default: '4,5' }}</strong> / 5 op basis van 3.200+ reviews</p>
-        <div style="display:inline-flex;align-items:center;gap:4px;margin-top:6px;">
-          <div class="tp-star" style="width:16px;height:16px;background:#00B67A;"><svg viewBox="0 0 12 12" fill="none"><path d="M6 1l1.5 3.1 3.4.3-2.5 2.2.7 3.4L6 8.2 2.9 10l.7-3.4L1.1 4.4l3.4-.3z" fill="white"/></svg></div>
-          <span style="font-size:12px;font-weight:500;color:#1a1a1a;">Trustpilot</span>
-        </div>
-      </div>
-    </div>
-
-    {%- comment -%} ═══ 22. DIT IS ODUREE (merkverhaal donker blok) ═══ {%- endcomment -%}
-    <div class="section-block">
-      <div class="brand-block">
-        {%- if section.settings.brand_image != blank -%}
-          <div class="brand-block-img">
-            {{ section.settings.brand_image | image_url: width: 960 | image_tag: loading: 'lazy', style: 'width:100%;height:100%;object-fit:cover;display:block;' }}
-          </div>
-        {%- else -%}
-          <div class="brand-block-img" style="background:linear-gradient(145deg,#3a3a38,#2C2C2A);display:flex;align-items:center;justify-content:center;">
-            <span style="font-size:11px;color:rgba(255,255,255,0.2);">Foto placeholder</span>
-          </div>
-        {%- endif -%}
-        <div class="brand-block-text">
-          <h3>{{ section.settings.brand_title | default: 'Dit is Oduree' }}</h3>
-          {%- if section.settings.brand_text != blank -%}
-            {{ section.settings.brand_text }}
-          {%- else -%}
-            <p>Wij geloven dat je auto net zo goed mag ruiken als jijzelf. Daarom maken we autoparfums geïnspireerd op de geuren die je kent en waar je van houdt — maar dan voor onderweg. Premium kwaliteit, stijlvol design, en een geur die weken blijft hangen.</p>
-          {%- endif -%}
-        </div>
-      </div>
-    </div>
-
-    {%- comment -%} ═══ 23. PERFECT VOOR (2×2 use-case kaartjes) ═══ {%- endcomment -%}
-    {%- assign has_usecases = false -%}
-    {%- for block in section.blocks -%}
-      {%- if block.type == 'usecase' -%}{%- assign has_usecases = true -%}{%- break -%}{%- endif -%}
-    {%- endfor -%}
-    <div class="section-block">
-      <p class="section-title">{{ section.settings.usecase_title | default: 'Perfect voor' }}</p>
-      <div class="usecase-grid">
-        {%- if has_usecases -%}
-          {%- for block in section.blocks -%}
-            {%- if block.type == 'usecase' -%}
-              <div class="usecase-card" {{ block.shopify_attributes }} style="{% if block.settings.bg_color != blank %}background:{{ block.settings.bg_color }};{% endif %}">
-                {%- if block.settings.image != blank -%}
-                  {{ block.settings.image | image_url: width: 480 | image_tag: loading: 'lazy', class: 'usecase-card-img' }}
-                {%- else -%}
-                  <div class="usecase-card-placeholder"></div>
-                {%- endif -%}
-                {%- if block.settings.label != blank -%}
-                  <div class="usecase-card-label">{{ block.settings.label }}</div>
-                {%- endif -%}
-              </div>
-            {%- endif -%}
-          {%- endfor -%}
-        {%- else -%}
-          <div class="usecase-card" style="background:linear-gradient(145deg,#d4c8b8,#c5b9a8);"><div class="usecase-card-placeholder"></div><div class="usecase-card-label">Dagelijks woon-werk</div></div>
-          <div class="usecase-card" style="background:linear-gradient(145deg,#c5b9a8,#b5a898);"><div class="usecase-card-placeholder"></div><div class="usecase-card-label">Roadtrips</div></div>
-          <div class="usecase-card" style="background:linear-gradient(145deg,#b5a898,#a59888);"><div class="usecase-card-placeholder"></div><div class="usecase-card-label">Als cadeau</div></div>
-          <div class="usecase-card" style="background:linear-gradient(145deg,#d4c8b8,#b5a898);"><div class="usecase-card-placeholder"></div><div class="usecase-card-label">Na het wassen</div></div>
-        {%- endif -%}
-      </div>
-    </div>
-
-    {%- comment -%} ═══ 24. ONTDEK MEER GEUREN (cross-sell) ═══ {%- endcomment -%}
-    {%- if section.settings.crosssell_collection != blank -%}
-      {%- assign crosssell_products = section.settings.crosssell_collection.products -%}
-      {%- assign crosssell_max = section.settings.crosssell_max | default: 4 -%}
-      <div class="section-block">
-        <p class="section-title">{{ section.settings.crosssell_title }}</p>
-        <div class="crosssell-scroll">
-          {%- for p in crosssell_products limit: crosssell_max -%}
-            {%- if p.id != product.id -%}
-              <div class="crosssell-card">
-                <a href="{{ p.url }}" class="crosssell-img-link">
-                  {%- if p.featured_image != blank -%}
-                    {{ p.featured_image | image_url: width: 300 | image_tag: loading: 'lazy', class: 'crosssell-img' }}
-                  {%- else -%}
-                    <div class="crosssell-img" style="background:linear-gradient(135deg,#F8F2E6,#ede8df);"></div>
-                  {%- endif -%}
-                </a>
-                <div class="crosssell-info">
-                  <div class="crosssell-name">{{ p.title }}</div>
-                  <div class="crosssell-price">{{ p.price | money }}</div>
-                </div>
-                <a href="{{ p.url }}" class="crosssell-btn">Bekijk</a>
-              </div>
-            {%- endif -%}
-          {%- endfor -%}
-        </div>
-      </div>
-    {%- else -%}
-      <div class="section-block">
-        <p class="section-title">{{ section.settings.crosssell_title | default: 'Ontdek meer geuren' }}</p>
-        <div class="crosssell-scroll">
-          {%- for p in product.collections.first.products limit: 4 -%}
-            {%- if p.id != product.id -%}
-              <div class="crosssell-card">
-                <a href="{{ p.url }}" class="crosssell-img-link">
-                  {%- if p.featured_image != blank -%}
-                    {{ p.featured_image | image_url: width: 300 | image_tag: loading: 'lazy', class: 'crosssell-img' }}
-                  {%- else -%}
-                    <div class="crosssell-img" style="background:linear-gradient(135deg,#F8F2E6,#ede8df);aspect-ratio:1/1;"></div>
-                  {%- endif -%}
-                </a>
-                <div class="crosssell-info">
-                  <div class="crosssell-name">{{ p.title }}</div>
-                  <div class="crosssell-price">{{ p.price | money }}</div>
-                </div>
-                <a href="{{ p.url }}" class="crosssell-btn">Bekijk</a>
-              </div>
-            {%- endif -%}
-          {%- endfor -%}
-        </div>
-      </div>
-    {%- endif -%}
-
-  </div>{%- comment -%} /.below-fold {%- endcomment -%}
-
-  {%- comment -%} ═══ 25. TRUST FOOTER (SVG iconen, geen emoji's) ═══ {%- endcomment -%}
-  <div class="trust-footer">
-    <span class="trust-footer-item"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="2" y="5.5" width="9" height="6.5" rx="1.5" stroke="#999" stroke-width="1"/><path d="M4 5.5V4a2.5 2.5 0 015 0v1.5" stroke="#999" stroke-width="1" stroke-linecap="round"/></svg> {{ section.settings.trust_footer_1 | default: 'Veilig betalen' }}</span>
-    <span class="trust-footer-item"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.5" stroke="#999" stroke-width="1"/><path d="M4.5 6.5l1.5 1.5 3-3" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg> {{ section.settings.trust_footer_2 | default: 'Nederlands bedrijf' }}</span>
-    <span class="trust-footer-item"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1.5" y="4" width="10" height="7" rx="1" stroke="#999" stroke-width="1"/><path d="M1.5 6.5h10M5 4V2.5M8 4V2.5" stroke="#999" stroke-width="1" stroke-linecap="round"/></svg> {{ section.settings.trust_footer_3 | default: 'Vandaag verzonden' }}</span>
-  </div>
-
-  {%- comment -%} ═══ 26. GARANTIE AFSLUITER (donker blok) ═══ {%- endcomment -%}
-  <div class="cta-banner">
-    <p style="font-size:10px;text-transform:uppercase;letter-spacing:2px;color:rgba(255,255,255,0.35);margin-bottom:12px;">Onze belofte</p>
-    <p class="cta-banner-title">{{ section.settings.cta_banner_title | default: '30 dagen testen. Niet goed? Geld terug.' }}</p>
-    <p class="cta-banner-sub" style="max-width:300px;margin:12px auto 20px;line-height:1.6;">{{ section.settings.cta_banner_text | default: 'Maar we weten uit ervaring: 93% van onze klanten bestelt opnieuw. Probeer het zelf — risicovrij.' }}</p>
-    <button class="cta-banner-btn" id="ctaBannerBtn">{{ section.settings.cta_banner_button | default: 'Bestel nu' }}</button>
-  </div>
 
 </div>{%- comment -%} /.oduree-product {%- endcomment -%}
 
@@ -2495,241 +2114,68 @@
       "type": "header",
       "content": "Trustpilot"
     },
-    {
-      "type": "checkbox",
-      "id": "trustpilot_enabled",
-      "label": "Trustpilot tonen",
-      "default": true
-    },
-    {
-      "type": "text",
-      "id": "trustpilot_rating",
-      "label": "Trustpilot rating",
-      "default": "4,5"
-    },
-    {
-      "type": "text",
-      "id": "trustpilot_text",
-      "label": "Trustpilot tekst",
-      "default": "200.000+ Tevreden Gebruikers"
-    },
-    {
-      "type": "color",
-      "id": "trustpilot_color",
-      "label": "Sterren kleur",
-      "default": "#00B67A"
-    },
+    { "type": "checkbox", "id": "trustpilot_enabled", "label": "Trustpilot tonen", "default": true },
+    { "type": "text", "id": "trustpilot_rating", "label": "Rating", "default": "4,5" },
+    { "type": "text", "id": "trustpilot_text", "label": "Tekst", "default": "200.000+ Tevreden Gebruikers" },
+    { "type": "color", "id": "trustpilot_color", "label": "Sterren kleur", "default": "#00B67A" },
     {
       "type": "header",
       "content": "Product Benefits"
     },
-    {
-      "type": "text",
-      "id": "benefit_1",
-      "label": "Benefit 1",
-      "default": "Tot 45 dagen langdurige geur"
-    },
-    {
-      "type": "checkbox",
-      "id": "benefit_1_tooltip_enabled",
-      "label": "Benefit 1 tooltip tonen",
-      "default": true
-    },
-    {
-      "type": "textarea",
-      "id": "benefit_1_tooltip_text",
-      "label": "Benefit 1 tooltip tekst",
-      "default": "De geurduur verschilt per geur en is afhankelijk van temperatuur, ventilatie en gebruik. Uit feedback van 500.000+ verkochte stuks geven klanten gemiddeld 4–6 weken aan."
-    },
-    {
-      "type": "text",
-      "id": "benefit_2",
-      "label": "Benefit 2",
-      "default": "Ruikt naar bekende parfums"
-    },
-    {
-      "type": "text",
-      "id": "benefit_3",
-      "label": "Benefit 3",
-      "default": "Het perfecte, betaalbare cadeau"
-    },
+    { "type": "text", "id": "benefit_1", "label": "Benefit 1", "default": "Tot 45 dagen langdurige geur" },
+    { "type": "checkbox", "id": "benefit_1_tooltip_enabled", "label": "Benefit 1 tooltip", "default": true },
+    { "type": "textarea", "id": "benefit_1_tooltip_text", "label": "Benefit 1 tooltip tekst", "default": "De geurduur verschilt per geur en is afhankelijk van temperatuur, ventilatie en gebruik. Uit feedback van 500.000+ verkochte stuks geven klanten gemiddeld 4–6 weken aan." },
+    { "type": "text", "id": "benefit_2", "label": "Benefit 2", "default": "Ruikt naar bekende parfums" },
+    { "type": "text", "id": "benefit_3", "label": "Benefit 3", "default": "Het perfecte, betaalbare cadeau" },
     {
       "type": "header",
       "content": "Pricing / Abonnement"
     },
-    {
-      "type": "checkbox",
-      "id": "abo_enabled",
-      "label": "Abonnement optie tonen",
-      "default": true
-    },
-    {
-      "type": "text",
-      "id": "abo_badge_text",
-      "label": "Abonnement badge tekst",
-      "default": "Meest gekozen"
-    },
-    {
-      "type": "range",
-      "id": "abo_discount",
-      "label": "Abonnement korting (%)",
-      "min": 0,
-      "max": 50,
-      "step": 5,
-      "default": 20
-    },
-    {
-      "type": "text",
-      "id": "eenmalig_label",
-      "label": "Eenmalig label",
-      "default": "Eenmalig"
-    },
-    {
-      "type": "text",
-      "id": "abo_label",
-      "label": "Abonnement label",
-      "default": "Abonnement"
-    },
-    {
-      "type": "text",
-      "id": "abo_sub_text",
-      "label": "Abo subtekst",
-      "default": "Maandelijks · altijd opzegbaar"
-    },
+    { "type": "checkbox", "id": "abo_enabled", "label": "Abonnement tonen", "default": true },
+    { "type": "text", "id": "abo_badge_text", "label": "Abo badge", "default": "Meest gekozen" },
+    { "type": "range", "id": "abo_discount", "label": "Abo korting (%)", "min": 0, "max": 50, "step": 5, "default": 20 },
+    { "type": "text", "id": "eenmalig_label", "label": "Eenmalig label", "default": "Eenmalig" },
+    { "type": "text", "id": "abo_label", "label": "Abo label", "default": "Abonnement" },
+    { "type": "text", "id": "abo_sub_text", "label": "Abo subtekst", "default": "Maandelijks · altijd opzegbaar" },
     {
       "type": "header",
       "content": "Abo Voordelen"
     },
-    {
-      "type": "text",
-      "id": "abo_voordeel_1",
-      "label": "Abo voordeel 1",
-      "default": "20% korting op elke levering"
-    },
-    {
-      "type": "text",
-      "id": "abo_voordeel_2",
-      "label": "Abo voordeel 2",
-      "default": "Gratis verzending, altijd"
-    },
-    {
-      "type": "text",
-      "id": "abo_voordeel_3",
-      "label": "Abo voordeel 3",
-      "default": "Geen gedoe — automatisch geleverd"
-    },
-    {
-      "type": "text",
-      "id": "abo_voordeel_4",
-      "label": "Abo voordeel 4",
-      "default": "Elk moment pauzeren of opzeggen"
-    },
-    {
-      "type": "text",
-      "id": "abo_voordeel_5",
-      "label": "Abo voordeel 5",
-      "default": "Geur wisselen wanneer je wil"
-    },
+    { "type": "text", "id": "abo_voordeel_1", "label": "Voordeel 1", "default": "20% korting op elke levering" },
+    { "type": "text", "id": "abo_voordeel_2", "label": "Voordeel 2", "default": "Gratis verzending, altijd" },
+    { "type": "text", "id": "abo_voordeel_3", "label": "Voordeel 3", "default": "Geen gedoe — automatisch geleverd" },
+    { "type": "text", "id": "abo_voordeel_4", "label": "Voordeel 4", "default": "Elk moment pauzeren of opzeggen" },
+    { "type": "text", "id": "abo_voordeel_5", "label": "Voordeel 5", "default": "Geur wisselen wanneer je wil" },
     {
       "type": "header",
       "content": "CTA Buttons"
     },
-    {
-      "type": "text",
-      "id": "atc_text",
-      "label": "Add to cart tekst",
-      "default": "Voeg toe aan winkelwagen"
-    },
-    {
-      "type": "color",
-      "id": "atc_color",
-      "label": "ATC button kleur",
-      "default": "#C9A84C"
-    },
-    {
-      "type": "color",
-      "id": "atc_text_color",
-      "label": "ATC tekst kleur",
-      "default": "#FFFFFF"
-    },
-    {
-      "type": "checkbox",
-      "id": "sticky_bar_enabled",
-      "label": "Sticky buy bar tonen",
-      "default": true
-    },
+    { "type": "text", "id": "atc_text", "label": "Add to cart tekst", "default": "Voeg toe aan winkelwagen" },
+    { "type": "color", "id": "atc_color", "label": "ATC kleur", "default": "#C9A84C" },
+    { "type": "color", "id": "atc_text_color", "label": "ATC tekst kleur", "default": "#FFFFFF" },
+    { "type": "checkbox", "id": "sticky_bar_enabled", "label": "Sticky buy bar", "default": true },
     {
       "type": "header",
       "content": "Bundel"
     },
-    {
-      "type": "checkbox",
-      "id": "bundel_enabled",
-      "label": "Bundel sectie tonen",
-      "default": true
-    },
-    {
-      "type": "text",
-      "id": "bundel_button_text",
-      "label": "Bundel knop tekst",
-      "default": "Bekijk bundelaanbiedingen"
-    },
-    {
-      "type": "text",
-      "id": "bundel_sub_text",
-      "label": "Bundel subtekst",
-      "default": "Koop meer, ontvang een gratis cadeau"
-    },
-    {
-      "type": "text",
-      "id": "bundel_populair_badge",
-      "label": "Populairste bundel badge",
-      "default": "Populairste keuze"
-    },
+    { "type": "checkbox", "id": "bundel_enabled", "label": "Bundel tonen", "default": true },
+    { "type": "text", "id": "bundel_button_text", "label": "Bundel knop", "default": "Bekijk bundelaanbiedingen" },
+    { "type": "text", "id": "bundel_sub_text", "label": "Bundel subtekst", "default": "Koop meer, ontvang een gratis cadeau" },
+    { "type": "text", "id": "bundel_populair_badge", "label": "Populairste badge", "default": "Populairste keuze" },
     {
       "type": "header",
       "content": "Geur Experience"
     },
-    {
-      "type": "text",
-      "id": "geur_exp_title",
-      "label": "Geur experience titel",
-      "default": "Over deze geur"
-    },
-    {
-      "type": "text",
-      "id": "geur_type_badge",
-      "label": "Geurtype badge",
-      "default": "Fris · Houtachtig"
-    },
-    {
-      "type": "text",
-      "id": "geur_inspired_text",
-      "label": "Geïnspireerd op tekst",
-      "default": "Geïnspireerd op Dior Sauvage"
-    },
+    { "type": "text", "id": "geur_exp_title", "label": "Titel", "default": "Over deze geur" },
+    { "type": "text", "id": "geur_type_badge", "label": "Geurtype badge", "default": "Fris · Houtachtig" },
+    { "type": "text", "id": "geur_inspired_text", "label": "Geïnspireerd op", "default": "Geïnspireerd op Dior Sauvage" },
     {
       "type": "header",
       "content": "Levering & Trust"
     },
-    {
-      "type": "text",
-      "id": "delivery_text",
-      "label": "Levering tekst",
-      "default": "Vandaag besteld → morgen bezorgd"
-    },
-    {
-      "type": "text",
-      "id": "trust_text_1",
-      "label": "Trust tekst 1",
-      "default": "Gratis verzending vanaf €50"
-    },
-    {
-      "type": "text",
-      "id": "trust_text_2",
-      "label": "Trust tekst 2",
-      "default": "Niet goed? Geld terug!"
-    },
+    { "type": "text", "id": "delivery_text", "label": "Levering tekst", "default": "Vandaag besteld → morgen bezorgd" },
+    { "type": "text", "id": "trust_text_1", "label": "Trust tekst 1", "default": "Gratis verzending vanaf €50" },
+    { "type": "text", "id": "trust_text_2", "label": "Trust tekst 2", "default": "Niet goed? Geld terug!" },
     {
       "type": "header",
       "content": "Gallery"
@@ -2741,515 +2187,13 @@
       "options": [
         { "value": "slider", "label": "Slider" },
         { "value": "grid", "label": "Grid" },
-        { "value": "thumbnails-left", "label": "Thumbnails links (desktop)" }
+        { "value": "thumbnails-left", "label": "Thumbnails links" }
       ],
       "default": "slider"
     },
-    {
-      "type": "checkbox",
-      "id": "gallery_zoom",
-      "label": "Zoom inschakelen",
-      "default": true
-    },
-    {
-      "type": "header",
-      "content": "Lifestyle Afbeeldingen"
-    },
-    {
-      "type": "image_picker",
-      "id": "lifestyle_hero_image",
-      "label": "Lifestyle hero afbeelding"
-    },
-    {
-      "type": "text",
-      "id": "lifestyle_hero_heading",
-      "label": "Hero heading",
-      "default": "Elke rit een ervaring"
-    },
-    {
-      "type": "text",
-      "id": "lifestyle_hero_subheading",
-      "label": "Hero subheading",
-      "default": "Ontdek de geur die bij jou past"
-    },
-    {
-      "type": "image_picker",
-      "id": "lifestyle_statement_image",
-      "label": "Lifestyle statement afbeelding"
-    },
-    {
-      "type": "text",
-      "id": "lifestyle_statement_heading",
-      "label": "Statement heading",
-      "default": "Jouw geur, jouw stijl"
-    },
-    {
-      "type": "text",
-      "id": "lifestyle_statement_subtitle",
-      "label": "Statement subtitle",
-      "default": "20 geuren \u00b7 1 keuze"
-    },
-    {
-      "type": "image_picker",
-      "id": "lifestyle_wide_image",
-      "label": "Lifestyle wide afbeelding"
-    },
-    {
-      "type": "text",
-      "id": "lifestyle_wide_heading",
-      "label": "Wide heading",
-      "default": "Meer dan een luchtverfrisser"
-    },
-    {
-      "type": "text",
-      "id": "lifestyle_wide_subheading",
-      "label": "Wide subheading",
-      "default": "Een statement. Elke keer als je instapt."
-    },
-    {
-      "type": "header",
-      "content": "Social Proof Strip"
-    },
-    {
-      "type": "text",
-      "id": "social_proof_title",
-      "label": "Social proof titel",
-      "default": "500.000+ autoparfums verkocht"
-    },
-    {
-      "type": "text",
-      "id": "stat_1_number",
-      "label": "Stat 1 nummer",
-      "default": "4,5"
-    },
-    {
-      "type": "text",
-      "id": "stat_1_label",
-      "label": "Stat 1 label",
-      "default": "Trustpilot"
-    },
-    {
-      "type": "text",
-      "id": "stat_2_number",
-      "label": "Stat 2 nummer",
-      "default": "93%"
-    },
-    {
-      "type": "text",
-      "id": "stat_2_label",
-      "label": "Stat 2 label",
-      "default": "Beveelt aan"
-    },
-    {
-      "type": "text",
-      "id": "stat_3_number",
-      "label": "Stat 3 nummer",
-      "default": "4–6"
-    },
-    {
-      "type": "text",
-      "id": "stat_3_label",
-      "label": "Stat 3 label",
-      "default": "Weken geur"
-    },
-    {
-      "type": "header",
-      "content": "Hoe het werkt"
-    },
-    {
-      "type": "text",
-      "id": "steps_title",
-      "label": "Stappen titel",
-      "default": "In 3 stappen genieten"
-    },
-    {
-      "type": "text",
-      "id": "step_1_title",
-      "label": "Stap 1 titel",
-      "default": "Kies je geur"
-    },
-    {
-      "type": "text",
-      "id": "step_1_text",
-      "label": "Stap 1 tekst",
-      "default": "Van fris en sportief tot warm en verfijnd. Elke geur is geïnspireerd op iconische parfums."
-    },
-    {
-      "type": "text",
-      "id": "step_2_title",
-      "label": "Stap 2 titel",
-      "default": "Hang het op"
-    },
-    {
-      "type": "text",
-      "id": "step_2_text",
-      "label": "Stap 2 tekst",
-      "default": "Bevestig de autoparfum aan je achteruitkijkspiegel. Klaar in 5 seconden."
-    },
-    {
-      "type": "text",
-      "id": "step_3_title",
-      "label": "Stap 3 titel",
-      "default": "Stel de intensiteit in"
-    },
-    {
-      "type": "text",
-      "id": "step_3_text",
-      "label": "Stap 3 tekst",
-      "default": "Draai de dop losser voor meer geur, strakker voor minder. Jij bepaalt."
-    },
-    {
-      "type": "header",
-      "content": "CTA Banner"
-    },
-    {
-      "type": "text",
-      "id": "cta_banner_title",
-      "label": "CTA banner titel",
-      "default": "30 dagen testen. Niet goed? Geld terug."
-    },
-    {
-      "type": "textarea",
-      "id": "cta_banner_text",
-      "label": "CTA banner tekst",
-      "default": "Maar we weten uit ervaring: 93% van onze klanten bestelt opnieuw. Probeer het zelf — risicovrij."
-    },
-    {
-      "type": "text",
-      "id": "cta_banner_button",
-      "label": "CTA banner knop",
-      "default": "Bestel nu"
-    },
-    {
-      "type": "header",
-      "content": "Brand Story"
-    },
-    {
-      "type": "text",
-      "id": "brand_title",
-      "label": "Brand story titel",
-      "default": "Dit is Oduree"
-    },
-    {
-      "type": "richtext",
-      "id": "brand_text",
-      "label": "Brand story tekst",
-      "default": "<p>Wij geloven dat je auto net zo goed mag ruiken als jijzelf. Daarom maken we autoparfums geïnspireerd op de geuren die je kent en waar je van houdt — maar dan voor onderweg. Premium kwaliteit, stijlvol design, en een geur die weken blijft hangen.</p>"
-    },
-    {
-      "type": "image_picker",
-      "id": "brand_image",
-      "label": "Brand story afbeelding"
-    },
-    {
-      "type": "header",
-      "content": "Vergelijkingstabel"
-    },
-    {
-      "type": "text",
-      "id": "compare_title",
-      "label": "Vergelijking titel",
-      "default": "Waarom Oduree?"
-    },
-    {
-      "type": "text",
-      "id": "compare_col_2",
-      "label": "Concurrent 1 naam",
-      "default": "Geurboom"
-    },
-    {
-      "type": "text",
-      "id": "compare_col_3",
-      "label": "Concurrent 2 naam",
-      "default": "Ventilatie clip"
-    },
-    {
-      "type": "header",
-      "content": "Cross-sell"
-    },
-    {
-      "type": "text",
-      "id": "crosssell_title",
-      "label": "Cross-sell titel",
-      "default": "Ontdek meer geuren"
-    },
-    {
-      "type": "collection",
-      "id": "crosssell_collection",
-      "label": "Cross-sell collectie"
-    },
-    {
-      "type": "range",
-      "id": "crosssell_max",
-      "label": "Max producten",
-      "min": 2,
-      "max": 8,
-      "step": 1,
-      "default": 4
-    },
-    {
-      "type": "header",
-      "content": "Use Cases"
-    },
-    {
-      "type": "text",
-      "id": "usecase_title",
-      "label": "Use cases titel",
-      "default": "Perfect voor"
-    },
-    {
-      "type": "header",
-      "content": "USP Balk"
-    },
-    {
-      "type": "text",
-      "id": "usp_1_icon",
-      "label": "USP 1 icoon (emoji)",
-      "default": "🧴"
-    },
-    {
-      "type": "text",
-      "id": "usp_1_label",
-      "label": "USP 1 label",
-      "default": "Langdurige geur"
-    },
-    {
-      "type": "text",
-      "id": "usp_1_desc",
-      "label": "USP 1 beschrijving",
-      "default": "Tot 45 dagen geur"
-    },
-    {
-      "type": "text",
-      "id": "usp_2_icon",
-      "label": "USP 2 icoon (emoji)",
-      "default": "✨"
-    },
-    {
-      "type": "text",
-      "id": "usp_2_label",
-      "label": "USP 2 label",
-      "default": "Premium kwaliteit"
-    },
-    {
-      "type": "text",
-      "id": "usp_2_desc",
-      "label": "USP 2 beschrijving",
-      "default": "Luxe materialen"
-    },
-    {
-      "type": "text",
-      "id": "usp_3_icon",
-      "label": "USP 3 icoon (emoji)",
-      "default": "🚚"
-    },
-    {
-      "type": "text",
-      "id": "usp_3_label",
-      "label": "USP 3 label",
-      "default": "Snel geleverd"
-    },
-    {
-      "type": "text",
-      "id": "usp_3_desc",
-      "label": "USP 3 beschrijving",
-      "default": "Morgen in huis"
-    },
-    {
-      "type": "header",
-      "content": "Trust Footer"
-    },
-    {
-      "type": "text",
-      "id": "trust_footer_1",
-      "label": "Trust footer 1",
-      "default": "Veilig betalen"
-    },
-    {
-      "type": "text",
-      "id": "trust_footer_2",
-      "label": "Trust footer 2",
-      "default": "Nederlands bedrijf"
-    },
-    {
-      "type": "text",
-      "id": "trust_footer_3",
-      "label": "Trust footer 3",
-      "default": "Vandaag verzonden"
-    }
+    { "type": "checkbox", "id": "gallery_zoom", "label": "Zoom inschakelen", "default": true }
   ],
   "blocks": [
-    {
-      "type": "faq_item",
-      "name": "FAQ Vraag",
-      "settings": [
-        {
-          "type": "text",
-          "id": "question",
-          "label": "Vraag"
-        },
-        {
-          "type": "textarea",
-          "id": "answer",
-          "label": "Antwoord"
-        }
-      ]
-    },
-    {
-      "type": "review",
-      "name": "Review",
-      "settings": [
-        {
-          "type": "range",
-          "id": "stars",
-          "label": "Sterren",
-          "min": 1,
-          "max": 5,
-          "step": 1,
-          "default": 5
-        },
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Review titel"
-        },
-        {
-          "type": "textarea",
-          "id": "text",
-          "label": "Review tekst"
-        },
-        {
-          "type": "text",
-          "id": "author",
-          "label": "Auteur"
-        },
-        {
-          "type": "text",
-          "id": "date",
-          "label": "Datum",
-          "default": "3 dagen geleden"
-        }
-      ]
-    },
-    {
-      "type": "usecase",
-      "name": "Use Case",
-      "settings": [
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Afbeelding"
-        },
-        {
-          "type": "text",
-          "id": "label",
-          "label": "Label"
-        },
-        {
-          "type": "color_background",
-          "id": "bg_color",
-          "label": "Achtergrondkleur"
-        }
-      ]
-    },
-    {
-      "type": "lifestyle_image",
-      "name": "Lifestyle Afbeelding",
-      "settings": [
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Afbeelding"
-        },
-        {
-          "type": "text",
-          "id": "heading",
-          "label": "Heading"
-        },
-        {
-          "type": "text",
-          "id": "subheading",
-          "label": "Subheading"
-        },
-        {
-          "type": "select",
-          "id": "aspect_ratio",
-          "label": "Aspect ratio",
-          "options": [
-            { "value": "16-10", "label": "16:10 (landscape)" },
-            { "value": "16-9", "label": "16:9 (wide)" },
-            { "value": "3-4", "label": "3:4 (portrait)" }
-          ],
-          "default": "16-10"
-        }
-      ]
-    },
-    {
-      "type": "video_reel",
-      "name": "Video Reel",
-      "settings": [
-        {
-          "type": "video_url",
-          "id": "video",
-          "label": "Video URL",
-          "accept": ["youtube", "vimeo"]
-        },
-        {
-          "type": "image_picker",
-          "id": "thumbnail",
-          "label": "Thumbnail"
-        },
-        {
-          "type": "text",
-          "id": "label",
-          "label": "Label"
-        }
-      ]
-    },
-    {
-      "type": "compare_row",
-      "name": "Vergelijking rij",
-      "settings": [
-        {
-          "type": "text",
-          "id": "feature",
-          "label": "Kenmerk"
-        },
-        {
-          "type": "text",
-          "id": "oduree_value",
-          "label": "Oduree waarde"
-        },
-        {
-          "type": "checkbox",
-          "id": "oduree_check",
-          "label": "Oduree check",
-          "default": true
-        },
-        {
-          "type": "text",
-          "id": "competitor_1",
-          "label": "Concurrent 1 waarde"
-        },
-        {
-          "type": "checkbox",
-          "id": "competitor_1_check",
-          "label": "Concurrent 1 check",
-          "default": false
-        },
-        {
-          "type": "text",
-          "id": "competitor_2",
-          "label": "Concurrent 2 waarde"
-        },
-        {
-          "type": "checkbox",
-          "id": "competitor_2_check",
-          "label": "Concurrent 2 check",
-          "default": false
-        }
-      ]
-    },
     {
       "type": "geurnoot",
       "name": "Geurnoot",
@@ -3265,63 +2209,35 @@
           ],
           "default": "TOP"
         },
-        {
-          "type": "text",
-          "id": "name",
-          "label": "Naam"
-        }
+        { "type": "text", "id": "name", "label": "Naam" }
       ]
     },
     {
       "type": "geur_kenmerk",
       "name": "Geur Kenmerk",
       "settings": [
-        {
-          "type": "text",
-          "id": "text",
-          "label": "Kenmerk tekst"
-        },
-        {
-          "type": "checkbox",
-          "id": "has_tooltip",
-          "label": "Heeft tooltip",
-          "default": false
-        },
-        {
-          "type": "textarea",
-          "id": "tooltip_text",
-          "label": "Tooltip tekst"
-        }
+        { "type": "text", "id": "text", "label": "Tekst" },
+        { "type": "checkbox", "id": "has_tooltip", "label": "Heeft tooltip", "default": false },
+        { "type": "textarea", "id": "tooltip_text", "label": "Tooltip tekst" }
       ]
     },
     {
       "type": "gift_item",
       "name": "Bundel Cadeau",
       "settings": [
-        {
-          "type": "text",
-          "id": "name",
-          "label": "Cadeau naam"
-        },
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Afbeelding"
-        },
-        {
-          "type": "text",
-          "id": "value",
-          "label": "Waarde (t.w.v.)"
-        },
-        {
-          "type": "range",
-          "id": "min_items",
-          "label": "Minimum stuks",
-          "min": 1,
-          "max": 20,
-          "step": 1,
-          "default": 2
-        }
+        { "type": "text", "id": "name", "label": "Naam" },
+        { "type": "image_picker", "id": "image", "label": "Afbeelding" },
+        { "type": "text", "id": "value", "label": "Waarde (t.w.v.)" },
+        { "type": "range", "id": "min_items", "label": "Minimum stuks", "min": 1, "max": 20, "step": 1, "default": 2 }
+      ]
+    },
+    {
+      "type": "video_reel",
+      "name": "Video Reel",
+      "settings": [
+        { "type": "video_url", "id": "video", "label": "Video URL", "accept": ["youtube", "vimeo"] },
+        { "type": "image_picker", "id": "thumbnail", "label": "Thumbnail" },
+        { "type": "text", "id": "label", "label": "Label" }
       ]
     }
   ]

@@ -1,0 +1,39 @@
+{% render 'oduree-base' %}
+<style>
+  .od-trust-footer {
+    display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;
+    padding: 20px 0; font-size: 11px; color: var(--od-text-muted);
+  }
+  .od-trust-footer__item { display: flex; align-items: center; gap: 5px; }
+  .od-trust-footer__item svg { flex-shrink: 0; }
+</style>
+
+<div class="oduree-section">
+  <div class="od-trust-footer">
+    <span class="od-trust-footer__item">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="2" y="5.5" width="9" height="6.5" rx="1.5" stroke="#999" stroke-width="1"/><path d="M4 5.5V4a2.5 2.5 0 015 0v1.5" stroke="#999" stroke-width="1" stroke-linecap="round"/></svg>
+      {{ section.settings.item_1 }}
+    </span>
+    <span class="od-trust-footer__item">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.5" stroke="#999" stroke-width="1"/><path d="M4.5 6.5l1.5 1.5 3-3" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      {{ section.settings.item_2 }}
+    </span>
+    <span class="od-trust-footer__item">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1.5" y="4" width="10" height="7" rx="1" stroke="#999" stroke-width="1"/><path d="M1.5 6.5h10M5 4V2.5M8 4V2.5" stroke="#999" stroke-width="1" stroke-linecap="round"/></svg>
+      {{ section.settings.item_3 }}
+    </span>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Oduree — Trust Footer",
+  "class": "oduree-trust-footer-section",
+  "settings": [
+    { "type": "text", "id": "item_1", "label": "Item 1", "default": "Veilig betalen" },
+    { "type": "text", "id": "item_2", "label": "Item 2", "default": "Nederlands bedrijf" },
+    { "type": "text", "id": "item_3", "label": "Item 3", "default": "Vandaag verzonden" }
+  ],
+  "presets": [{ "name": "Oduree — Trust Footer" }]
+}
+{% endschema %}

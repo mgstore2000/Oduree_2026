@@ -1,0 +1,72 @@
+{% render 'oduree-base' %}
+<style>
+  .od-faq { padding: 28px 0; }
+  .od-faq__list { display: flex; flex-direction: column; }
+  .od-faq__item { border-bottom: 0.5px solid var(--od-border); }
+  .od-faq__q {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 16px 0; cursor: pointer; font-size: 14px; font-weight: 500;
+    color: var(--od-text); user-select: none;
+  }
+  .od-faq__icon {
+    font-size: 18px; color: var(--od-text-muted); transition: transform 0.3s ease;
+    flex-shrink: 0; margin-left: 12px;
+  }
+  .od-faq__a {
+    display: none; padding: 0 0 16px; font-size: 13px;
+    color: var(--od-text-secondary); line-height: 1.6;
+  }
+  @media (min-width: 750px) {
+    .od-faq__list { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; }
+  }
+</style>
+
+<div class="oduree-section od-faq">
+  {%- if section.settings.title != blank -%}
+    <p class="od-title">{{ section.settings.title }}</p>
+  {%- endif -%}
+  <div class="od-faq__list">
+    {%- for block in section.blocks -%}
+      <div class="od-faq__item" {{ block.shopify_attributes }}>
+        <div class="od-faq__q" onclick="(function(h){var c=h.nextElementSibling,i=h.querySelector('.od-faq__icon'),o=c.style.display==='block';document.querySelectorAll('.od-faq__a').forEach(function(a){a.style.display='none'});document.querySelectorAll('.od-faq__icon').forEach(function(x){x.style.transform='rotate(0)'});if(!o){c.style.display='block';i.style.transform='rotate(45deg)'}})(this)">
+          {{ block.settings.question }}
+          <span class="od-faq__icon">+</span>
+        </div>
+        <div class="od-faq__a">{{ block.settings.answer }}</div>
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Oduree — FAQ",
+  "class": "oduree-faq-section",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Titel", "default": "Veelgestelde vragen" }
+  ],
+  "blocks": [
+    {
+      "type": "question",
+      "name": "Vraag",
+      "settings": [
+        { "type": "text", "id": "question", "label": "Vraag" },
+        { "type": "richtext", "id": "answer", "label": "Antwoord" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Oduree — FAQ",
+      "blocks": [
+        { "type": "question", "settings": { "question": "Hoe lang gaat de geur mee?", "answer": "<p>De meeste geuren gaan 4 tot 6 weken mee, afhankelijk van de temperatuur, ventilatie en hoe ver je de dop opendraait.</p>" } },
+        { "type": "question", "settings": { "question": "Kan ik de geurintensiteit aanpassen?", "answer": "<p>Ja! Door de dop losser of strakker te draaien bepaal je zelf hoeveel geur er vrijkomt.</p>" } },
+        { "type": "question", "settings": { "question": "Is het veilig voor mijn auto-interieur?", "answer": "<p>Absoluut. Onze autoparfums zijn lekvrij ontworpen en komen niet in contact met je dashboard of bekleding.</p>" } },
+        { "type": "question", "settings": { "question": "Op welke parfums zijn de geuren geïnspireerd?", "answer": "<p>Elke geur is geïnspireerd op een iconisch parfum. Bekijk de geuromschrijving bij elk product voor details.</p>" } },
+        { "type": "question", "settings": { "question": "Hoe werkt het abonnement?", "answer": "<p>Je kiest een geur en leveringsfrequentie. Wij leveren automatisch. 20% korting en gratis verzending. Pauzeren of opzeggen kan op elk moment.</p>" } },
+        { "type": "question", "settings": { "question": "Wat als ik de geur niet lekker vind?", "answer": "<p>Geen probleem. Je hebt 30 dagen om het te proberen. Niet tevreden? Dan krijg je je geld terug.</p>" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

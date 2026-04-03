@@ -1,0 +1,55 @@
+{% render 'oduree-base' %}
+<style>
+  .od-guarantee {
+    background: var(--od-dark); border-radius: 14px; padding: 36px 24px;
+    text-align: center; color: white; margin: 16px 0;
+  }
+  .od-guarantee__subtitle {
+    font-size: 10px; text-transform: uppercase; letter-spacing: 2px;
+    color: rgba(255,255,255,0.35); margin-bottom: 12px;
+  }
+  .od-guarantee__title {
+    font-family: var(--od-font-display);
+    font-size: clamp(20px, 4.5vw, 26px); font-weight: 400;
+    margin: 0 0 12px; line-height: 1.35;
+  }
+  .od-guarantee__text {
+    font-size: 13px; color: rgba(255,255,255,0.6);
+    max-width: 300px; margin: 0 auto 20px; line-height: 1.6;
+  }
+  .od-guarantee__btn {
+    background: var(--od-gold); color: white; border: none;
+    padding: 14px 32px; border-radius: var(--od-radius-btn);
+    font-size: 13px; font-weight: 600; cursor: pointer;
+    font-family: var(--od-font); letter-spacing: 0.3px;
+    transition: filter 0.2s ease;
+  }
+  .od-guarantee__btn:hover { filter: brightness(0.92); }
+</style>
+
+<div class="oduree-section">
+  <div class="od-guarantee">
+    {%- if section.settings.subtitle != blank -%}
+      <p class="od-guarantee__subtitle">{{ section.settings.subtitle }}</p>
+    {%- endif -%}
+    <p class="od-guarantee__title">{{ section.settings.heading }}</p>
+    {%- if section.settings.text != blank -%}
+      <p class="od-guarantee__text">{{ section.settings.text }}</p>
+    {%- endif -%}
+    <button class="od-guarantee__btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">{{ section.settings.button_text }}</button>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Oduree — Garantie",
+  "class": "oduree-guarantee-section",
+  "settings": [
+    { "type": "text", "id": "subtitle", "label": "Subtitle", "default": "Onze belofte" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "30 dagen testen. Niet goed? Geld terug." },
+    { "type": "textarea", "id": "text", "label": "Tekst", "default": "Maar we weten uit ervaring: 93% van onze klanten bestelt opnieuw. Probeer het zelf — risicovrij." },
+    { "type": "text", "id": "button_text", "label": "Button tekst", "default": "Bestel nu" }
+  ],
+  "presets": [{ "name": "Oduree — Garantie" }]
+}
+{% endschema %}

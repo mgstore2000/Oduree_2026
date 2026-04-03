@@ -1,0 +1,69 @@
+{% render 'oduree-base' %}
+<style>
+  .od-usecases { padding: 28px 0; }
+  .od-usecases__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .od-usecases__card {
+    border-radius: 12px; overflow: hidden; position: relative;
+    aspect-ratio: 1/1; background: linear-gradient(145deg, #e8e1d5, #ddd6c8);
+  }
+  .od-usecases__card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .od-usecases__label {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 10px 12px;
+    background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 100%);
+    color: white; font-size: 12px; font-weight: 500;
+  }
+  @media (min-width: 750px) {
+    .od-usecases__grid { grid-template-columns: repeat(4, 1fr); }
+  }
+</style>
+
+<div class="oduree-section od-usecases">
+  {%- if section.settings.title != blank -%}
+    <p class="od-title">{{ section.settings.title }}</p>
+  {%- endif -%}
+  <div class="od-usecases__grid">
+    {%- for block in section.blocks -%}
+      <div class="od-usecases__card" {{ block.shopify_attributes }} style="{% if block.settings.bg_color != blank %}background:{{ block.settings.bg_color }};{% endif %}">
+        {%- if block.settings.image != blank -%}
+          {{ block.settings.image | image_url: width: 480 | image_tag: loading: 'lazy' }}
+        {%- endif -%}
+        {%- if block.settings.label != blank -%}
+          <div class="od-usecases__label">{{ block.settings.label }}</div>
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Oduree — Use Cases",
+  "class": "oduree-usecases-section",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Titel", "default": "Perfect voor" }
+  ],
+  "blocks": [
+    {
+      "type": "case",
+      "name": "Use Case",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Afbeelding" },
+        { "type": "text", "id": "label", "label": "Label" },
+        { "type": "color_background", "id": "bg_color", "label": "Achtergrondkleur" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Oduree — Use Cases",
+      "blocks": [
+        { "type": "case", "settings": { "label": "Dagelijks woon-werk" } },
+        { "type": "case", "settings": { "label": "Roadtrips" } },
+        { "type": "case", "settings": { "label": "Als cadeau" } },
+        { "type": "case", "settings": { "label": "Na het wassen" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

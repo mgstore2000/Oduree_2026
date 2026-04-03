@@ -1,0 +1,81 @@
+{% render 'oduree-base' %}
+<style>
+  .od-crosssell { padding: 28px 0; }
+  .od-crosssell__scroll {
+    display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch; scrollbar-width: none; padding: 4px 0;
+  }
+  .od-crosssell__scroll::-webkit-scrollbar { display: none; }
+  .od-crosssell__card {
+    flex-shrink: 0; width: 160px; scroll-snap-align: start;
+  }
+  .od-crosssell__img {
+    width: 100%; aspect-ratio: 1/1; border-radius: 10px; overflow: hidden;
+    background: linear-gradient(135deg, #F8F2E6, #ede8df);
+  }
+  .od-crosssell__img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .od-crosssell__name { font-size: 12px; font-weight: 500; margin-top: 8px; color: var(--od-text); }
+  .od-crosssell__price { font-size: 12px; color: var(--od-text-secondary); margin-top: 2px; }
+  .od-crosssell__btn {
+    display: block; width: 100%; margin-top: 8px; padding: 8px; text-align: center;
+    border: 1px solid var(--od-dark); border-radius: var(--od-radius-btn);
+    font-size: 11px; font-weight: 500; color: var(--od-dark);
+    background: transparent; cursor: pointer; text-decoration: none;
+    font-family: var(--od-font);
+  }
+  @media (min-width: 750px) {
+    .od-crosssell__card { width: 200px; }
+  }
+</style>
+
+<div class="oduree-section od-crosssell">
+  {%- if section.settings.title != blank -%}
+    <p class="od-title">{{ section.settings.title }}</p>
+  {%- endif -%}
+  <div class="od-crosssell__scroll">
+    {%- if section.settings.collection != blank -%}
+      {%- for p in section.settings.collection.products limit: section.settings.max_products -%}
+        {%- if p.id != product.id -%}
+          <div class="od-crosssell__card">
+            <a href="{{ p.url }}" class="od-crosssell__img">
+              {%- if p.featured_image != blank -%}
+                {{ p.featured_image | image_url: width: 300 | image_tag: loading: 'lazy', style: 'width:100%;height:100%;object-fit:cover;display:block;' }}
+              {%- endif -%}
+            </a>
+            <div class="od-crosssell__name">{{ p.title }}</div>
+            <div class="od-crosssell__price">{{ p.price | money }}</div>
+            <a href="{{ p.url }}" class="od-crosssell__btn">Bekijk</a>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    {%- else -%}
+      {%- for p in product.collections.first.products limit: section.settings.max_products -%}
+        {%- if p.id != product.id -%}
+          <div class="od-crosssell__card">
+            <a href="{{ p.url }}" class="od-crosssell__img">
+              {%- if p.featured_image != blank -%}
+                {{ p.featured_image | image_url: width: 300 | image_tag: loading: 'lazy', style: 'width:100%;height:100%;object-fit:cover;display:block;' }}
+              {%- endif -%}
+            </a>
+            <div class="od-crosssell__name">{{ p.title }}</div>
+            <div class="od-crosssell__price">{{ p.price | money }}</div>
+            <a href="{{ p.url }}" class="od-crosssell__btn">Bekijk</a>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Oduree — Cross-sell",
+  "class": "oduree-crosssell-section",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Titel", "default": "Ontdek meer geuren" },
+    { "type": "collection", "id": "collection", "label": "Collectie" },
+    { "type": "range", "id": "max_products", "label": "Max producten", "min": 2, "max": 8, "step": 1, "default": 4 }
+  ],
+  "presets": [{ "name": "Oduree — Cross-sell" }]
+}
+{% endschema %}

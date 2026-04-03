@@ -1,0 +1,53 @@
+{% render 'oduree-base' %}
+<style>
+  .od-stats { padding: 28px 0; text-align: center; }
+  .od-stats__row { display: flex; align-items: center; justify-content: center; }
+  .od-stats__item { flex: 1; text-align: center; padding: 8px 0; }
+  .od-stats__number { font-family: var(--od-font-display); font-size: 28px; color: var(--od-gold); font-weight: 400; }
+  .od-stats__label { font-size: 11px; color: var(--od-text-secondary); margin-top: 4px; line-height: 1.4; }
+  .od-stats__divider { width: 1px; height: 36px; background: #e0d8cc; flex-shrink: 0; }
+</style>
+
+<div class="oduree-section od-stats">
+  {%- if section.settings.title != blank -%}
+    <p class="od-title">{{ section.settings.title }}</p>
+  {%- endif -%}
+  <div class="od-stats__row">
+    <div class="od-stats__item">
+      <div class="od-stats__number">{{ section.settings.stat_1_number }}</div>
+      <div class="od-stats__label">{{ section.settings.stat_1_label }}</div>
+    </div>
+    <div class="od-stats__divider"></div>
+    <div class="od-stats__item">
+      <div class="od-stats__number">{{ section.settings.stat_2_number }}</div>
+      <div class="od-stats__label">{{ section.settings.stat_2_label }}</div>
+    </div>
+    <div class="od-stats__divider"></div>
+    <div class="od-stats__item">
+      <div class="od-stats__number">{{ section.settings.stat_3_number }}</div>
+      <div class="od-stats__label">{{ section.settings.stat_3_label }}</div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Oduree — Statistieken",
+  "class": "oduree-stats-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titel",
+      "default": "500.000+ autoparfums verkocht"
+    },
+    { "type": "text", "id": "stat_1_number", "label": "Stat 1 nummer", "default": "4,5" },
+    { "type": "text", "id": "stat_1_label", "label": "Stat 1 label", "default": "Trustpilot" },
+    { "type": "text", "id": "stat_2_number", "label": "Stat 2 nummer", "default": "93%" },
+    { "type": "text", "id": "stat_2_label", "label": "Stat 2 label", "default": "Beveelt aan" },
+    { "type": "text", "id": "stat_3_number", "label": "Stat 3 nummer", "default": "4–6" },
+    { "type": "text", "id": "stat_3_label", "label": "Stat 3 label", "default": "Weken geur" }
+  ],
+  "presets": [{ "name": "Oduree — Statistieken" }]
+}
+{% endschema %}

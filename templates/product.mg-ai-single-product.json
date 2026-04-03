@@ -11,17 +11,125 @@
   "sections": {
     "main": {
       "type": "main-product",
+      "settings": {}
+    },
+    "stats": {
+      "type": "oduree-stats-strip",
+      "settings": {}
+    },
+    "lifestyle_hero": {
+      "type": "oduree-lifestyle-image",
       "settings": {
-        "tp_rating": "4,5",
-        "tp_text": "200.000+ Tevreden Gebruikers",
-        "benefit_1": "Tot 45 dagen langdurige geur",
-        "benefit_1_tooltip": "De geurduur verschilt per geur en is afhankelijk van temperatuur, ventilatie en gebruik. Uit feedback van 500.000+ verkochte stuks geven klanten gemiddeld 4–6 weken aan.",
-        "benefit_2": "Ruikt naar bekende parfums",
-        "benefit_3": "Het perfecte, betaalbare cadeau"
+        "heading": "Elke rit een ervaring",
+        "subheading": "Ontdek de geur die bij jou past",
+        "aspect_ratio": "16-10"
       }
+    },
+    "steps": {
+      "type": "oduree-steps",
+      "blocks": {
+        "step_1": { "type": "step", "settings": { "title": "Kies je geur", "text": "Van fris en sportief tot warm en verfijnd. Elke geur is geïnspireerd op iconische parfums." } },
+        "step_2": { "type": "step", "settings": { "title": "Hang het op", "text": "Bevestig de autoparfum aan je achteruitkijkspiegel. Klaar in 5 seconden." } },
+        "step_3": { "type": "step", "settings": { "title": "Stel de intensiteit in", "text": "Draai de dop losser voor meer geur, strakker voor minder. Jij bepaalt." } }
+      },
+      "block_order": ["step_1", "step_2", "step_3"],
+      "settings": {}
+    },
+    "lifestyle_statement": {
+      "type": "oduree-lifestyle-image",
+      "settings": {
+        "heading": "Jouw geur, jouw stijl",
+        "subtitle": "20 geuren · 1 keuze",
+        "aspect_ratio": "3-4"
+      }
+    },
+    "faq": {
+      "type": "oduree-faq",
+      "blocks": {
+        "faq_1": { "type": "question", "settings": { "question": "Hoe lang gaat de geur mee?", "answer": "<p>De meeste geuren gaan 4 tot 6 weken mee, afhankelijk van de temperatuur, ventilatie en hoe ver je de dop opendraait.</p>" } },
+        "faq_2": { "type": "question", "settings": { "question": "Kan ik de geurintensiteit aanpassen?", "answer": "<p>Ja! Door de dop losser of strakker te draaien bepaal je zelf hoeveel geur er vrijkomt.</p>" } },
+        "faq_3": { "type": "question", "settings": { "question": "Is het veilig voor mijn auto-interieur?", "answer": "<p>Absoluut. Onze autoparfums zijn lekvrij ontworpen en komen niet in contact met je dashboard of bekleding.</p>" } },
+        "faq_4": { "type": "question", "settings": { "question": "Op welke parfums zijn de geuren geïnspireerd?", "answer": "<p>Elke geur is geïnspireerd op een iconisch parfum. Bekijk de geuromschrijving bij elk product voor details.</p>" } },
+        "faq_5": { "type": "question", "settings": { "question": "Hoe werkt het abonnement?", "answer": "<p>Je kiest een geur en leveringsfrequentie. Wij leveren automatisch. 20% korting en gratis verzending. Pauzeren of opzeggen kan op elk moment.</p>" } },
+        "faq_6": { "type": "question", "settings": { "question": "Wat als ik de geur niet lekker vind?", "answer": "<p>Geen probleem. Je hebt 30 dagen om het te proberen. Niet tevreden? Dan krijg je je geld terug.</p>" } }
+      },
+      "block_order": ["faq_1", "faq_2", "faq_3", "faq_4", "faq_5", "faq_6"],
+      "settings": {}
+    },
+    "compare": {
+      "type": "oduree-compare-table",
+      "blocks": {
+        "r1": { "type": "row", "settings": { "feature": "Geurduur", "oduree_check": true, "oduree_text": "4-6 weken", "comp1_check": false, "comp1_text": "1-2 weken", "comp2_check": false, "comp2_text": "2-3 weken" } },
+        "r2": { "type": "row", "settings": { "feature": "Intensiteit regelbaar", "oduree_check": true, "comp1_check": false, "comp2_check": false } },
+        "r3": { "type": "row", "settings": { "feature": "Luxe design", "oduree_check": true, "comp1_check": false, "comp2_check": true } },
+        "r4": { "type": "row", "settings": { "feature": "Bekende geuren", "oduree_check": true, "comp1_check": false, "comp2_check": false } },
+        "r5": { "type": "row", "settings": { "feature": "Geen schade interieur", "oduree_check": true, "comp1_check": true, "comp2_check": false } },
+        "r6": { "type": "row", "settings": { "feature": "Cadeau-waardig", "oduree_check": true, "comp1_check": false, "comp2_check": false } }
+      },
+      "block_order": ["r1", "r2", "r3", "r4", "r5", "r6"],
+      "settings": {}
+    },
+    "lifestyle_wide": {
+      "type": "oduree-lifestyle-image",
+      "settings": {
+        "heading": "Meer dan een luchtverfrisser",
+        "subheading": "Een statement. Elke keer als je instapt.",
+        "aspect_ratio": "16-9"
+      }
+    },
+    "reviews": {
+      "type": "oduree-reviews",
+      "blocks": {
+        "rev_1": { "type": "review", "settings": { "stars": 5, "title": "Geur blijft lang hangen", "text": "Na 3 weken ruikt mijn auto nog steeds heerlijk. Veel beter dan die dennenbomen van het tankstation.", "author": "Thomas D.", "date": "3 dagen geleden" } },
+        "rev_2": { "type": "review", "settings": { "stars": 5, "title": "Ruikt als de echte Sauvage", "text": "Ik draag Dior Sauvage dagelijks en dit is echt een goede match.", "author": "Mohammed A.", "date": "1 week geleden" } },
+        "rev_3": { "type": "review", "settings": { "stars": 5, "title": "Perfect cadeau", "text": "Gekocht als cadeau voor mijn vriend. Hij is er helemaal weg van.", "author": "Sophie L.", "date": "2 weken geleden" } },
+        "rev_4": { "type": "review", "settings": { "stars": 4, "title": "Goede geur, mooi design", "text": "Looks premium, smells great. Enige minpunt: had iets langer mogen meegaan bij warm weer.", "author": "Jesse v.D.", "date": "3 weken geleden" } }
+      },
+      "block_order": ["rev_1", "rev_2", "rev_3", "rev_4"],
+      "settings": {}
+    },
+    "brand": {
+      "type": "oduree-brand-story",
+      "settings": {}
+    },
+    "usecases": {
+      "type": "oduree-usecases",
+      "blocks": {
+        "uc_1": { "type": "case", "settings": { "label": "Dagelijks woon-werk" } },
+        "uc_2": { "type": "case", "settings": { "label": "Roadtrips" } },
+        "uc_3": { "type": "case", "settings": { "label": "Als cadeau" } },
+        "uc_4": { "type": "case", "settings": { "label": "Na het wassen" } }
+      },
+      "block_order": ["uc_1", "uc_2", "uc_3", "uc_4"],
+      "settings": {}
+    },
+    "crosssell": {
+      "type": "oduree-crosssell",
+      "settings": {}
+    },
+    "trust_footer": {
+      "type": "oduree-trust-footer",
+      "settings": {}
+    },
+    "guarantee": {
+      "type": "oduree-guarantee",
+      "settings": {}
     }
   },
   "order": [
-    "main"
+    "main",
+    "stats",
+    "lifestyle_hero",
+    "steps",
+    "lifestyle_statement",
+    "faq",
+    "compare",
+    "lifestyle_wide",
+    "reviews",
+    "brand",
+    "usecases",
+    "crosssell",
+    "trust_footer",
+    "guarantee"
   ]
 }
