@@ -10,31 +10,14 @@
 {
   "sections": {
     "main": {
-      "type": "product-custom-mg-ai",
+      "type": "main-product",
       "settings": {
-        "bg_color": "#0f0f0f",
-        "text_color": "#f5f0eb",
-        "accent_color": "#C9A84C",
-        "accent_hover_color": "#d4b85e",
-        "heading_font": "serif",
-        "show_vendor": true,
-        "show_reviews": true,
-        "show_dynamic_checkout": true,
-        "atc_text": "Add to Cart",
-        "soldout_text": "Sold Out",
-        "show_trust_badges": true,
-        "trust_1": "Secure Payment",
-        "trust_2": "Free Shipping",
-        "trust_3": "30-Day Returns",
-        "tab_1_title": "Description",
-        "tab_2_title": "Materials & Care",
-        "tab_2_content": "<p>Premium materials sourced with care. Please refer to the product label for specific care instructions.</p>",
-        "tab_3_title": "Shipping & Returns",
-        "show_share": true,
-        "show_recommendations": true,
-        "recs_subtitle": "Curated for You",
-        "recs_title": "You May Also Like",
-        "recs_count": 4
+        "tp_rating": "4,5",
+        "tp_text": "200.000+ Tevreden Gebruikers",
+        "benefit_1": "Tot 45 dagen langdurige geur",
+        "benefit_1_tooltip": "De geurduur verschilt per geur en is afhankelijk van temperatuur, ventilatie en gebruik. Uit feedback van 500.000+ verkochte stuks geven klanten gemiddeld 4–6 weken aan.",
+        "benefit_2": "Ruikt naar bekende parfums",
+        "benefit_3": "Het perfecte, betaalbare cadeau"
       }
     }
   },
